@@ -1,0 +1,219 @@
+# Output format for the chapter_blueprint node.
+# Source: Chapter Blueprint skill -> references/output-formatting.md (HTML version).
+# diagnose builds every added or replaced block from these templates, so a
+# revised block is marked up exactly like the blocks Chapter Blueprint generated.
+
+node_name: chapter_blueprint
+content_format: html
+
+global:
+  spacer: "<p>&nbsp;</p>"
+  rules:
+    - "No CSS and no colour anywhere: no style attributes, no <style> blocks, no class. They are stripped in conversion, and there is no text-colour equivalent that survives."
+    - "Every blank line is a <p>&nbsp;</p> spacer paragraph. Whitespace and newlines in the HTML source are ignored."
+    - "A title never shares a paragraph with its content. Title paragraph, spacer, content paragraph, spacer — this is the defect the whole format exists to prevent."
+    - "Sub-section titles (N.X —) stay <strong> inside their own <p>. Never a heading of any level: promoting 10-20 of them floods the Doc's outline pane."
+    - "The [WOW MOMENT] tag carries that distinction on its own, since no colour is available. Keep the bracketed text intact and bolded like any other sub-section title, and never compensate with all-caps, extra asterisks or added exclamation marks."
+    - "Tables convert to real Doc tables, but column widths are best-effort only: width attributes on the header cells are a hint the converter may ignore. Set them anyway; never treat the result as guaranteed."
+    - "Escape & as &amp;, < as &lt;, > as &gt;. Write em dashes as &mdash;, en dashes as &ndash;, ellipses as &hellip;."
+    - "Never a typed divider row (═══ or ━━━) in the text — separators are real <hr> elements."
+    - "Never emit an empty heading, an empty table row, or a table carrying only a header row."
+    - "No literal Markdown characters (#, **, -, ---) survive anywhere in the Doc text."
+    - "Templates govern markup only. Element names, conclusions, descriptions, pattern names and modification notes are never shortened or reworded to fit one."
+  headings:
+    h1: "The document title, carrying the chapter topic"
+    h2: "Block 0, Block 1, Block 2, and Completeness Summary"
+    h3: "Each Option (A/B/C) inside Block 1, and each `N —` section title inside Block 2"
+    strong: "Sub-section (N.X —) titles, field labels, pattern lead-ins, and the Section column's cell text — body text, never headings"
+    em: "A Block 2 section's one-line conclusion"
+  in_the_doc:
+    spacer: "a paragraph whose text is one non-breaking space (\\u00a0) and a newline"
+    hr: "a paragraph holding a horizontal rule element"
+    headings: "paragraphs with namedStyleType HEADING_1 / HEADING_2 / HEADING_3"
+    tables: "a Block 1 skeleton is a real Doc table: a table element whose rows and cells hold their own paragraphs. Carry it across as a table, never flattened to paragraphs"
+    block_end: "each Block 1 option and each Block 2 section ends with spacer, <hr>, spacer — the next block starts on the paragraph after that last spacer"
+
+sections:
+
+  - id: document_header
+    heading: "{Chapter Topic} — Chapter Blueprint"
+    evaluate_topic: null
+    section: |
+      <h1>{Chapter Topic} &mdash; Chapter Blueprint</h1>
+      <p>&nbsp;</p>
+      <hr>
+      <p>&nbsp;</p>
+
+  - id: block_0_foundation
+    heading: "Block 0 — Chapter Foundation"
+    evaluate_topic: "BLOCK 0 — Chapter Foundation"
+    section: |
+      <h2>Block 0 &mdash; Chapter Foundation</h2>
+      <p>&nbsp;</p>
+      <p><strong>Chapter Purpose</strong></p>
+      <p>&nbsp;</p>
+      <p>{Definition.}</p>
+      <p>&nbsp;</p>
+      <p><strong>Core Argument</strong></p>
+      <p>&nbsp;</p>
+      <p>{Definition.}</p>
+      <p>&nbsp;</p>
+      <p><strong>Reader Transformation</strong></p>
+      <p>&nbsp;</p>
+      <p>{Before &rarr; After definition.}</p>
+      <p>&nbsp;</p>
+      <p><strong>Primary Tension</strong></p>
+      <p>&nbsp;</p>
+      <p>{Definition.}</p>
+      <p>&nbsp;</p>
+      <p><strong>Main Counterargument</strong></p>
+      <p>&nbsp;</p>
+      <p>{Definition.}</p>
+      <p>&nbsp;</p>
+      <p><strong>Chapter Promise</strong></p>
+      <p>&nbsp;</p>
+      <p>{Definition.}</p>
+      <p>&nbsp;</p>
+      <hr>
+      <p>&nbsp;</p>
+    blocks:
+      element:
+        html: |
+          <p><strong>{Element name}</strong></p>
+          <p>&nbsp;</p>
+          <p>{Definition.}</p>
+          <p>&nbsp;</p>
+        add_after: "the spacer of the element it follows; the six run in the fixed order above"
+    rules:
+      - "Plain labelled text, never a table — six short labels against six long definitions reads as cramped and top-heavy in one."
+      - "Each element is title paragraph, spacer, definition paragraph, spacer. A title and its definition never share a line."
+
+  - id: block_1_alternatives
+    heading: "Block 1 — Structural Alternatives"
+    evaluate_topic: "BLOCK 1 — Structural Alternatives"
+    section: |
+      <h2>Block 1 &mdash; Structural Alternatives</h2>
+      <p>&nbsp;</p>
+      {options}
+      <p>Pick an option, mix elements from two, or tell me what to change &mdash; then I will expand it fully in Block 2.</p>
+      <p>&nbsp;</p>
+    blocks:
+      option:
+        html: |
+          <h3>Option {A} &mdash; {Name / Angle in 3&ndash;5 words}</h3>
+          <p>&nbsp;</p>
+          <p><strong>{Pattern X (&hellip;)} &mdash; modified.</strong> {The rest of the pattern/modification paragraph.}</p>
+          <p>&nbsp;</p>
+          <p>{The reader's-journey sentence.}</p>
+          <p>&nbsp;</p>
+          <table>
+          <tr>
+          <th width="5%">#</th>
+          <th width="18%">Section</th>
+          <th width="19%">Core Idea or Concept</th>
+          <th width="29%">What It's About</th>
+          <th width="29%">What is the Conclusion</th>
+          </tr>
+          <tr>
+          <td>1</td>
+          <td><strong>{Section name}</strong></td>
+          <td>{Unique 2&ndash;7 word label specific to this section's logic}</td>
+          <td>{What this section does &mdash; one clause}</td>
+          <td>{The specific conclusion for this chapter topic}</td>
+          </tr>
+          </table>
+          <p>&nbsp;</p>
+          <hr>
+          <p>&nbsp;</p>
+        add_after: "the closing spacer of the previous option, above the hand-off paragraph"
+      table_row:
+        html: |
+          <tr>
+          <td>{N}</td>
+          <td><strong>{Section name}</strong></td>
+          <td>{Core idea or concept}</td>
+          <td>{What it's about}</td>
+          <td>{The conclusion}</td>
+          </tr>
+        add_after: "the last <tr> of that option's table, inside the same <table>"
+    rules:
+      - "The header row uses <th>, not <td> — with no shading available, that is what makes it read as a header."
+      - "The Section column's cell text is bold on every data row."
+      - "Header widths are 5 / 18 / 19 / 29 / 29 — a best-effort hint only."
+      - "One table per option, and a real <hr> between options with spacers on both sides, never blank space."
+      - "A [TECH] section is marked inside its Section cell: <strong>[TECH] {Section name}</strong>."
+      - "Every <tr> carries real section data. A skeleton with five sections emits five data rows and stops — never padded with placeholder rows."
+      - "The hand-off paragraph closes the block, as plain text after the last option."
+
+  - id: block_2_expansion
+    heading: "Block 2 — Full Expansion"
+    evaluate_topic: "each Block 2 sub-section"
+    also_resolves:
+      - "the sub-section marked WOW MOMENT"
+      - "the [TECH] section"
+    section: |
+      <h2>Block 2 &mdash; Full Expansion</h2>
+      <p>&nbsp;</p>
+      {sections}
+    blocks:
+      section:
+        html: |
+          <h3>{N} &mdash; {SECTION NAME}</h3>
+          <p>&nbsp;</p>
+          <p><em>{One line &mdash; what is the conclusion for this section.}</em></p>
+          <p>&nbsp;</p>
+          {sub-sections}
+          <hr>
+          <p>&nbsp;</p>
+        add_after: "the closing spacer of the previous section; the new section takes the next number"
+      subsection:
+        html: |
+          <p><strong>{N}.{X} &mdash; {Sub-section name, phrased as a question, &le;5&ndash;6 words}</strong></p>
+          <p>&nbsp;</p>
+          <p>{1-2 line description of what this sub-section covers conceptually.}</p>
+          <p>&nbsp;</p>
+        add_after: "the spacer of the sub-section it follows, above the section's <hr>"
+      wow_moment_subsection:
+        html: |
+          <p><strong>{N}.{X} &mdash; [WOW MOMENT] {Sub-section name, phrased as a question, &le;5&ndash;6 words}</strong></p>
+          <p>&nbsp;</p>
+          <p>{Description of what the surprising, sourced finding demonstrates conceptually &mdash; never the finding itself.}</p>
+          <p>&nbsp;</p>
+        add_after: "the spacer of the sub-section it follows, inside its own section"
+    rules:
+      - "A spacer after the section title, after the conclusion, after every sub-section title, and after every sub-section description."
+      - "The section's conclusion line is italic; sub-section descriptions are plain text."
+      - "Every section carries at least two sub-sections, in order, each following the same title / spacer / description shape."
+      - "<hr> separates full sections. No divider between sub-sections inside a section — only spacers."
+      - "A comment naming a sub-section, the WOW MOMENT sub-section, or the [TECH] section is a comment on this section's file."
+
+  - id: completeness_summary
+    heading: "Completeness Summary"
+    evaluate_topic: "Completeness Summary"
+    section: |
+      <h2>Completeness Summary</h2>
+      <p>&nbsp;</p>
+      <p><strong>Sections:</strong> {N}</p>
+      <p>&nbsp;</p>
+      <p><strong>Sub-sections per section:</strong> {counts}</p>
+      <p>&nbsp;</p>
+      <p><strong>WOW MOMENT present:</strong> {yes &mdash; section N.X / no}</p>
+      <p>&nbsp;</p>
+      <p><strong>[TECH] section present:</strong> {yes / no}</p>
+      <p>&nbsp;</p>
+      <p><strong>Anti-redundancy check:</strong> {pass &mdash; no issues / issues found and fixed: &hellip;}</p>
+      <p>&nbsp;</p>
+      <p><strong>Evidence-free check:</strong> {pass &mdash; no citations/products/case studies present / issues found}</p>
+      <p>&nbsp;</p>
+    rules:
+      - "Exactly six field paragraphs, one per field, in the order above. Two labels sharing a paragraph is the defect that made this section unreadable in earlier drafts."
+      - "Every number here must match the body: a change that adds or removes a section or sub-section updates Sections and Sub-sections per section with it, and moving or retagging a WOW MOMENT or [TECH] section updates those fields."
+
+verify:
+  - "No section or sub-section title shares a paragraph with its conclusion or description anywhere in Block 2."
+  - "Every `N —` section title is a real <h3>, and no sub-section title is a heading of any level — all stay <strong> inside their own <p>."
+  - "Every [WOW MOMENT] sub-section title has the bracketed tag intact and bolded, with no added emphasis standing in for colour."
+  - "Block 0 is plain labelled text, not a table; each Block 1 skeleton is a real <table> with a <th> header row, not plain-text cells."
+  - "No typed ═══ or ━━━ divider rows remain in the Doc text — separators are real <hr> elements."
+  - "The Completeness Summary has exactly six field paragraphs, and its numbers match the body."
+  - "No style, class, <style> or colour appears anywhere, and no literal Markdown characters (#, **, -, ---) survive in the Doc text."

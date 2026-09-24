@@ -1,0 +1,148 @@
+pass_threshold: 0.85
+
+sections:
+  - id: central_concept
+    name: "1. Central Concept"
+    match: fixed
+    weight: 0.10
+    purpose: "The single organizing idea every later section (Themes, Models, Synthesis Ideas) hangs off of — if this is generic, everything downstream inherits that genericness."
+    dimensions:
+      content_completeness:
+        weight: 0.4
+        checks:
+          - "States a distinct organizing idea, not a restatement of the chapter topic"
+      purpose_alignment:
+        weight: 0.6
+        checks:
+          - "Specific enough that a blueprint writer could immediately picture a chapter structure built on it"
+
+  - id: themes
+    name: "2. Themes"
+    match: fixed
+    weight: 0.16
+    purpose: "Per the skill: this is a synthesis step, not a re-listing step — it exists to surface connections and contradictions across broad-research's findings, not to reorganize them under new headings."
+    dimensions:
+      content_completeness:
+        weight: 0.25
+        checks:
+          - "Each theme is evidence-backed with a specific attached example, stat, or case — not pure abstraction"
+      quality:
+        weight: 0.25
+        checks:
+          - "Themes are specific to this chapter's actual findings, not generic AI-industry themes"
+      purpose_alignment:
+        weight: 0.5
+        checks:
+          - "At least one theme surfaces a connection or tension between multiple sources that wasn't stated explicitly in any single broad-research finding"
+    red_flags:
+      - "A theme maps 1:1 onto a single evidence card with no synthesis across sources"
+
+  - id: mental_models
+    name: "3. Mental Models"
+    match: fixed
+    weight: 0.10
+    purpose: "Exists to give a PM a usable lens or decision framework — per the book profile's promise of 'vocabulary they can use in meetings' — not to restate the Themes section in different words."
+    dimensions:
+      content_completeness:
+        weight: 0.3
+        checks:
+          - "Each model is distinct from the Themes section, not a renamed theme"
+      purpose_alignment:
+        weight: 0.7
+        checks:
+          - "Each model gives a PM a specific, applicable lens or decision framework — not a generic 'consider the tradeoffs' statement"
+
+  - id: technical_concepts
+    name: "4. Technical Concepts"
+    match: fixed
+    weight: 0.08
+    purpose: "Explains the technical concepts this specific chapter needs — grounded in this chapter's actual research, not a standalone glossary entry that could belong to any AI book."
+    dimensions:
+      content_completeness:
+        weight: 0.4
+        checks:
+          - "Each concept is tied to a specific finding or example from broad-research"
+      quality:
+        weight: 0.6
+        checks:
+          - "Explanations are accurate and specific to this chapter's context, not generic AI definitions"
+
+  - id: retain_downgrade_remove
+    name: "5. What to Retain, Downgrade, or Remove"
+    match: fixed
+    weight: 0.18
+    purpose: "Per the skill: this is the filtering judgment call the whole synthesis exists to apply — a call that isn't individually defensible against the chapter's actual goal means no real filtering happened."
+    dimensions:
+      structural:
+        weight: 0.2
+        checks:
+          - "Retain / Downgrade / Remove counts are present and not all in a single bucket"
+      quality:
+        weight: 0.3
+        checks:
+          - "Spot-checking 3 calls, each has a specific reason, not boilerplate ('less relevant') that doesn't say relevant to what"
+      purpose_alignment:
+        weight: 0.5
+        checks:
+          - "A reader could predict which bucket an item landed in just from reading the chapter topic and the item — the call is defensible against the actual chapter goal, not applied as a fixed rule (e.g. keep everything from certain rungs)"
+
+  - id: chapter_synthesis_ideas
+    name: "6. Chapter Synthesis Ideas"
+    match: fixed
+    weight: 0.14
+    purpose: "Per the skill: written so 'a blueprint writer could act on it without reopening broad-research' — this is a testable claim about usability, not a quality vibe."
+    dimensions:
+      content_completeness:
+        weight: 0.4
+        checks:
+          - "Each idea pairs a structural suggestion with specific supporting material already surfaced in this synthesis"
+      purpose_alignment:
+        weight: 0.6
+        checks:
+          - "A blueprint writer reading only this idea, not the raw broad-research doc, would have enough to act on it"
+
+  - id: final_conclusion
+    name: "7. Final Conclusion"
+    match: fixed
+    weight: 0.08
+    purpose: "Meant to draw the synthesis together into a point of view — not a section-by-section recap of what came before."
+    dimensions:
+      quality:
+        weight: 0.5
+        checks:
+          - "States a specific takeaway that follows from the Themes/Models above"
+      purpose_alignment:
+        weight: 0.5
+        checks:
+          - "Reads as a conclusion with a point of view, not a restatement of the Central Concept"
+
+  - id: research_gaps
+    name: "8. Research Gaps & Opportunities"
+    match: fixed
+    weight: 0.08
+    purpose: "Names what deep-research will need to chase later — vague hedging here just pushes the problem downstream undocumented."
+    dimensions:
+      content_completeness:
+        weight: 0.5
+        checks:
+          - "If present: names specific, checkable gaps, not generic hedging ('some areas need more research')"
+      consistency:
+        weight: 0.5
+        checks:
+          - "If omitted, the Completeness Summary's 'Input completeness' note supports that omission (input was genuinely comprehensive) rather than contradicting it"
+
+  - id: completeness_summary
+    name: "Completeness Summary"
+    match: fixed
+    weight: 0.08
+    purpose: "The skill's own self-report — exists so a downstream reader can trust the synthesis's scope without re-reading the whole document."
+    dimensions:
+      structural:
+        weight: 0.3
+        checks:
+          - "Sections-written list, duplication-check result, and Retain/Downgrade/Remove counts are present"
+      consistency:
+        weight: 0.7
+        checks:
+          - "Every claim in the summary is verifiably consistent with the body above"
+          - "'Input completeness' states full or thin, and if thin, names specifically what was missing"

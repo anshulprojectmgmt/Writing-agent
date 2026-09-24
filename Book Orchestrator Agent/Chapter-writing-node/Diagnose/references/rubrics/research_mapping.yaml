@@ -1,0 +1,233 @@
+# Output format for the research_mapping node.
+# Source: Research Mapping skill -> references/output-formatting.md (HTML version).
+# diagnose builds every added or replaced block from these templates, so a
+# revised block is marked up exactly like the blocks Research Mapping generated.
+
+node_name: research_mapping
+content_format: html
+
+global:
+  spacer: "<p>&nbsp;</p>"
+  rules:
+    - "No CSS and no colour anywhere: no style attributes, no <style> blocks, no class. A HIGH fit, a MED fit, a GAP and a creative beat are told apart by their label text and emoji alone."
+    - "Every blank line is a <p>&nbsp;</p> spacer paragraph. Whitespace and newlines in the HTML source are ignored."
+    - "A title never shares a paragraph with its content: sub-section title, spacer, what-it-does line, spacer — and an evidence title never sits in the same paragraph as its points."
+    - "<blockquote> does not survive. The skill's Markdown blockquotes become bold-labelled paragraphs, and a literal > at the start of a paragraph is never emitted."
+    - "The emoji (⚠️ ✅ 🎨 🔗) are literal characters, never escaped and never dropped — they carry the distinction colour would otherwise carry."
+    - "Sub-section titles and Evidence titles stay <strong> inside their own <p>. Never a heading of any level: promoting 10-20+ of them floods the Doc's outline pane."
+    - "Tables convert to real Doc tables, but column widths are best-effort only: a width attribute on a header cell is a hint the converter may ignore. Set it anyway; never treat the result as guaranteed."
+    - "Escape & as &amp;, < as &lt;, > as &gt;. Write em dashes as &mdash;, en dashes as &ndash;, ellipses as &hellip;, and the how-it-serves arrow as &rarr;."
+    - "Every evidence Source is a real URL written <a href=\"{URL}\">{URL}</a>, the address in both places. A source broad-research gave as a short in-text citation with no URL stays plain text — never invent a link."
+    - "Never a typed ━━━ or ═══ divider row in the text — separators are real <hr> elements."
+    - "Never emit an empty heading, an empty table row, or a table carrying only a header row."
+    - "No literal Markdown characters (#, **, -, ---, •) survive anywhere in the Doc text."
+    - "Templates govern markup only. Content bullets, evidence points, how-it-serves explanations, fit labels, GAP descriptions and source URLs are never shortened, merged, re-ranked or reworded to fit one — least of all an evidence point, which the skill requires written out in full."
+  headings:
+    h1: "The document title, carrying the chapter title"
+    h2: "Punch Line, Chapter-Level Feedback, and Coverage Summary"
+    h3: "Each `N —` section title, and the three Coverage Summary table titles"
+    strong: "Sub-section (N.X —) titles, Evidence titles, GAP / no-GAP / creative-beat labels, and Source labels — body text, never headings"
+    em: "A section's Purpose line, a sub-section's what-it-does line, the (Fit: HIGH/MED) label, each How it serves clause, the for-deep-research tag, and the punch line and feedback quotes"
+  in_the_doc:
+    spacer: "a paragraph whose text is one non-breaking space (\\u00a0) and a newline"
+    hr: "a paragraph holding a horizontal rule element"
+    headings: "paragraphs with namedStyleType HEADING_1 / HEADING_2 / HEADING_3"
+    tables: "each Coverage Summary table is a real Doc table: a table element whose rows and cells hold their own paragraphs. Carry it across as a table, never flattened to paragraphs"
+    file_split: "the export starts a new file at each HEADING_1 and HEADING_2, and this node's `N —` section titles are HEADING_3 — so the title and every blueprint section land in the first file together, with Punch Line, Chapter-Level Feedback and Coverage Summary as their own files. Locate a block by its exact HTML, not by which file it sits in"
+    block_end: "each blueprint section ends with spacer, <hr>, spacer; sub-sections inside a section are separated by spacers only"
+
+sections:
+
+  - id: document_header
+    heading: "{Chapter Title} — Final Chapter Blueprint"
+    evaluate_topic: null
+    section: |
+      <h1>{Chapter Title} &mdash; Final Chapter Blueprint</h1>
+      <p>&nbsp;</p>
+      <hr>
+      <p>&nbsp;</p>
+
+  - id: blueprint_sections
+    heading: "{N} — {SECTION NAME}"
+    evaluate_topic: "each [N] — [SECTION NAME] block"
+    also_resolves:
+      - "cross-subsection duplicate use of the same source"
+    section: |
+      <h3>{N} &mdash; {SECTION NAME}</h3>
+      <p>&nbsp;</p>
+      <p><em>Purpose: {one clause, from the blueprint, unchanged}.</em></p>
+      <p>&nbsp;</p>
+      {sub-sections}
+      <hr>
+      <p>&nbsp;</p>
+    blocks:
+      subsection:
+        html: |
+          <p><strong>{N}.{X} &mdash; {SUB-SECTION NAME}</strong></p>
+          <p>&nbsp;</p>
+          <p><em>{What it does &mdash; from the blueprint.}</em></p>
+          <p>&nbsp;</p>
+          <ul>
+          <li>{Content bullet, copied from the blueprint unchanged.}</li>
+          </ul>
+          <p>&nbsp;</p>
+          {evidence blocks}
+          {gap line}
+        add_after: "the closing line of the sub-section it follows, inside the same section"
+      evidence_block:
+        html: |
+          <p><strong>Evidence &mdash; "{Item Name}"</strong> <em>(Fit: HIGH)</em></p>
+          <p>&nbsp;</p>
+          <ul>
+          <li>{Point, written out in full.} &rarr; <em>How it serves:</em> {one-line explanation specific to this point}</li>
+          </ul>
+          <p>&nbsp;</p>
+          <p>🔗 <strong>Source:</strong> <a href="{URL}">{URL}</a></p>
+          <p>&nbsp;</p>
+        add_after: "the Source line's spacer of the evidence block it follows, above the sub-section's GAP line"
+      evidence_point:
+        html: |
+          <li>{Point, written out in full.} &rarr; <em>How it serves:</em> {explanation specific to this point}</li>
+        add_after: "the last <li> of that evidence block's list, inside the same <ul>"
+      gap_line:
+        html: |
+          <p><strong>⚠️ GAP:</strong> {Specific description of what evidence type is missing} &mdash; <em>for deep-research</em></p>
+          <p>&nbsp;</p>
+        add_after: "the sub-section's last evidence block — one per sub-section"
+      no_gap_line:
+        html: |
+          <p><strong>✅ GAP: none</strong></p>
+          <p>&nbsp;</p>
+        add_after: "the sub-section's last evidence block — the alternative to a GAP line"
+      creative_beat:
+        html: |
+          <p><strong>{N}.{X} &mdash; {SUB-SECTION NAME}</strong> <em>(Creative beat &mdash; analogy / humor / author framework)</em></p>
+          <p>&nbsp;</p>
+          <p><em>{What it does.}</em></p>
+          <p>&nbsp;</p>
+          <ul>
+          <li>{Content bullet.}</li>
+          </ul>
+          <p>&nbsp;</p>
+          <p><strong>🎨 EVIDENCE: none</strong> &mdash; creative beat, no source required</p>
+          <p>&nbsp;</p>
+        add_after: "the closing line of the sub-section it follows — the marker replaces the evidence block entirely"
+    rules:
+      - "The Purpose line is italic and always its own paragraph, never appended to the section title."
+      - "A spacer after the sub-section title, after the what-it-does line, after the content-bullet <ul>, after every evidence title, after every point list, and after every Source line."
+      - "No spacer between <li> items; the spacer goes after the closing </ul>."
+      - "Content bullets are a real <ul>, never • characters typed into a paragraph."
+      - "The fit label stays exactly as scored — <em>(Fit: HIGH)</em> or <em>(Fit: MED)</em> — on the evidence title's line, in parentheses, italic. LOW items are never assigned, so Fit: LOW must never appear."
+      - "Every evidence point is a real <li> carrying its own How it serves clause after a &rarr;. One How it serves covering two points is a content error, not a formatting shortcut."
+      - "The Source line closes each evidence block as its own paragraph, with 🔗 intact and the URL a real hyperlink."
+      - "A sub-section with more than one assigned item repeats the whole evidence block — title, spacer, point list, spacer, Source, spacer — once per item."
+      - "Every sub-section closes with exactly one of ⚠️ GAP:, ✅ GAP: none, or 🎨 EVIDENCE: none. Nothing is left blank, and a drafted line is never quietly dropped."
+      - "A GAP reading only 'no evidence' is a content failure the skill's own Step 4 forbids — it is sent back to be written properly, never padded here."
+      - "<hr> separates full sections, with a spacer on both sides. Never an <hr> between sub-sections inside a section."
+
+  - id: punch_line
+    heading: "Punch Line"
+    evaluate_topic: "PUNCH LINE"
+    section: |
+      <h2>Punch Line</h2>
+      <p>&nbsp;</p>
+      <p><em>"{Punch line, from the blueprint, unchanged.}"</em></p>
+      <p>&nbsp;</p>
+    rules:
+      - "Carried over verbatim from the blueprint: italic, inside quotation marks."
+
+  - id: chapter_level_feedback
+    heading: "Chapter-Level Feedback"
+    evaluate_topic: null
+    section: |
+      <h2>Chapter-Level Feedback</h2>
+      <p>&nbsp;</p>
+      <p><em>"{Single chapter-level comment, from the blueprint, unchanged.}"</em></p>
+      <p>&nbsp;</p>
+      <hr>
+      <p>&nbsp;</p>
+    rules:
+      - "Carried over verbatim from the blueprint: italic, inside quotation marks."
+      - "The drafting annotation <!-- CHAPTER-LEVEL FEEDBACK --> is never emitted — this <h2> heading replaces it."
+
+  - id: coverage_summary
+    heading: "Coverage Summary"
+    evaluate_topic: "Coverage summary"
+    section: |
+      <h2>Coverage Summary</h2>
+      <p>&nbsp;</p>
+      <h3>Metrics</h3>
+      <p>&nbsp;</p>
+      <table>
+      <tr>
+      <th width="70%">Category</th>
+      <th width="30%">Count</th>
+      </tr>
+      <tr><td>Total sub-sections</td><td>{N}</td></tr>
+      <tr><td>Fully evidenced (HIGH fit)</td><td>{N}</td></tr>
+      <tr><td>Partial (MED fit only)</td><td>{N}</td></tr>
+      <tr><td>Creative beats (no source)</td><td>{N}</td></tr>
+      <tr><td>GAPs for deep-research</td><td>{N}</td></tr>
+      </table>
+      <p>&nbsp;</p>
+      <h3>GAPs</h3>
+      <p>&nbsp;</p>
+      <table>
+      <tr>
+      <th width="35%">Sub-section</th>
+      <th width="65%">What's Missing</th>
+      </tr>
+      <tr>
+      <td><strong>{N}.{X} &mdash; {Sub-section name}</strong></td>
+      <td>{One-line description of the missing evidence type.}</td>
+      </tr>
+      </table>
+      <p>&nbsp;</p>
+      <h3>Unplaced Items</h3>
+      <p>&nbsp;</p>
+      <table>
+      <tr>
+      <th width="35%">Item</th>
+      <th width="65%">Reason Excluded</th>
+      </tr>
+      <tr>
+      <td><strong>"{Item name}"</strong></td>
+      <td>{Why it did not fit anywhere.}</td>
+      </tr>
+      </table>
+      <p>&nbsp;</p>
+      <p>The unplaced items list tells the user what the research covered that did not make it into the chapter. They can decide whether to add a sub-section, swap an existing item, or let it go.</p>
+      <p>&nbsp;</p>
+    blocks:
+      gap_row:
+        html: |
+          <tr>
+          <td><strong>{N}.{X} &mdash; {Sub-section name}</strong></td>
+          <td>{One-line description of the missing evidence type.}</td>
+          </tr>
+        add_after: "the last <tr> of the GAPs table, inside the same <table>"
+      unplaced_row:
+        html: |
+          <tr>
+          <td><strong>"{Item name}"</strong></td>
+          <td>{Why it did not fit anywhere.}</td>
+          </tr>
+        add_after: "the last <tr> of the Unplaced Items table, inside the same <table>"
+    rules:
+      - "Three real tables, each under its own <h3>, all inside the one <h2>."
+      - "Header rows use <th>, not <td> — with no shading available, that is what makes them read as headers."
+      - "The five Metrics rows are fixed: all five, in that order, even when a count is 0. A missing row reads as an oversight, not a zero."
+      - "The GAPs table carries one row per GAP flagged in the document, and the Metrics counts must agree with the rows beneath them — a change that adds or removes a GAP updates both."
+      - "With no GAPs, the table carries a single row reading None and 'All sub-sections evidenced or marked as creative beats' — never a header-only table. Same for Unplaced Items."
+      - "The closing explanatory paragraph stays — it tells the reader what the third table is for."
+
+verify:
+  - "No sub-section title shares a paragraph with its what-it-does line, and no evidence title shares a paragraph with its points."
+  - "Every `N —` section title is a real <h3>; no sub-section title and no evidence title is a heading of any level."
+  - "Every sub-section ends with exactly one of ⚠️ GAP:, ✅ GAP: none, or 🎨 EVIDENCE: none, with the emoji intact."
+  - "No literal > blockquote character and no typed ━━━ or ═══ divider row survives in the Doc text."
+  - "Content bullets and evidence points are real <ul>/<li> lists, with no spacer between items and a spacer after each closing </ul>."
+  - "Every evidence point carries its own &rarr; How it serves clause, and every evidence block closes with a 🔗 Source paragraph whose URL is a real <a href>."
+  - "Every fit label reads (Fit: HIGH) or (Fit: MED) — never LOW, never missing."
+  - "The Coverage Summary is three real tables with <th> header rows, the Metrics table has all five rows, and its counts agree with the GAP rows beneath it."
+  - "No style, class, <style>, <blockquote> or colour appears anywhere, and no literal Markdown characters (#, **, -, ---, •) survive in the Doc text."

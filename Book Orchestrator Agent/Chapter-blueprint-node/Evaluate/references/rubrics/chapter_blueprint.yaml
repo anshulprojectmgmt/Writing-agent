@@ -1,0 +1,104 @@
+pass_threshold: 0.85
+
+sections:
+  - id: block_0_foundation
+    name: "BLOCK 0 — Chapter Foundation"
+    match: fixed
+    weight: 0.20
+    purpose: "Per the skill: this is the chapter's DNA, decided before any structure — every downstream block (Block 1's alternatives, Block 2's sub-sections) is judged against whether it actually delivers on the Reader Transformation and honors the Counterargument named here."
+    dimensions:
+      structural:
+        weight: 0.2
+        checks:
+          - "Purpose, Core Argument, Reader Transformation, Primary Tension, Counterargument, and Promise are all present"
+      quality:
+        weight: 0.3
+        checks:
+          - "Reader Transformation states a specific before → after belief, not a vague 'reader learns X'"
+      purpose_alignment:
+        weight: 0.5
+        checks:
+          - "Counterargument is a genuine opposing position someone would actually argue, not a straw man"
+          - "None of the six fields could be copy-pasted into a different chapter unchanged"
+
+  - id: block_1_alternatives
+    name: "BLOCK 1 — Structural Alternatives"
+    match: fixed
+    weight: 0.20
+    purpose: "Per the skill: three genuinely different structural options, each grounded in a named pattern from structural-patterns.md, so the chapter's shape is a deliberate choice rather than the first structure that came to mind."
+    dimensions:
+      structural:
+        weight: 0.3
+        checks:
+          - "Exactly three alternatives, each names the pattern it's grounded in"
+      content_completeness:
+        weight: 0.3
+        checks:
+          - "Each section within each alternative has a distinct one-line job"
+      purpose_alignment:
+        weight: 0.4
+        checks:
+          - "The three alternatives would produce noticeably different chapters if fully written — different emotional arcs, not just relabeled sections"
+
+  - id: block_2_subsections
+    name: "each Block 2 sub-section"
+    match: dynamic
+    weight: 0.50
+    purpose: "Per the skill: ideas-only discipline — a content idea specific enough that mapping-research could immediately picture what evidence would serve it, with zero citations/products/case studies at this stage."
+    dimensions:
+      structural:
+        weight: 0.2
+        checks:
+          - "Contains zero citations, product names, specific companies, or case studies"
+      content_completeness:
+        weight: 0.3
+        checks:
+          - "Has a specific one-to-two-line content idea, not a placeholder ('discuss how X relates to Y')"
+      quality:
+        weight: 0.2
+        checks:
+          - "The idea is specific to this chapter, not generic enough to belong to a different chapter on a similar topic"
+      purpose_alignment:
+        weight: 0.3
+        checks:
+          - "Doesn't restate the job of an adjacent sub-section"
+          - "The idea is specific enough that a mapping-research pass could immediately picture what evidence would serve it"
+    red_flags:
+      - "A specific company, product, or citation appears despite the ideas-only rule"
+
+  - id: wow_moment_check
+    name: "the sub-section marked WOW MOMENT"
+    match: fixed
+    weight: 0.06
+    purpose: "Per the skill: at least one sub-section must be a genuine surprise or reframe, not just solid content mislabeled — this is what's supposed to make the chapter memorable rather than merely informative."
+    dimensions:
+      purpose_alignment:
+        weight: 1.0
+        checks:
+          - "Names a specific reframe or counter-intuitive fact a PM reader plausibly wouldn't already believe, not an ordinary example mislabeled"
+
+  - id: tech_section_check
+    name: "the [TECH] section"
+    match: fixed
+    weight: 0.04
+    purpose: "Per the skill: mandatory technical grounding for this specific chapter's concept — present in name only defeats its purpose."
+    dimensions:
+      structural:
+        weight: 0.5
+        checks:
+          - "Present and labeled"
+      content_completeness:
+        weight: 0.5
+        checks:
+          - "The content idea is specific to a technical concept this exact chapter needs explained, not generic"
+
+  - id: completeness_summary
+    name: "Completeness Summary"
+    match: fixed
+    weight: 0.00
+    purpose: "The skill's own self-report of section count, WOW MOMENT presence, [TECH] presence, and anti-redundancy result."
+    dimensions:
+      consistency:
+        weight: 1.0
+        checks:
+          - "Every claim in the summary is verifiably consistent with the body above"

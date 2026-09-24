@@ -1,0 +1,388 @@
+# Output format for the research_analysis node.
+# Source: Research Analysis skill -> references/output-formatting.md (HTML version).
+# diagnose builds every added or replaced block from these templates, so a
+# revised block is marked up exactly like the blocks Research Analysis generated.
+
+node_name: research_analysis
+content_format: html
+
+global:
+  spacer: "<p>&nbsp;</p>"
+  rules:
+    - "No CSS and no colour anywhere: no style attributes, no <style> blocks, no class. They are stripped in conversion, and there is no text-colour equivalent that survives."
+    - "Every blank line is a <p>&nbsp;</p> spacer paragraph. Whitespace and newlines in the HTML source are ignored."
+    - "One spacer between every pair of blocks, and after every labelled field paragraph. Never a spacer between two <li> items — it splits the list in two."
+    - "Repeated titles — a Theme, Mental Model, Technical Concept, Tension, Idea or Gap — stay <strong> inside their own <p>. Never <h4>, and never promoted to a heading: that floods the Doc's outline pane."
+    - "Escape & as &amp;, < as &lt;, > as &gt;. Write em dashes as &mdash; and the 'leads to' arrow in Searches run bullets as &rarr;."
+    - "Where a source is a real URL, write it <a href=\"{URL}\">{URL}</a>, the address in both places. Where the skill's own format gives a short parenthetical or in-line citation instead, keep it as plain text — never invent a link."
+    - "Never emit an empty heading or an empty <li>. Never emit a heading for a section that was correctly omitted."
+    - "No literal Markdown characters (#, **, -, ---) survive anywhere in the Doc text."
+    - "Templates govern markup only. Claims, labels, sources and figures are never shortened or reworded to fit one."
+  headings:
+    h1: "The document title, carrying the topic"
+    h2: "Framing Check, the numbered sections 1 through 8, and Completeness Summary"
+    h3: "Live Tensions and Disconfirming Evidence — the two subsections inside Section 5"
+    strong: "Theme / Model / Concept / Tension / Idea / Gap titles, and every field label — body text, never headings"
+    em: "The one-line theme gloss, a model's Source line, the conclusion's Sources line, and the two Disconfirming Evidence labels"
+  in_the_doc:
+    spacer: "a paragraph whose text is one non-breaking space (\\u00a0) and a newline"
+    hr: "a paragraph holding a horizontal rule element"
+    headings: "paragraphs with namedStyleType HEADING_1 / HEADING_2 / HEADING_3"
+    block_end: "every theme, model, concept, tension, idea and gap ends with spacer, <hr>, spacer — the next block starts on the paragraph after that last spacer"
+
+sections:
+
+  - id: document_header
+    heading: "{Topic} — Research Synthesis"
+    evaluate_topic: null
+    section: |
+      <h1>{Topic} &mdash; Research Synthesis</h1>
+      <p>&nbsp;</p>
+      <hr>
+      <p>&nbsp;</p>
+
+  - id: framing_check
+    heading: "Framing Check"
+    evaluate_topic: null
+    section: |
+      <h2>Framing Check</h2>
+      <p>&nbsp;</p>
+      <p><strong>The stated question:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>The actual question:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>The assumption underneath:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>The constraint test:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>One serious alternative frame:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>FRAMING: {HOLDS / REFRAME PROPOSED}</strong></p>
+      <p>&nbsp;</p>
+      <hr>
+      <p>&nbsp;</p>
+    rules:
+      - "Five field paragraphs, a spacer after each. Two fields sharing a paragraph is the defect this block exists to prevent."
+      - "The verdict is its own bold paragraph, never appended to the fifth field."
+      - "On FRAMING: REFRAME PROPOSED, the one-sentence reframe summary follows the verdict as its own paragraph, with its own spacer, before the <hr> — it must stay visible, not buried."
+
+  - id: central_concept
+    heading: "1. Central Concept"
+    evaluate_topic: "1. Central Concept"
+    section: |
+      <h2>1. Central Concept</h2>
+      <p>&nbsp;</p>
+      <p>{Paragraph one.}</p>
+      <p>&nbsp;</p>
+      <p>{Paragraph two.}</p>
+      <p>&nbsp;</p>
+      <p>{Paragraph three, if present.}</p>
+      <p>&nbsp;</p>
+      <p><strong>Sources:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <hr>
+      <p>&nbsp;</p>
+    blocks:
+      paragraph:
+        html: |
+          <p>{text}</p>
+          <p>&nbsp;</p>
+        add_after: "the spacer of the paragraph it follows, above the Sources field"
+    rules:
+      - "Each paragraph the synthesis wrote is its own <p> with a spacer after it — never merged into one block."
+      - "Sources is always the closing field, in its own paragraph."
+
+  - id: themes
+    heading: "2. Themes"
+    evaluate_topic: "2. Themes"
+    section: |
+      <h2>2. Themes</h2>
+      <p>&nbsp;</p>
+      {themes}
+    blocks:
+      theme:
+        html: |
+          <p><strong>Theme {N}: {Short heading}</strong></p>
+          <p>&nbsp;</p>
+          <p><em>{One-line plain-language gloss.}</em></p>
+          <p>&nbsp;</p>
+          <p>{Explanatory paragraph one.}</p>
+          <p>&nbsp;</p>
+          <p>{Explanatory paragraph two, if present.}</p>
+          <p>&nbsp;</p>
+          <p><strong>Example:</strong> {…}</p>
+          <p>&nbsp;</p>
+          <p><strong>Sources:</strong> {…}</p>
+          <p>&nbsp;</p>
+          <hr>
+          <p>&nbsp;</p>
+        add_after: "the closing spacer of the last theme; the new theme takes the next number"
+    rules:
+      - "A spacer after the title, after the gloss, after each explanatory paragraph, after Example, and after Sources. A theme with fewer is wrong."
+      - "The one-line gloss is the only italicised line here — it is content, not a field label, so <em>, never <strong>."
+      - "Where the explanation runs two or three paragraphs, each is its own <p>."
+      - "<hr> separates themes, with a spacer before and after it."
+
+  - id: mental_models
+    heading: "3. Mental Models"
+    evaluate_topic: "3. Mental Models"
+    section: |
+      <h2>3. Mental Models</h2>
+      <p>&nbsp;</p>
+      {models}
+    blocks:
+      model:
+        html: |
+          <p><strong>{Model Name} ({Theorist, if named})</strong></p>
+          <p>&nbsp;</p>
+          <p>{Explanatory paragraph one.}</p>
+          <p>&nbsp;</p>
+          <p>{Explanatory paragraph two, if present.}</p>
+          <p>&nbsp;</p>
+          <p><strong>Why it matters:</strong> {…}</p>
+          <p>&nbsp;</p>
+          <p><em>Source: {…}</em></p>
+          <p>&nbsp;</p>
+          <hr>
+          <p>&nbsp;</p>
+        add_after: "the closing spacer of the last model"
+      contrast_list:
+        html: |
+          <p>&nbsp;</p>
+          <ul>
+          <li><strong>{X}:</strong> {…}</li>
+          <li><strong>{Y}:</strong> {…}</li>
+          </ul>
+          <p>&nbsp;</p>
+        add_after: "used in the explanatory paragraph's position, where a model is fundamentally an X-vs-Y distinction"
+    rules:
+      - "Models stay in the order the synthesis gave them — strongest explanatory leverage first. This file marks them up, it does not reorder them."
+      - "Source stays italic — the one field in this section that is not bold."
+      - "No spacer between the <li> items of a contrast list; spacers sit before the <ul> and after the closing tag."
+
+  - id: technical_concepts
+    heading: "4. Technical Concepts"
+    evaluate_topic: "4. Technical Concepts"
+    section: |
+      <h2>4. Technical Concepts</h2>
+      <p>&nbsp;</p>
+      {concepts}
+    blocks:
+      concept:
+        html: |
+          <p><strong>{Concept Name}</strong></p>
+          <p>&nbsp;</p>
+          <ul>
+          <li><strong>What it is:</strong> {…}</li>
+          <li><strong>Why it matters:</strong> {…}</li>
+          <li><strong>Source:</strong> {…}</li>
+          <li><strong>What changed:</strong> {…}</li>
+          </ul>
+          <p>&nbsp;</p>
+          <hr>
+          <p>&nbsp;</p>
+        add_after: "the closing spacer of the last concept"
+    rules:
+      - "A spacer after the concept's title and before its <ul>, and a spacer after the closing </ul> before the <hr>. Without them a concept name runs straight into the previous concept's last bullet."
+      - "No spacer between the <li> items."
+      - "What changed is emitted only when the synthesis actually wrote it — never an empty <li> to keep a uniform four-bullet shape."
+      - "<hr> separates concepts, with a spacer before and after it."
+
+  - id: retain_downgrade_remove
+    heading: "5. What to Retain, Downgrade, or Remove"
+    evaluate_topic: "5. What to Retain, Downgrade, or Remove"
+    section: |
+      <h2>5. What to Retain, Downgrade, or Remove</h2>
+      <p>&nbsp;</p>
+      {tiers}
+      <h3>Live Tensions</h3>
+      <p>&nbsp;</p>
+      {tensions}
+      <h3>Disconfirming Evidence</h3>
+      <p>&nbsp;</p>
+      {disconfirming_evidence}
+    blocks:
+      tier:
+        html: |
+          <p><strong>{Retain | Downgrade | Remove}</strong></p>
+          <p>&nbsp;</p>
+          <ul>
+          <li>{Claim} &mdash; {(Source attribution) for Retain, or the one-line reason for Downgrade and Remove}</li>
+          </ul>
+          <p>&nbsp;</p>
+        add_after: "the spacer after the previous tier's list; the three tiers run Retain, Downgrade, Remove in that order"
+      tension:
+        html: |
+          <p><strong>{Pole A} vs. {Pole B}</strong></p>
+          <p>&nbsp;</p>
+          <ul>
+          <li><strong>Side A:</strong> {…} <em>({source})</em></li>
+          <li><strong>Side B:</strong> {…} <em>({source})</em></li>
+          <li><strong>Why it stays open:</strong> {…}</li>
+          <li><strong>Chapter use:</strong> {…}</li>
+          </ul>
+          <p>&nbsp;</p>
+          <hr>
+          <p>&nbsp;</p>
+        add_after: "the closing spacer of the last tension, under the Live Tensions heading"
+      no_tension_note:
+        html: |
+          <p>{One line naming the closest thing to a disagreement, or stating plainly that none was found.}</p>
+          <p>&nbsp;</p>
+        add_after: "the Live Tensions heading's spacer — used in place of the tension blocks when none exists"
+      disconfirming_evidence:
+        html: |
+          <p><em>What would weaken this</em></p>
+          <p>&nbsp;</p>
+          <ul>
+          <li>{Specific, falsifiable condition}</li>
+          </ul>
+          <p>&nbsp;</p>
+          <p><em>Searches run</em></p>
+          <p>&nbsp;</p>
+          <ul>
+          <li>{What was searched} &rarr; {what came back, including null results}</li>
+          </ul>
+          <p>&nbsp;</p>
+          <p><strong>Falsifier:</strong> stated at the close of Section 7.</p>
+          <p>&nbsp;</p>
+          <hr>
+          <p>&nbsp;</p>
+        add_after: "the Disconfirming Evidence heading's spacer"
+    rules:
+      - "Each tier is a bold label followed by a real <ul>, with no spacer between <li> items."
+      - "Live Tensions and Disconfirming Evidence are real <h3> subsections, not another tier and not bold paragraphs."
+      - "One to three tension blocks, each title plus four-item list plus divider."
+      - "What would weaken this and Searches run are italic labels, each its own paragraph, each immediately followed by its own <ul> — never merged into one list."
+      - "Falsifier is the closing paragraph of Section 5: bold label, plain text after it. It points to Section 7, it does not repeat it."
+
+  - id: chapter_synthesis_ideas
+    heading: "6. Chapter Synthesis Ideas"
+    evaluate_topic: "6. Chapter Synthesis Ideas"
+    section: |
+      <h2>6. Chapter Synthesis Ideas</h2>
+      <p>&nbsp;</p>
+      {ideas}
+    blocks:
+      idea:
+        html: |
+          <p><strong>Idea {N}: {Idea name}</strong></p>
+          <p>&nbsp;</p>
+          <p><strong>Core framing:</strong> {…}</p>
+          <p>&nbsp;</p>
+          <p><strong>Chapter flow:</strong></p>
+          <p>&nbsp;</p>
+          <ul>
+          <li><strong>Opening:</strong> {…}</li>
+          <li><strong>Section 1:</strong> {…}</li>
+          <li><strong>Section 2:</strong> {…}</li>
+          <li><strong>Section 3:</strong> {…}</li>
+          <li><strong>Section 4:</strong> {…}</li>
+          <li><strong>Closing:</strong> {…}</li>
+          </ul>
+          <p>&nbsp;</p>
+          <hr>
+          <p>&nbsp;</p>
+        add_after: "the closing spacer of the last idea; the new idea takes the next number"
+    rules:
+      - "Core framing is a normal labelled paragraph. Chapter flow introduces the list and is never itself an <li>."
+      - "No spacer between the <li> items inside Chapter flow."
+      - "The Section 4 row appears only where the flow actually has one."
+      - "<hr> separates ideas, with a spacer before and after it."
+
+  - id: final_conclusion
+    heading: "7. Final Conclusion"
+    evaluate_topic: "7. Final Conclusion"
+    section: |
+      <h2>7. Final Conclusion</h2>
+      <p>&nbsp;</p>
+      <p>{Paragraph one.}</p>
+      <p>&nbsp;</p>
+      <p>{Paragraph two.}</p>
+      <p>&nbsp;</p>
+      <p>{Paragraph three, if present — the standalone closing claim.}</p>
+      <p>&nbsp;</p>
+      <p><strong>What would change this conclusion:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><em>Sources supporting the conclusion: {…}</em></p>
+      <p>&nbsp;</p>
+      <hr>
+      <p>&nbsp;</p>
+    rules:
+      - "The closing claim the chapter builds toward stays its own <p>, never folded into the paragraph before it."
+      - "Sources supporting the conclusion stays italic."
+      - "What would change this conclusion is the stated falsifier Section 5 points at — it is never dropped."
+
+  - id: research_gaps
+    heading: "8. Research Gaps & Opportunities"
+    evaluate_topic: "8. Research Gaps & Opportunities"
+    section: |
+      <h2>8. Research Gaps &amp; Opportunities</h2>
+      <p>&nbsp;</p>
+      {gaps}
+    blocks:
+      gap:
+        html: |
+          <p><strong>Gap {N}: {Specific unanswered question}</strong></p>
+          <p>&nbsp;</p>
+          <p>{Explanatory paragraph.}</p>
+          <p>&nbsp;</p>
+          <p><strong>Web search findings:</strong> {…}</p>
+          <p>&nbsp;</p>
+          <p><strong>Updated guidance for the chapter:</strong> {…}</p>
+          <p>&nbsp;</p>
+          <hr>
+          <p>&nbsp;</p>
+        add_after: "the closing spacer of the last gap"
+    rules:
+      - "This section is optional. If the synthesis correctly omitted it, the heading is absent too — never an empty <h2> with nothing under it."
+      - "A divider between gaps applies only when there is more than one gap."
+      - "The heading's ampersand is written &amp;."
+
+  - id: completeness_summary
+    heading: "Completeness Summary"
+    evaluate_topic: "Completeness Summary"
+    section: |
+      <h2>Completeness Summary</h2>
+      <p>&nbsp;</p>
+      <p><strong>Sections written:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>Section 8 included:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>Word count:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>Duplication check run:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>Retain / Downgrade / Remove counts:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>Input completeness:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>Framing verdict:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>Live tensions logged:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>Disconfirming searches run:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>Falsifier stated in Section 7:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>Section 4 "What changed" lines:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>Book state document:</strong> {…}</p>
+      <p>&nbsp;</p>
+    rules:
+      - "Exactly twelve field paragraphs, one per field, in the order above. Two labels sharing a paragraph is the defect that made this section unreadable in earlier drafts."
+      - "Every number here must match the body: a change that adds or removes a theme, concept, tension, idea or gap updates the counts, the section list and the word count with it."
+
+verify:
+  - "The Framing Check has a spacer after each of its five fields and after the verdict paragraph."
+  - "Every theme has a spacer after its title, its gloss, each explanatory paragraph, Example and Sources, and no two of those share a paragraph."
+  - "Every mental model has a spacer after its title, each explanatory paragraph, Why it matters, and the italic Source line."
+  - "Every technical concept has a spacer after its title, before its <ul> and after it, with What it is / Why it matters / Source / What changed as real <li> items, not <p> lines."
+  - "Retain, Downgrade and Remove are each a bold label followed by a real <ul>, with no spacer between <li> items."
+  - "Live Tensions is a real <h3>; each tension has a bold title and a four-item <ul> (Side A, Side B, Why it stays open, Chapter use), with a divider between tensions."
+  - "Disconfirming Evidence is a real <h3>, with What would weaken this and Searches run as their own italic-labelled paragraphs each followed by their own <ul>, and Falsifier as its own closing bold-labelled paragraph."
+  - "Every chapter synthesis idea has Core framing as a paragraph and Chapter flow as a labelled paragraph followed by a real <ul> with no spacers between items."
+  - "The Final Conclusion's closing claim is its own paragraph, and Sources supporting the conclusion stays italic."
+  - "Section 8 is either fully formatted with dividers between multiple gaps, or entirely absent — never an empty heading."
+  - "The Completeness Summary has exactly twelve field paragraphs, and its numbers match the body."
+  - "No style, class, <style> or colour appears anywhere, and no literal Markdown characters (#, **, -, ---) survive in the Doc text."

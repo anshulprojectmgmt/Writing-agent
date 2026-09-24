@@ -1,0 +1,83 @@
+pass_threshold: 0.85
+
+sections:
+  - id: draft_sections
+    name: "each section of the Complete Chapter Draft"
+    match: dynamic
+    weight: 0.55
+    purpose: "Per the writing-style reference: this is manuscript prose in the house voice ('smart friend over coffee') — every jargon term explained on first use, every mechanism earned by tension established first, every major concept grounded in a real analogy or named example."
+    dimensions:
+      structural:
+        weight: 0.15
+        checks:
+          - "Present, in the same order, as the approved blueprint — no silent additions, drops, or reorders"
+      content_completeness:
+        weight: 0.2
+        checks:
+          - "Every factual claim traces to assigned evidence or is explicitly GAP-marked — no bare unsupported assertions"
+      quality:
+        weight: 0.3
+        checks:
+          - "Every jargon term (LLM, agent, RAG, context window, etc.) has a plain-English explanation on first use, in the same breath"
+          - "No hype language (revolutionary, game-changing, unprecedented, transformative) without being immediately backed by the specific named example that earns it"
+      purpose_alignment:
+        weight: 0.35
+        checks:
+          - "Technical explanations open with the failure mode/prior assumption before the mechanism (tension before resolution)"
+          - "Major concepts are grounded in a real-life analogy or a named, specific example, not left abstract"
+    red_flags:
+      - "A generic hypothetical example ('imagine a company that...') used where a real, named example was available in the evidence package"
+      - "A statistic or named example with no citation and no GAP marker anywhere near it"
+
+  - id: reader_transformation_check
+    name: "the section where Reader Transformation is designed to land"
+    match: fixed
+    weight: 0.10
+    purpose: "Per the blueprint's Chapter Foundation: the before → after belief shift must land at exactly one identifiable point, not diffuse across the chapter, or the reader never feels it happen."
+    dimensions:
+      purpose_alignment:
+        weight: 1.0
+        checks:
+          - "A specific paragraph or moment clearly delivers the before → after shift named in the blueprint, at exactly one point"
+
+  - id: tension_check
+    name: "where the Counterargument is voiced"
+    match: fixed
+    weight: 0.08
+    purpose: "Per the blueprint's Chapter Foundation: the counterargument must be genuinely argued, not just referenced, or the chapter's own position never actually gets tested."
+    dimensions:
+      purpose_alignment:
+        weight: 1.0
+        checks:
+          - "The counterargument from the blueprint is given a genuine, fair hearing in the draft's prose before the chapter's own position responds to it — not dispatched in a single dismissive clause"
+
+  - id: chapter_writing_notes
+    name: "Chapter Writing Notes"
+    match: fixed
+    weight: 0.08
+    purpose: "Documents evidence used, gaps managed, and cut decisions — exists so a later reviewer understands *why* the draft made the choices it made, not just what it chose."
+    dimensions:
+      content_completeness:
+        weight: 0.5
+        checks:
+          - "Every cut or gap-management decision has a specific, traceable reason, not a generic note"
+      consistency:
+        weight: 0.5
+        checks:
+          - "Decisions documented here match what actually happened in the draft"
+
+  - id: manuscript_handoff_package
+    name: "Manuscript Handoff Package"
+    match: fixed
+    weight: 0.09
+    purpose: "The package a downstream reviewer or formatter relies on without re-reading the whole draft — any mismatch with the actual draft defeats that purpose."
+    dimensions:
+      structural:
+        weight: 0.3
+        checks:
+          - "Word counts, citation list, and coverage map are all present"
+      consistency:
+        weight: 0.7
+        checks:
+          - "Citation list matches the citations actually used in the draft text — same count, same sources"
+          - "Word counts and coverage map are consistent with the actual draft"

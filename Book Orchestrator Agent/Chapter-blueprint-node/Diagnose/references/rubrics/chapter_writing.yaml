@@ -1,0 +1,235 @@
+# Output format for the chapter_writing node.
+#
+# DERIVED, not transcribed. This node has no references/output-formatting.md:
+# it writes Markdown, saves a .md, and converts that to a Doc. The templates
+# below translate the skill's own "Formatting" and "Delivery Format" sections
+# into the HTML the revision is built from, using the same house conventions
+# the sibling nodes' output-formatting files set out.
+# If an output-formatting.md is written for this node later, replace this file
+# from it rather than editing around it.
+
+node_name: chapter_writing
+content_format: html
+
+global:
+  spacer: "<p>&nbsp;</p>"
+  rules:
+    - "No CSS and no colour anywhere: no style attributes, no <style> blocks, no class."
+    - "Every blank line is a <p>&nbsp;</p> spacer paragraph. Whitespace and newlines in the HTML source are ignored."
+    - "Never a fenced code block, for anything. The fence is stripped in conversion and the block collapses into one paragraph — which is why the notes, handoff package and summary are labelled lines and tables instead."
+    - "Headings are bold: the heading text is wrapped in <strong> inside its heading tag, because the Doc's default heading styles are not bold and the subsection style renders grey."
+    - "No dashes in any heading. The number is followed by a single space, then the title. Blueprint numbering is kept exactly."
+    - "[TECH] and [WOW MOMENT] are the only bracket tags that survive into a heading, and they are kept verbatim. No other bracket tag, ever."
+    - "No editorial metadata in the prose: no `Section context:` paragraphs, no `Purpose:` lines under subsection headings, no inline manuscript notes. Those live in the Chapter Writing Notes."
+    - "Escape & as &amp;, < as &lt;, > as &gt;. Write em dashes as &mdash;, en dashes as &ndash;, ellipses as &hellip;."
+    - "<blockquote> does not survive this pipeline. The chapter's at-most-two quoted beats stay as their own paragraphs — carry their wording intact and never add markup that will be stripped."
+    - "Never emit an empty heading, an empty table row, a table with only a header row, or an empty list."
+    - "No literal Markdown characters (#, **, -, ---) survive anywhere in the Doc text."
+    - "Templates govern markup only. Prose, punch lines, citations and field values are never shortened, merged or reworded to fit one — a punch line is carried verbatim from the blueprint."
+  prose_rules:
+    - "Three to six bold items per section, and never zero: punch lines, the load-bearing phrase inside a paragraph, run-in openers, and a key term at first definition."
+    - "Two to four italics per section: a defined technical term at first use, a line voiced as the product's or user's own, a single pivotal word, a phrase held at arm's length."
+    - "Bold is never a whole sentence, and italic is never a whole paragraph or twice in one paragraph."
+    - "A counted enumeration in the prose (three jobs, four failures, five questions) is set as a list, not left as prose."
+    - "At most two lists per section, parallel items only; numbered when the source names a count or order, bulleted when it does not. The Your Move questions are always a list."
+    - "At most one table in the manuscript itself, and only for a genuine two-axis comparison; never as a layout device. Tables are unrestricted inside the Manuscript Handoff Package."
+    - "No device lands at the same position in every section — that is the over-formatting failure the AI-fingerprint pass exists to catch."
+    - "Citations are inline attributions, never footnotes, and never invented. A claim resting on an unresolved gap carries the skill's own marker: (limited evidence; see research notes) or (underresearched; treat as hypothesis pending further validation)."
+    - "No mid-sentence em dash as a structural element; paragraphs run 3-7 sentences; no stacked one-liners."
+  headings:
+    h1: "The chapter title — chapter number plus title only"
+    h2: "Each top-level section, keeping the blueprint's numbering and its [TECH] / [WOW MOMENT] tags"
+    h3: "Each subsection, carrying the blueprint's numbering; the Scene section's beats (The Setup, The Magic, The Razor's Edge) are unnumbered"
+    strong: "The heading text itself, punch lines, load-bearing phrases, run-in openers, key terms at first definition, and every field label in the notes, handoff package and summary"
+    em: "A defined technical term at first use, a line voiced as the product's or the user's own, a single pivotal word, a phrase held at arm's length"
+  in_the_doc:
+    spacer: "a paragraph whose text is one non-breaking space (\\u00a0) and a newline"
+    hr: "a paragraph holding a horizontal rule element"
+    headings: "paragraphs with namedStyleType HEADING_1 / HEADING_2 / HEADING_3, their text a bold run"
+    tables: "the Chapter Writing Notes' per-section table and the Completeness Summary are real Doc tables. Carry them across as tables, never flattened to paragraphs"
+    quoted_beats: "a Markdown blockquote converted into this Doc may come back as an ordinary or indented paragraph. Carry its text exactly and do not try to reconstruct the quote styling"
+    block_end: "the chapter title is followed by an <hr>, and another <hr> precedes each top-level heading that starts a new output (the notes, the handoff package)"
+
+sections:
+
+  - id: chapter_draft
+    heading: "CHAPTER {N} {CHAPTER TITLE}"
+    evaluate_topic: "each section of the Complete Chapter Draft"
+    also_resolves:
+      - "the section where Reader Transformation is designed to land"
+      - "where the Counterargument is voiced"
+    section: |
+      <h1><strong>CHAPTER {N} {CHAPTER TITLE}</strong></h1>
+      <p>&nbsp;</p>
+      <hr>
+      <p>&nbsp;</p>
+      {sections}
+    blocks:
+      section:
+        html: |
+          <h2><strong>{N} {SECTION TITLE}</strong></h2>
+          <p>&nbsp;</p>
+          {sub-sections}
+        add_after: "the last paragraph of the section it follows; the new section keeps the blueprint's number"
+      subsection:
+        html: |
+          <h3><strong>{N}.{X} {Subsection title}</strong></h3>
+          <p>&nbsp;</p>
+          <p>{Prose paragraph.}</p>
+          <p>&nbsp;</p>
+        add_after: "the last paragraph of the subsection it follows, inside the same section"
+      scene_beat:
+        html: |
+          <h3><strong>{The Setup | The Magic | The Razor's Edge}</strong></h3>
+          <p>&nbsp;</p>
+          <p>{Prose paragraph.}</p>
+          <p>&nbsp;</p>
+        add_after: "the last paragraph of the beat it follows — Scene's beats are unnumbered on purpose"
+      paragraph:
+        html: |
+          <p>{Prose paragraph, with its bold and italic carried inline.}</p>
+          <p>&nbsp;</p>
+        add_after: "the spacer of the paragraph it follows"
+      punch_line:
+        html: |
+          <p><strong>{Punch line, verbatim from the blueprint.}</strong></p>
+          <p>&nbsp;</p>
+        add_after: "the paragraph it closes — always its own paragraph, always bold"
+      list:
+        html: |
+          <ul>
+          <li>{Parallel item.}</li>
+          </ul>
+          <p>&nbsp;</p>
+        add_after: "the paragraph that enumerates the set, replacing prose that counted it out"
+    rules:
+      - "Blueprint structure is preserved exactly: every section and subsection in the blueprint's order, with its numbering."
+      - "Section A, the opening creative beat, is renamed Scene and uses narrative beats instead of numbered subheadings. It carries no citations, no evidence and no Purpose metadata."
+      - "Punch lines are bold, on their own paragraph, and verbatim from the blueprint. Every punch line, every time."
+      - "Every section carries three to six bold items and two to four italics. A section at zero bold has been under-formatted and is not deliverable."
+      - "The chapter appears exactly once. Nothing is restated, duplicated or re-emitted after the draft."
+      - "The [TECH] / PM lens passages are written as a field manual, not a lecture, and carry no first person."
+      - "The skill's Header contract shows the chapter title with a dash while its Headings rule says no heading carries a dash, the chapter title included. Leave whichever form the document already uses; never introduce a dash, and change this only if a comment asks for it."
+
+  - id: chapter_writing_notes
+    heading: "Chapter Writing Notes"
+    evaluate_topic: "Chapter Writing Notes"
+    section: |
+      <hr>
+      <p>&nbsp;</p>
+      <h1><strong>Chapter Writing Notes</strong></h1>
+      <p>&nbsp;</p>
+      <table>
+      <tr>
+      <th>Section</th>
+      <th>Evidence Used</th>
+      <th>Gaps Managed</th>
+      <th>Tension Logged</th>
+      <th>Cut Decisions</th>
+      </tr>
+      <tr>
+      <td>{Section}</td>
+      <td>{Citation tag}</td>
+      <td>{How unresolved gaps were handled}</td>
+      <td>{Which tensions were preserved}</td>
+      <td>{What was removed, and why}</td>
+      </tr>
+      </table>
+      <p>&nbsp;</p>
+      <p><strong>Transformation Point:</strong> {where the reader shift occurred}</p>
+      <p>&nbsp;</p>
+      <p><strong>Voice Pass:</strong> {what the pass changed, and any first-person or uncertainty calls worth the author's attention}</p>
+      <p>&nbsp;</p>
+      <p><strong>Formatting Audit:</strong> {any device that had become regular and was de-templated}</p>
+      <p>&nbsp;</p>
+      <p><strong>Book Profile Source:</strong> {supplied chapter details / inferred from the blueprint / default informed professional reader}</p>
+      <p>&nbsp;</p>
+    blocks:
+      section_row:
+        html: |
+          <tr>
+          <td>{Section}</td>
+          <td>{Citation tag}</td>
+          <td>{How unresolved gaps were handled}</td>
+          <td>{Which tensions were preserved}</td>
+          <td>{What was removed, and why}</td>
+          </tr>
+        add_after: "the last <tr> of the table, inside the same <table> — one row per section of the draft"
+    rules:
+      - "One table row per section of the draft, in draft order. A new or removed section in the draft adds or removes its row here."
+      - "The four chapter-level fields are labelled lines, one per paragraph, never run together."
+      - "Everything editorial lives here — nothing editorial belongs in the chapter prose."
+
+  - id: manuscript_handoff_package
+    heading: "Manuscript Handoff Package"
+    evaluate_topic: "Manuscript Handoff Package"
+    section: |
+      <hr>
+      <p>&nbsp;</p>
+      <h1><strong>Manuscript Handoff Package</strong></h1>
+      <p>&nbsp;</p>
+      <p><strong>Word count:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>Section word counts:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>Citation list:</strong> {all inline refs collected}</p>
+      <p>&nbsp;</p>
+      <p><strong>Evidence coverage map:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>Gaps requiring author decision:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>Suggested line edits:</strong> {voice, repetition, jargon}</p>
+      <p>&nbsp;</p>
+    rules:
+      - "Six labelled lines, one per paragraph, in the order above."
+      - "The citation list collects every inline reference in the draft — a change that adds or removes a citation updates it."
+      - "Tables are unrestricted here, unlike in the manuscript itself."
+
+  - id: completeness_summary
+    heading: "Completeness Summary"
+    evaluate_topic: "Completeness Summary"
+    section: |
+      <h2><strong>Completeness Summary</strong></h2>
+      <p>&nbsp;</p>
+      <table>
+      <tr>
+      <th width="60%">Check</th>
+      <th width="40%">Result</th>
+      </tr>
+      <tr><td>Word count</td><td>{count}</td></tr>
+      <tr><td>Section count</td><td>{N, vs. blueprint's N}</td></tr>
+      <tr><td>Blueprint structure preserved exactly</td><td>{yes / no &mdash; list deviations}</td></tr>
+      <tr><td>Punch Lines preserved verbatim</td><td>{yes / no &mdash; list any altered}</td></tr>
+      <tr><td>Reader transformation point present and singular</td><td>{yes / no}</td></tr>
+      <tr><td>Tension preserved and both sides presented</td><td>{yes / no}</td></tr>
+      <tr><td>Unsupported claims check</td><td>{pass &mdash; every claim attributed / issues found}</td></tr>
+      <tr><td>Forward pointer to next chapter present</td><td>{yes / no}</td></tr>
+      <tr><td>First-person instances</td><td>{N &mdash; all at seams? yes / no, list strays}</td></tr>
+      <tr><td>Hedging check</td><td>{pass &mdash; no vague hedging / instances found}</td></tr>
+      <tr><td>House formatting check</td><td>{pass / violations}</td></tr>
+      <tr><td>AI-fingerprint pass run</td><td>{yes / no &mdash; clusters patched: N}</td></tr>
+      <tr><td>Punch Lines bold</td><td>{N of N &mdash; all bold? yes / no}</td></tr>
+      <tr><td>Bold items per section</td><td>{min N, max N &mdash; any section at zero? yes / no}</td></tr>
+      <tr><td>Italic items per section</td><td>{min N, max N}</td></tr>
+      <tr><td>Formatting audit run</td><td>{yes / no &mdash; devices de-templated: N}</td></tr>
+      <tr><td>Chapter appears once, no duplicated sections</td><td>{yes / no}</td></tr>
+      <tr><td>Voice quality gate</td><td>{pass / revised once / issues remaining}</td></tr>
+      <tr><td>Chapter Writing Notes produced</td><td>{yes / no}</td></tr>
+      <tr><td>Manuscript Handoff Package produced</td><td>{yes / no}</td></tr>
+      <tr><td>Headings bold and dash-free</td><td>{yes / no}</td></tr>
+      </table>
+      <p>&nbsp;</p>
+    rules:
+      - "A two-column table, never a code fence, with every row the skill lists — a missing row reads as an oversight, not a pass."
+      - "Every value here must match the draft: a change to the prose, a punch line, a section or a citation updates the rows it touches, counts included."
+
+verify:
+  - "Every heading is bold, carries no dash, keeps the blueprint's numbering, and shows no bracket tag other than [TECH] or [WOW MOMENT]."
+  - "Every punch line is bold and on its own paragraph, verbatim from the blueprint."
+  - "Every section carries three to six bold items and two to four italics, and no section is at zero."
+  - "No counted enumeration is left as prose, no section carries more than two lists, and the manuscript carries at most one table."
+  - "No editorial metadata is in the prose: no Section context: paragraph, no Purpose: line, no inline manuscript note."
+  - "The chapter appears exactly once; nothing is restated after the draft."
+  - "Chapter Writing Notes, Manuscript Handoff Package and Completeness Summary use labelled lines and real tables — never a code fence — and the notes carry one row per section of the draft."
+  - "No device lands at the same position in every section."
+  - "No style, class, <style> or colour appears anywhere, and no literal Markdown characters (#, **, -, ---) survive in the Doc text."

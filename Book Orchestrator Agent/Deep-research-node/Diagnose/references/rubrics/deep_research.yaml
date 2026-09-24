@@ -1,0 +1,228 @@
+# Output format for the deep_research node.
+# Source: Deep Research skill -> references/output-formatting.md (HTML version).
+# diagnose builds every added or replaced block from these templates, so a
+# revised block is marked up exactly like the blocks Deep Research generated.
+
+node_name: deep_research
+content_format: html
+
+global:
+  spacer: "<p>&nbsp;</p>"
+  rules:
+    - "No CSS and no colour anywhere: no style attributes, no <style> blocks, no class. GAP FILLED and GAP UNRESOLVED are told apart by their label text alone."
+    - "Every blank line is a <p>&nbsp;</p> spacer paragraph. Whitespace and newlines in the HTML source are ignored."
+    - "A label never shares a paragraph with its content: an item name, its Citation line, and its Deep Bullets label are three paragraphs with a spacer after each."
+    - "<blockquote> does not survive. A direct quote stays inline inside its bullet, in quotation marks, and a literal > at the start of a paragraph is never emitted."
+    - "Deep bullets are a real <ul> with bold kind labels. The → in the skill's own spec is a chat bullet marker — the list marker replaces it, and never both."
+    - "Only the bullet kinds the research actually produced are emitted. Four real bullets is correct; six padded with an empty or invented bullet is not, and a label with nothing after it is never emitted."
+    - "Tables convert to real Doc tables, but column widths are best-effort only: a width attribute on a header cell is a hint the converter may ignore. Set it anyway; never treat the result as guaranteed."
+    - "Escape & as &amp;, < as &lt;, > as &gt;. Write em dashes as &mdash;, en dashes as &ndash;, ellipses as &hellip;; percent figures stay as typed."
+    - "Every citation and source URL is written <a href=\"{URL}\">{URL}</a>, the address in both places, never a publication name as the link text. A source with genuinely no URL keeps its other fields and writes the URL field as n/a."
+    - "Never a typed --- or ━━━ divider row in the text — separators are real <hr> elements."
+    - "Never emit an empty heading, an empty table row, a table carrying only a header row, or an empty list."
+    - "No literal Markdown characters (#, **, -, ---) survive anywhere in the Doc text."
+    - "Templates govern markup only. Facts, statistics, mechanisms, quotes, surprising details, caveats, citation fields, search logs and recommendations are never shortened, merged, paraphrased or reworded — least of all a quote or a citation, which the writing phase cannot reconstruct if this document gets them wrong."
+  headings:
+    h1: "The document title, carrying the chapter name"
+    h2: "Research Summary and Writing Handoff"
+    h3: "Each `N.X —` subsection title — the document's navigational spine, and a deliberate divergence from the sibling nodes, where repeated titles stay bold"
+    strong: "EVIDENCE / GAP FILLED / GAP UNRESOLVED labels, evidence item names, bullet kind labels, and every field label — body text, never headings"
+    em: "The original GAP line carried over from the mapped blueprint"
+  in_the_doc:
+    spacer: "a paragraph whose text is one non-breaking space (\\u00a0) and a newline"
+    hr: "a paragraph holding a horizontal rule element"
+    headings: "paragraphs with namedStyleType HEADING_1 / HEADING_2 / HEADING_3"
+    tables: "the Research Summary's metrics table is a real Doc table: a table element whose rows and cells hold their own paragraphs. Carry it across as a table, never flattened to paragraphs"
+    file_split: "the export starts a new file at each HEADING_1 and HEADING_2, and this node's subsection titles are HEADING_3 — so the title and every subsection land in the first file together, with Research Summary and Writing Handoff as their own files. Locate a block by its exact HTML, not by which file it sits in"
+    block_end: "each subsection ends with spacer, <hr>, spacer; the EVIDENCE and GAP blocks inside a subsection are separated by spacers only"
+
+sections:
+
+  - id: document_header
+    heading: "{Chapter Name} — Deep Research Package"
+    evaluate_topic: null
+    section: |
+      <h1>{Chapter Name} &mdash; Deep Research Package</h1>
+      <p>&nbsp;</p>
+      <p><strong>Chapter:</strong> {Chapter Name}</p>
+      <p>&nbsp;</p>
+      <hr>
+      <p>&nbsp;</p>
+
+  - id: subsections
+    heading: "{N}.{X} — {SUBSECTION NAME}"
+    evaluate_topic: "each [N.X] — [SUBSECTION NAME] block"
+    also_resolves:
+      - "each GAP FILLED / GAP UNRESOLVED block"
+    section: |
+      <h3>{N}.{X} &mdash; {SUBSECTION NAME}</h3>
+      <p>&nbsp;</p>
+      {evidence blocks}
+      {gap blocks}
+      <hr>
+      <p>&nbsp;</p>
+    blocks:
+      evidence_block:
+        html: |
+          <p><strong>EVIDENCE</strong></p>
+          <p>&nbsp;</p>
+          <p><strong>{Evidence Item Name}</strong></p>
+          <p>&nbsp;</p>
+          <p><strong>Citation:</strong> {Author} / {Publication} / {Year} / <a href="{URL}">{URL}</a></p>
+          <p>&nbsp;</p>
+          <p><strong>Deep Bullets</strong></p>
+          <p>&nbsp;</p>
+          <ul>
+          <li><strong>Fact:</strong> {Specific fact, finding, or observation.}</li>
+          <li><strong>Mechanism:</strong> {How it works, why it works, what caused the result.}</li>
+          <li><strong>Statistic:</strong> {Metric, percentage, benchmark, or outcome.}</li>
+          <li><strong>Quote:</strong> "{Short, directly usable quote.}"</li>
+          <li><strong>Surprising detail:</strong> {Counterintuitive or non-obvious finding.}</li>
+          <li><strong>Caveat:</strong> {Limitation, failure mode, criticism, or contradictory evidence.}</li>
+          </ul>
+          <p>&nbsp;</p>
+        add_after: "the closing spacer of the evidence block it follows, above the subsection's GAP blocks"
+      deep_bullet:
+        html: |
+          <li><strong>{Fact | Mechanism | Statistic | Quote | Surprising detail | Caveat}:</strong> {…}</li>
+        add_after: "the last <li> of that block's list, inside the same <ul>, keeping the six kinds in the order above"
+      gap_filled:
+        html: |
+          <p><strong>GAP FILLED</strong></p>
+          <p>&nbsp;</p>
+          <p><em>{Original GAP, copied from the mapped blueprint unchanged.}</em></p>
+          <p>&nbsp;</p>
+          <p><strong>Source:</strong> {Publication} / <a href="{URL}">{URL}</a></p>
+          <p>&nbsp;</p>
+          <p><strong>Citation:</strong> {Author} / {Publication} / {Year} / <a href="{URL}">{URL}</a></p>
+          <p>&nbsp;</p>
+          <p><strong>Deep Bullets</strong></p>
+          <p>&nbsp;</p>
+          <ul>
+          <li><strong>Supporting fact:</strong> {…}</li>
+          <li><strong>Supporting evidence:</strong> {…}</li>
+          <li><strong>Supporting statistic:</strong> {…}</li>
+          <li><strong>Caveat:</strong> {…}</li>
+          </ul>
+          <p>&nbsp;</p>
+        add_after: "the subsection's last EVIDENCE block, or the closing spacer of the GAP block it follows"
+      gap_unresolved:
+        html: |
+          <p><strong>GAP UNRESOLVED</strong></p>
+          <p>&nbsp;</p>
+          <p><em>{Original GAP, copied from the mapped blueprint unchanged.}</em></p>
+          <p>&nbsp;</p>
+          <p><strong>Searches Conducted</strong></p>
+          <p>&nbsp;</p>
+          <ul>
+          <li>{Search term or query, as run.}</li>
+          </ul>
+          <p>&nbsp;</p>
+          <p><strong>Findings:</strong> {What was found, and why it does not close the gap.}</p>
+          <p>&nbsp;</p>
+          <p><strong>Recommendation:</strong> {Cut claim / Soften claim / Mark uncertainty / Leave for future research}</p>
+          <p>&nbsp;</p>
+        add_after: "the subsection's last EVIDENCE block, or the closing spacer of the GAP block it follows"
+    rules:
+      - "Subsections run in blueprint order, and the numbering matches the mapped blueprint exactly — this Doc is read side by side with it."
+      - "EVIDENCE blocks come first in a subsection, then GAP blocks."
+      - "A spacer after the EVIDENCE label, after the item name, after the citation, after the Deep Bullets label, and after the closing </ul>. No spacer between <li> items."
+      - "A subsection with more than one assigned item repeats the whole block — label, item name, citation, bullets — once per item."
+      - "The citation is one paragraph with all four fields in order — Author / Publication / Year / URL. A field the source genuinely does not carry is written n/a, never dropped silently and never guessed at."
+      - "In a GAP block, the original GAP is italic and carried over verbatim from the mapped blueprint, so the writer can judge whether the answer meets it. It is never rewritten to match what was found."
+      - "Source and Citation stay separate paragraphs in a GAP FILLED block, even though they overlap."
+      - "Searches Conducted is a labelled paragraph introducing a real <ul>, never itself an <li>. Findings and Recommendation are each their own bold-labelled paragraph."
+      - "The recommendation is exactly one of the skill's four options, written out in full — not abbreviated, not hedged into two."
+      - "<hr> separates subsections, with a spacer on both sides. Never an <hr> between the blocks inside one subsection."
+      - "A subsection the mapping marked EVIDENCE: NONE with no GAP is skipped entirely — never an empty heading."
+
+  - id: research_summary
+    heading: "Research Summary"
+    evaluate_topic: "RESEARCH SUMMARY"
+    section: |
+      <h2>Research Summary</h2>
+      <p>&nbsp;</p>
+      <table>
+      <tr>
+      <th width="70%">Metric</th>
+      <th width="30%">Count</th>
+      </tr>
+      <tr><td>Total Evidence Items Expanded</td><td>{N}</td></tr>
+      <tr><td>GAPs Resolved</td><td>{N}</td></tr>
+      <tr><td>GAPs Partially Resolved</td><td>{N}</td></tr>
+      <tr><td>GAPs Unresolved</td><td>{N}</td></tr>
+      </table>
+      <p>&nbsp;</p>
+      <p><strong>Strongest New Findings</strong></p>
+      <p>&nbsp;</p>
+      <ul>
+      <li>{…}</li>
+      </ul>
+      <p>&nbsp;</p>
+      <p><strong>Strongest Statistics</strong></p>
+      <p>&nbsp;</p>
+      <ul>
+      <li>{…}</li>
+      </ul>
+      <p>&nbsp;</p>
+      <p><strong>Strongest Case Studies</strong></p>
+      <p>&nbsp;</p>
+      <ul>
+      <li>{…}</li>
+      </ul>
+      <p>&nbsp;</p>
+      <p><strong>Strongest Academic Findings</strong></p>
+      <p>&nbsp;</p>
+      <ul>
+      <li>{…}</li>
+      </ul>
+      <p>&nbsp;</p>
+      <p><strong>Remaining Research Needs</strong></p>
+      <p>&nbsp;</p>
+      <ul>
+      <li>{…}</li>
+      </ul>
+      <p>&nbsp;</p>
+      <hr>
+      <p>&nbsp;</p>
+    blocks:
+      summary_item:
+        html: |
+          <li>{…}</li>
+        add_after: "the last <li> of that labelled field's list, inside the same <ul>"
+    rules:
+      - "The header row uses <th>, not <td> — with no shading available, that is what makes it read as a header."
+      - "The four metric rows are fixed: all four, in that order, even when a count is 0. A missing row reads as an oversight, not a zero."
+      - "The counts must agree with the document above them — GAPs Unresolved and the number of GAP UNRESOLVED blocks are the same number, so a change that adds or removes a block updates the table with it."
+      - "All five labelled fields are emitted, each a bold paragraph followed by its own <ul>. A field with nothing to report gets a single <li> saying None — never an empty list, never a dropped label."
+
+  - id: writing_handoff
+    heading: "Writing Handoff"
+    evaluate_topic: "WRITING HANDOFF"
+    section: |
+      <h2>Writing Handoff</h2>
+      <p>&nbsp;</p>
+      <p>{The handoff paragraph &mdash; what this package provides for the writing phase.}</p>
+      <p>&nbsp;</p>
+      <ul>
+      <li>Supporting evidence</li>
+      <li>Citation trail</li>
+      <li>Facts</li>
+      <li>Statistics</li>
+      <li>Quotes</li>
+      <li>Caveats</li>
+      </ul>
+      <p>&nbsp;</p>
+    rules:
+      - "The checklist stays a real <ul> — it is what the writing phase reads to confirm the package is usable before drafting starts."
+
+verify:
+  - "No evidence item name shares a paragraph with its citation, and no citation shares a paragraph with its Deep Bullets label."
+  - "Every `N.X —` subsection title is a real <h3>; no EVIDENCE, GAP FILLED, GAP UNRESOLVED or item-name line is a heading of any level."
+  - "Every deep-bullet list is a real <ul> with bold kind labels, no → characters, no spacer between items, and a spacer after each closing </ul>."
+  - "Every EVIDENCE and GAP FILLED block carries a Citation paragraph with all four fields in order, and every URL is a real <a href>, not bare text."
+  - "Every GAP UNRESOLVED block has Searches Conducted as a labelled paragraph above a real list, and Findings and Recommendation as two separate bold-labelled paragraphs."
+  - "Every original GAP line is italic and matches the mapped blueprint's wording exactly."
+  - "No literal > blockquote character and no typed --- or ━━━ divider row survives in the Doc text."
+  - "The Research Summary's metrics table is a real table with a <th> header row and all four rows, its counts agree with the blocks above it, and all five labelled lists are present."
+  - "No style, class, <style>, <blockquote> or colour appears anywhere, and no literal Markdown characters (#, **, -, ---) survive in the Doc text."

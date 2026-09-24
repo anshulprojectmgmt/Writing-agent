@@ -1,0 +1,80 @@
+pass_threshold: 0.85
+
+# v2: the brief has three sections and ends after Source Ladder Findings.
+# v1's Source Quality Labels (4) and Evidence Cards (6) now live inside each
+# finding, so their checks, red flags and weights are merged into
+# source_ladder_findings. Sections 5 and 7-13 and the Completeness Summary are
+# no longer produced, so they are no longer scored. Weights: research_objective
+# 0.10, query_map 0.12, source_ladder_findings 0.78 — Section 3 still carries
+# most of the score, but Sections 1 and 2 weigh enough to move the result.
+
+sections:
+  - id: research_objective
+    name: "1. Research Objective"
+    match: fixed
+    weight: 0.10
+    purpose: "Frames what this chapter's research needs to prove or ground — the anchor every finding's relevance gets judged against."
+    dimensions:
+      structural:
+        weight: 0.4
+        checks:
+          - "A distinct objective statement is present, not folded into the topic restatement"
+      content_completeness:
+        weight: 0.6
+        checks:
+          - "Names the specific claims/pillars the chapter needs research to support, not just the topic"
+
+  - id: query_map
+    name: "2. Query Map"
+    match: fixed
+    weight: 0.12
+    purpose: "Per the skill: builds the term map (primary/synonyms/technical/product/business/ethics/contrarian) that the entire Source Ladder search is run against — a thin map produces a thin search downstream."
+    dimensions:
+      structural:
+        weight: 0.3
+        checks:
+          - "All 7 categories present: primary, synonyms, technical, product, business, ethics, contrarian"
+      content_completeness:
+        weight: 0.4
+        checks:
+          - "Technical terms favor genAI-specific vocabulary (LLMs, agents, RAG, context windows, etc.) per the skill's GenAI Lens rule, not generic AI/tech terms"
+          - "Contrarian terms are actually failure/criticism/risk/backlash terms, not restated synonyms"
+      quality:
+        weight: 0.3
+        checks:
+          - "Terms are specific enough that searching them would surface this topic and not a dozen unrelated ones"
+
+  - id: source_ladder_findings
+    name: "3. Source Ladder Findings (Rungs 1-10)"
+    match: fixed
+    weight: 0.78
+    purpose: "Per the skill: rungs are ranked in a specific order (consulting/analyst → VC research → academic venues → practitioner blogs/platforms → case studies → ethics/regulatory → trend/futures → newsletters → general news last) so higher-authority sources get searched before the search settles for whatever's easiest to find — and every finding carries its own type/authority/freshness/use labels and evidence card (falsifiable claim + why it matters + confidence), so the finding itself is the unit every later synthesis is built from and a downstream reader can tell which findings would survive scrutiny without re-researching them."
+    dimensions:
+      structural:
+        weight: 0.2
+        checks:
+          - "At least rungs 1-5 populated; any skipped rung keeps its heading with a Note paragraph giving a specific reason, not left blank or silently omitted"
+          - "Every finding has a resolvable source (real URL or named publication + date)"
+          - "Every finding (other than a cross-reference entry) carries SOURCE TYPE / AUTHORITY / FRESHNESS / USE labels"
+          - "Every finding (other than a cross-reference entry) carries a summary paragraph and CLAIM / WHY IT MATTERS / CONFIDENCE fields"
+          - "At least 8 findings carry the full evidence card fields"
+      content_completeness:
+        weight: 0.3
+        checks:
+          - "The skill's own per-rung minimum (≥5 findings per rung) is met, or the shortfall is explicitly explained in a rung Note"
+          - "Findings span at least 3 different rungs meaningfully, not concentrated in one and padded"
+      quality:
+        weight: 0.25
+        checks:
+          - "Findings are specific: named companies, products, numbers, dates — not generic trend language"
+          - "Each CLAIM is falsifiable/specific, not vague enough to be unfalsifiable"
+          - "Authority labels are honestly calibrated — not everything marked High regardless of actual source type"
+      purpose_alignment:
+        weight: 0.25
+        checks:
+          - "High-rung findings (1-3) are genuinely the primary/authoritative source type that rung promises, not a lower-tier source relabeled to look authoritative"
+          - "Confidence labels are honestly calibrated to actual source strength — a single-sourced or opinion-based claim is not marked High"
+    red_flags:
+      - "A finding cited only as 'according to industry experts' or similar with no named, checkable source"
+      - "A 'high-authority' source that's actually a marketing blog or unattributed claim"
+      - "A single-source claim from an opinion piece or press release labeled CONFIDENCE: High"

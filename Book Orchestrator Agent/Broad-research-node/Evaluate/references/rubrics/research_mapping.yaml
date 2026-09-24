@@ -1,0 +1,77 @@
+pass_threshold: 0.85
+
+sections:
+  - id: mapped_subsections
+    name: "each [N] — [SECTION NAME] block"
+    match: dynamic
+    weight: 0.60
+    purpose: "Per the skill's core principle: evidence is assigned by purpose fit, not global quality rank — the whole node exists to match each sub-section's stated need to the item that actually serves it, not to distribute the strongest available items."
+    dimensions:
+      structural:
+        weight: 0.15
+        checks:
+          - "Evidence assigned carries an explicit HIGH/MED fit label — never LOW, never unlabeled"
+      content_completeness:
+        weight: 0.2
+        checks:
+          - "No more than 3 items assigned, unless the sub-section's complexity genuinely warrants more"
+          - "If flagged GAP instead: names specifically what evidence type is missing"
+      quality:
+        weight: 0.25
+        checks:
+          - "The 'how it serves' line is specific to this exact sub-section, not generic enough to paste elsewhere unchanged"
+      purpose_alignment:
+        weight: 0.4
+        checks:
+          - "Evidence assigned is a genuine content fit — swapping it into a different sub-section wouldn't make equal sense"
+          - "If GAP-flagged: the flag is honest, not a stretch citation used to avoid it"
+    red_flags:
+      - "The 'how it serves' text is near-identical wording to this same item's use in a different sub-section"
+      - "A citation that's topically related but doesn't actually address the sub-section's specific point"
+
+  - id: punch_line_check
+    name: "PUNCH LINE"
+    match: fixed
+    weight: 0.05
+    purpose: "A specific, quotable line that follows from the evidence just mapped — exists to give the chapter something memorable to land on."
+    dimensions:
+      content_completeness:
+        weight: 0.4
+        checks:
+          - "Present, not a placeholder restating the chapter topic"
+      quality:
+        weight: 0.6
+        checks:
+          - "Specific to this chapter's actual evidence, not generic enough to close a different chapter too"
+
+  - id: coverage_summary
+    name: "Coverage summary"
+    match: fixed
+    weight: 0.30
+    purpose: "The only place GAP count, unplaced items, and blank sub-sections get surfaced — downstream nodes rely on this being accurate to know where evidence coverage is actually thin."
+    dimensions:
+      structural:
+        weight: 0.3
+        checks:
+          - "Metrics, GAPs table, and Unplaced Items table are all present"
+      content_completeness:
+        weight: 0.3
+        checks:
+          - "Every unplaced item has a one-line reason it wasn't assigned"
+          - "GAP count is at or below the chapter's threshold (default: no more than 2)"
+      consistency:
+        weight: 0.4
+        checks:
+          - "No sub-section is absent from both the evidence list and the GAPs table — silently blank"
+          - "Numbers here match a careful count of the actual mapped sub-section blocks"
+
+  - id: duplicate_point_check
+    name: "cross-subsection duplicate use of the same source"
+    match: fixed
+    weight: 0.05
+    purpose: "Per the skill's no-duplicate-point rule: where the same source serves multiple sub-sections, each pull must be a genuinely different specific point."
+    dimensions:
+      consistency:
+        weight: 1.0
+        checks:
+          - "No identical point (same stat, same quote) reused verbatim across two sub-sections"

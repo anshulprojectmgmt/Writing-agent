@@ -1,0 +1,79 @@
+pass_threshold: 0.85
+
+sections:
+  - id: deepened_subsections
+    name: "each [N.X] — [SUBSECTION NAME] block"
+    match: dynamic
+    weight: 0.55
+    purpose: "Per the skill's core principle: 'deepen commitments, don't expand scope' — every assigned item should end up with genuinely new facts, mechanisms, statistics, quotes, surprising details, or caveats that weren't in the mapping node's version, not a reworded restatement."
+    dimensions:
+      structural:
+        weight: 0.15
+        checks:
+          - "Has the full applicable set of deep bullets (fact, mechanism, statistic, quote, surprising detail, caveat)"
+      content_completeness:
+        weight: 0.25
+        checks:
+          - "Citation, where present, would directly confirm the specific claim it's attached to, not just the general topic"
+      quality:
+        weight: 0.25
+        checks:
+          - "The 'surprising detail' bullet is actually surprising, not a restatement of the item's already-known core fact"
+      purpose_alignment:
+        weight: 0.35
+        checks:
+          - "Contains information genuinely new versus the mapping node's original assignment — not the same point reworded"
+    red_flags:
+      - "A citation attached to a claim the source doesn't actually make"
+
+  - id: gap_blocks
+    name: "each GAP FILLED / GAP UNRESOLVED block"
+    match: dynamic
+    weight: 0.25
+    purpose: "Per the skill: a falsely-resolved GAP is worse than an honest one — it tells chapter-writing a claim is safe to state as fact when it isn't."
+    dimensions:
+      structural:
+        weight: 0.2
+        checks:
+          - "GAP UNRESOLVED has a specific recommendation attached (cut / soften / mark uncertainty / leave for future research)"
+      content_completeness:
+        weight: 0.3
+        checks:
+          - "GAP FILLED has a citation attached, not left bare"
+      purpose_alignment:
+        weight: 0.5
+        checks:
+          - "GAP FILLED's citation would satisfy a skeptical reader that the specific gap (not just the general topic) is addressed"
+    red_flags:
+      - "A GAP FILLED marker with softer, more hedged language than the original GAP description — the uncertainty was relabeled, not resolved"
+
+  - id: research_summary
+    name: "RESEARCH SUMMARY"
+    match: fixed
+    weight: 0.12
+    purpose: "The skill's own self-report of GAP resolution rate — exists so downstream nodes can trust the evidence package's completeness without re-checking every GAP block."
+    dimensions:
+      content_completeness:
+        weight: 0.4
+        checks:
+          - "GAPs Resolved + Partially Resolved account for at least half the mapping node's originally flagged GAPs"
+          - "GAPs Unresolved is at or below the chapter's threshold (default: no more than 1)"
+      consistency:
+        weight: 0.6
+        checks:
+          - "Numbers here match a careful count of the actual GAP blocks in the body"
+
+  - id: writing_handoff
+    name: "WRITING HANDOFF"
+    match: fixed
+    weight: 0.08
+    purpose: "Per the skill: confirms every claim has evidence/citation/facts/stats/quotes/caveats ready for direct use — its value is in flagging what a writer should actually be cautious about, not a generic sign-off."
+    dimensions:
+      quality:
+        weight: 0.4
+        checks:
+          - "Confirmation is specific to what's actually in this package, not a generic 'ready for writing' note"
+      consistency:
+        weight: 0.6
+        checks:
+          - "The completeness it confirms is actually supported by the body — doesn't claim readiness the package doesn't have"

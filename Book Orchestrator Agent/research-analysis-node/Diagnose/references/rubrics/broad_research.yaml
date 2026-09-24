@@ -1,0 +1,180 @@
+# Output format for the broad_research node.
+# Source: Broad Research skill v2 -> references/output-formatting.md (HTML version).
+# diagnose builds every added or replaced block from these templates, so a
+# revised block is marked up exactly like the blocks Broad Research generated.
+#
+# v2: the brief has three sections and ends after Source Ladder Findings. Each
+# finding carries its source quality labels and its evidence card
+# (CLAIM / WHY IT MATTERS / CONFIDENCE) inside the finding block.
+
+node_name: broad_research
+content_format: html
+
+global:
+  spacer: "<p>&nbsp;</p>"
+  rules:
+    - "No CSS anywhere: no style attributes, no <style> blocks, no class. They are stripped in conversion."
+    - "Every blank line is a <p>&nbsp;</p> spacer paragraph. Whitespace and newlines in the HTML source are ignored."
+    - "One spacer between every pair of blocks. Never a spacer between two <li> items — it splits the list in two."
+    - "Escape & as &amp;, < as &lt;, > as &gt;. Write em dashes as &mdash;."
+    - "Every URL is <a href=\"{URL}\">{URL}</a> — the address is also the link text. No bare URLs, no names or titles as link text."
+    - "Never emit an empty heading or an empty <li>."
+    - "No backslash before section numbers: <h2>1. Research Objective</h2>."
+    - "Lists are edited whole: to add, remove or change an item, replace every paragraph of that list with the complete new <ul>/<ol>."
+    - "Templates govern markup only. Wording, claims, labels and URLs are never shortened or reworded to fit a template."
+    - "The document ends after Section 3. Never add a section, summary or heading after the last rung."
+  headings:
+    h1: "The document title — Broad Research Brief: {Topic}"
+    h2: "Numbered sections 1-3"
+    h3: "Rung subheadings inside Section 3"
+    strong: "Finding titles, card field labels and Query Map field labels — body text, never headings (headings would flood the outline pane)"
+  in_the_doc:
+    spacer: "a paragraph whose text is one non-breaking space (\\u00a0) and a newline"
+    hr: "a paragraph holding a horizontal rule element"
+    headings: "paragraphs with namedStyleType HEADING_1 / HEADING_2 / HEADING_3"
+    block_end: "every finding ends with spacer, <hr>, spacer — the next block starts on the paragraph after that last spacer"
+
+sections:
+
+  - id: document_header
+    heading: "Broad Research Brief: {Topic}"
+    evaluate_topic: null
+    section: |
+      <h1>Broad Research Brief: {Topic}</h1>
+      <p>&nbsp;</p>
+      <p><strong>Version:</strong> {…} <strong>Skill:</strong> {…} <strong>Topic:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <hr>
+      <p>&nbsp;</p>
+    rules:
+      - "The Version field states this document's own version and must match the version in its file name — when diagnose creates the next version, it updates this number and nothing else on the line."
+
+  - id: research_objective
+    heading: "1. Research Objective"
+    evaluate_topic: "1. Research Objective"
+    section: |
+      <h2>1. Research Objective</h2>
+      <p>&nbsp;</p>
+      {paragraphs}
+      <hr>
+      <p>&nbsp;</p>
+    blocks:
+      paragraph:
+        html: |
+          <p>{text}</p>
+          <p>&nbsp;</p>
+        add_after: "the last paragraph's spacer, before the section's <hr>"
+
+  - id: query_map
+    heading: "2. Query Map"
+    evaluate_topic: "2. Query Map"
+    section: |
+      <h2>2. Query Map</h2>
+      <p>&nbsp;</p>
+      <p><strong>PRIMARY TERM:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>SYNONYMS:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>TECHNICAL TERMS:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>PRODUCT TERMS:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>BUSINESS TERMS:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>ETHICS TERMS:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <p><strong>CONTRARIAN TERMS:</strong> {…}</p>
+      <p>&nbsp;</p>
+      <hr>
+      <p>&nbsp;</p>
+    blocks:
+      field:
+        html: |
+          <p><strong>{LABEL}:</strong> {terms}</p>
+          <p>&nbsp;</p>
+        add_after: "the spacer of the field that precedes it in the fixed order above"
+    rules:
+      - "Exactly seven field paragraphs, in the order above, labels all-caps and bold."
+      - "Two labels in one <p> is a defect."
+
+  - id: source_ladder_findings
+    heading: "3. Source Ladder Findings"
+    evaluate_topic: "3. Source Ladder Findings (Rungs 1-10)"
+    section: |
+      <h2>3. Source Ladder Findings</h2>
+      <p>&nbsp;</p>
+      <hr>
+      <p>&nbsp;</p>
+      {rungs}
+    blocks:
+      rung_heading:
+        html: |
+          <h3>Rung {N} &mdash; {Rung Name}</h3>
+          <p>&nbsp;</p>
+        add_after: "the closing spacer of the previous rung's last finding (or its rung_note)"
+      finding:
+        html: |
+          <p><strong>{ID} &mdash; {Title}</strong></p>
+          <p>&nbsp;</p>
+          <p>SOURCE TYPE: {…} | AUTHORITY: {…} | FRESHNESS: {…} | USE: {…}</p>
+          <p>&nbsp;</p>
+          <p>{The finding's summary, as one paragraph.}</p>
+          <p>&nbsp;</p>
+          <p><strong>CLAIM:</strong> {…}</p>
+          <p>&nbsp;</p>
+          <p><strong>WHY IT MATTERS:</strong> {…}</p>
+          <p>&nbsp;</p>
+          <p><strong>CONFIDENCE:</strong> {…}</p>
+          <p>&nbsp;</p>
+          <p><a href="{URL}">{URL}</a></p>
+          <p>&nbsp;</p>
+          <hr>
+          <p>&nbsp;</p>
+        add_after: "the closing spacer of the last finding in the same rung; the new ID is the next number in that rung"
+      finding_card_field:
+        html: |
+          <p><strong>{LABEL}:</strong> {…}</p>
+        add_after: "used for replace only — the CLAIM, WHY IT MATTERS or CONFIDENCE paragraph of an existing finding; its spacer stays as it is"
+      finding_extra_source:
+        html: |
+          <p><a href="{URL}">{URL}</a></p>
+          <p>&nbsp;</p>
+        add_after: "the finding's existing link paragraph and its spacer"
+      cross_reference_finding:
+        html: |
+          <p><strong>{ID} &mdash; {Title}</strong></p>
+          <p>&nbsp;</p>
+          <p>(see {Other ID})</p>
+          <p>&nbsp;</p>
+          <hr>
+          <p>&nbsp;</p>
+        add_after: "the closing spacer of the last finding in the same rung"
+      rung_note:
+        html: |
+          <p>Note: {the reason this rung contains fewer findings than its target, or was skipped.}</p>
+          <p>&nbsp;</p>
+        add_after: "the closing spacer of the rung's last finding, directly above the next rung heading; for a skipped rung, the spacer after its rung_heading"
+    rules:
+      - "Seven spacers per finding — after the title, the metadata line, the summary, each of the three card fields and the link — plus the spacer after its <hr>."
+      - "Fixed order in every finding: title, metadata line, summary, CLAIM, WHY IT MATTERS, CONFIDENCE, link."
+      - "Metadata is one <p>, not bold, fields in the fixed order SOURCE TYPE | AUTHORITY | FRESHNESS | USE, separated by ' | '."
+      - "Card labels CLAIM, WHY IT MATTERS, CONFIDENCE stay all-caps, each in <strong>, each starting its own paragraph. There is no SOURCE card field — the link paragraph is the source."
+      - "Link text is the URL itself. A finding with several sources has each link in its own <p>, with a spacer between them."
+      - "Never two findings in one paragraph. A cross-reference finding has a title and the cross-reference, no metadata line and no card fields."
+      - "A rung below its minimum of 5 findings, or skipped, gets a rung_note paragraph — never a heading."
+      - "Rung names containing an ampersand are escaped: Consulting &amp; Analyst."
+      - "Knock-on: removing a finding, or changing its ID, updates every cross_reference_finding that points at it in the same change."
+
+verify:
+  - "Every finding has a spacer after its title, metadata, summary, CLAIM, WHY IT MATTERS, CONFIDENCE and link."
+  - "Every finding runs in the fixed order: title, metadata, summary, CLAIM, WHY IT MATTERS, CONFIDENCE, link."
+  - "Every card label is bold, all-caps and starts its own paragraph; no finding has a SOURCE card field."
+  - "No two findings share a paragraph."
+  - "An <hr> sits between every pair of findings and sections, with a spacer before and after it."
+  - "Every link's text equals its URL; no bare URLs."
+  - "The Query Map is exactly seven field paragraphs."
+  - "Every rung below its minimum, or skipped, has a Note paragraph."
+  - "Nothing follows Section 3 — no section, summary or heading after the last rung."
+  - "No empty list item and no empty heading."
+  - "Rung notes and other explanatory text are paragraphs, not headings."
+  - "Every cross-reference points at a finding ID that exists."
