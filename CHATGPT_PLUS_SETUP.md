@@ -28,15 +28,19 @@ are not exposed programmatically.
 
 ## Quick start
 
-1. Push this branch to a private GitHub repository and connect that repository to Codex Cloud.
-2. Install the repository marketplace and `writing-agent-plus` plugin in Codex.
-3. Connect the official Google Drive plugin to the book's Google account.
-4. Import the control workbook template as a native Google Sheet in the project root.
-5. Start a new ChatGPT Work or Codex cloud chat in this repository.
-6. Say: `Use $writing-agent-plus to set up my Writing Agent project in Google Drive.`
-7. After the preflight test passes, create the scheduled task using the prompt in
-   `references/automation-prompt.md`.
-8. Start the first supervised chapter with a small topic and approve each linked Doc explicitly.
+The repository and Workspace control center are already prepared:
 
-Keep the first two chapters supervised. Do not remove Gumloop until Drive checkpoint recovery,
-comments, approvals, and all six stages have succeeded twice.
+- Repository: `anshulprojectmgmt/Writing-agent`
+- Branch: `chatgpt-plus-automation`
+- Cloud bootstrap: `WORK_START.md`
+- Writable Drive folder: `1mP719oQYn8NI-cAbt4yVlDJJW9z6NvVW`
+- Native control Sheet: `1LWX1fzmiTAcACGTNgusgJL34jXYyuNt1dQB-IArI_Kc`
+
+To start, open a new ChatGPT Work chat on the web and send:
+
+`Use GitHub repo anshulprojectmgmt/Writing-agent, branch chatgpt-plus-automation. Read WORK_START.md and start the writing-agent workflow for this chapter topic: <replace with topic>.`
+
+The bootstrap instructs the Work chat to perform the Drive preflight, create or confirm the
+30-minute recovery task, and begin Broad Research. Approve each linked Doc explicitly. Keep the
+first two chapters supervised; do not remove Gumloop until Drive checkpoint recovery, comments,
+approvals, and all six stages have succeeded twice.
