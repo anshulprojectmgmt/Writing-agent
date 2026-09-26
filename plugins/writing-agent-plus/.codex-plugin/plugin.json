@@ -1,0 +1,22 @@
+{
+  "name": "writing-agent-plus",
+  "version": "0.1.0",
+  "description": "Run the six-stage Products of Tomorrow writing workflow with ChatGPT plan usage and Google Drive checkpoints.",
+  "author": {
+    "name": "Writing Agent Team"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Writing Agent Plus",
+    "shortDescription": "Run reviewed chapters with Google Drive.",
+    "longDescription": "Start, resume, review, and recover six-stage book chapter workflows in ChatGPT Work or Codex without an OpenAI API key.",
+    "developerName": "Writing Agent Team",
+    "category": "Productivity",
+    "capabilities": ["Skills", "Google Drive", "Scheduled Tasks", "Human Review"],
+    "defaultPrompt": [
+      "Start a reviewed chapter workflow.",
+      "Show the status of my active chapter.",
+      "Resume my chapter from its Drive checkpoint."
+    ]
+  }
+}

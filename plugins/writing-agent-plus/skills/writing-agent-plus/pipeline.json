@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "edition": "chatgpt-plus",
+  "uses_openai_api": false,
+  "stages": [
+    "broad_research",
+    "research_analysis",
+    "chapter_blueprint",
+    "research_mapping",
+    "deep_research",
+    "chapter_writing"
+  ],
+  "upstream": {
+    "broad_research": [],
+    "research_analysis": ["broad_research"],
+    "chapter_blueprint": ["broad_research", "research_analysis"],
+    "research_mapping": ["broad_research", "chapter_blueprint"],
+    "deep_research": ["broad_research", "research_mapping"],
+    "chapter_writing": ["research_mapping", "deep_research"]
+  },
+  "role_adapters": {
+    "broad_research": "references/roles/broad_research.md",
+    "research_analysis": "references/roles/research_analysis.md",
+    "chapter_blueprint": "references/roles/chapter_blueprint.md",
+    "research_mapping": "references/roles/research_mapping.md",
+    "deep_research": "references/roles/deep_research.md",
+    "chapter_writing": "references/roles/chapter_writing.md"
+  },
+  "max_diagnose_attempts_per_review_cycle": 3,
+  "web_search_stages": ["broad_research", "deep_research"],
+  "human_approval_after_every_stage": true,
+  "blueprint_structure_selection": true
+}

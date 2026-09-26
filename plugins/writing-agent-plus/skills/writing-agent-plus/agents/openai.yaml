@@ -1,0 +1,4 @@
+interface:
+  display_name: "Writing Agent Plus"
+  short_description: "Run reviewed book chapters with Google Drive"
+  default_prompt: "Use $writing-agent-plus to start a reviewed chapter workflow."
