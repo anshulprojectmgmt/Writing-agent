@@ -21,6 +21,11 @@ Read the adapter in `references/roles/<stage>.md`. It points to the original wor
 diagnose, formatting, and rubric resources. Adapter rules replace Gumloop calls, Slack, and any
 instruction to continue without human approval.
 
+Evaluate and Diagnose must also follow `references/safe-evaluation.md`. Evaluation never mutates
+the source artifact in the subscription edition; all findings live in a separate verified native
+evaluation report. Diagnose uses that report for evaluation failures and uses open Doc comments
+only for human-feedback revisions.
+
 For each role attempt:
 
 1. Set a stable operation ID: `<run-id>:<stage>:<role>:v<version>:a<attempt>`.
