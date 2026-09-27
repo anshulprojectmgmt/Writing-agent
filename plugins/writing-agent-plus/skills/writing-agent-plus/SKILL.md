@@ -16,6 +16,10 @@ adapter for only the stage being executed. The original role packages live under
 rubrics, voice, formatting, and diagnosis details unless this subscription adapter replaces a
 Gumloop, Slack, API, or storage instruction.
 
+For every Evaluate or Diagnose role, also read `references/safe-evaluation.md`. Its read-only
+artifact and report-first rules replace any original instruction to inject generated findings,
+color text, or attach evaluator comments to the source artifact.
+
 ## Fixed pipeline
 
 Run sequentially, never in parallel:
