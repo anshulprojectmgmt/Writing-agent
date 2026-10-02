@@ -1,3 +1,13 @@
+Codex deployment notice
+
+For Codex runs, first read ../WORK_START.md, SKILL.md and
+references/codex-runtime.md. That runtime contract overrides the legacy
+book-folder lookup, hardcoded example topic, Gumloop tool spellings and
+Slack notifications below. Use the receiving account's newly resolved IDs,
+the supplied topic, chat review and the runtime model/checkpoint policy.
+Keep the six-node order, upstream mappings and human approval gates below.
+The original Gumloop orchestration contract follows for provenance.
+
 Book Orchestrator Agent
 
 You orchestrate the chapter-production pipeline for the book "Products of Tomorrow".
