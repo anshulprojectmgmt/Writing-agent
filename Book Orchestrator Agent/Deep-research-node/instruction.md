@@ -1,104 +1,105 @@
 Deep Research Node — Detailed Instructions
 
 1. Inputs
-   previous_node_1, previous_doc_id_1, previous_node_2, previous_doc_id_2, chapter_topic, chapter_details, main_drive_folder_id, tracking_sheet_id.
 
-previous_node_1 and previous_doc_id_1 come straight from the Broad Research Node's output. previous_node_2 and previous_doc_id_2 come straight from the Research Mapping Node's output. Verify previous_node_1 = "broad_research" and previous_node_2 = "research_mapping", and that both previous_doc_id_1 and previous_doc_id_2 open. If any of these checks fail, stop and report failure — never start deepening on a missing source. chapter_topic and chapter_details carry the scope and context for the deepening. The rest is workflow config.
+Normal run receives previous_node_1, previous_doc_id_1, previous_node_2, previous_doc_id_2, chapter_topic, chapter_details, main_drive_folder_id, tracking_sheet_id.
 
-Re-entry inputs (present only when the orchestrator sends the node back after user comments): doc_id — the deep-research document the user commented on — together with a statement that the user has added comments and that you should begin from the diagnose step. When these are present, follow the re-entry path in §5.
+Verify previous_node_1 = "broad_research" and previous_node_2 = "research_mapping" and both Docs open. Otherwise stop before research.
+
+Re-entry after comments on the Deep Research Package also receives doc_id and starts from Diagnose.
+
+Visual-decision mode additionally receives:
+mode = apply_visual_decisions
+visual_review_doc_id
+visual_assets_folder_id
+visual_decisions
+and the existing Deep Research doc_id.
+
+When mode=apply_visual_decisions, do not rerun Deep Research or visual discovery. Use section 6.
 
 2. Drive setup
-   Search main_drive_folder_id for a folder named Deep Research. Reuse if present, create if absent, never duplicate. Hold as folder_id. Every artifact this node produces lands here, flat. The research-mapping doc (previous_doc_id_2) and the broad-research doc (previous_doc_id_1) both stay where they are — they are read, never moved or modified.
 
-3. Sheet writing — node-owned
-   Columns, in order: Node | Version | Subagent | Doc ID | Comment.
+Reuse/create one `Deep Research` folder under main_drive_folder_id as folder_id.
+Inside it reuse/create one `Visual Assets` folder as visual_assets_folder_id.
+Keep Deep Research Package, Visual Review, and evaluation reports in Deep Research. Put extracted visual files in Visual Assets. Upstream Docs are read-only.
 
-Subagents return metadata; they never touch the sheet. After every subagent return, append exactly one row before proceeding.
+3. Logs
 
-Node — always Deep Research, on every row.
-Version — the deep-research version the row concerns. An Evaluate row carries the version it evaluated, not a new one.
-Subagent — Deep Research, Evaluate, or Diagnose.
-Doc ID — the doc that subagent produced.
-Comment — Evaluate: Score = <score>, <pass|failed>. Others: one line describing the artifact.
-Never write document content into the sheet. If a return is missing doc_id, append the row with a null id and the returned comment, then halt that path — do not continue.
+Columns remain Node | Version | Subagent | Doc ID | Comment.
+Node is always Deep Research.
+Allowed Subagent values: Deep Research, Evaluate, Visual Research, Evaluate Visual, Apply Visual Decisions, Diagnose.
+Append one row after every subagent return.
 
-Determining the current version. Before calling any subagent, read the tracking sheet and find the latest row where Node = Deep Research. That row tells you the version currently in play. On a first run there will be no such row, so start at V1. On a re-entry run, continue from the latest recorded version — never assume V1 and never recount from the folder. Previous versions are never updated, re-scored, or rewritten; work only forward from the latest.
+For Visual Research, Doc ID is visual_review_doc_id and Comment includes visual_assets_folder_id plus candidate/status summary.
+For Apply Visual Decisions, Doc ID is visual_review_doc_id and Comment records resolved/pending.
 
-4. Subagent calls
-   Every call passes ids only. Subagents open documents from Drive themselves. Never pass research-mapping text, broad-research text, deep-research text, evaluation text, summaries, or source lists. Each call ends with a line telling the subagent to follow its attached instructions, and nothing else — no task description, no topic restatement.
+4. Deep Research flow
 
-Deep Research Agent
+Deep Research Agent receives Research Mapping doc, Broad Research doc, chapter context, folder_id, version. It deepens assigned evidence and resolves mapped GAPs only; it does not make visual decisions.
 
-You pass: previous_doc_id_2, previous_doc_id_1, chapter_topic, chapter_details, folder_id, version = V1
-Closing line: follow your attached instructions.
-It returns: version, doc_id, comment
-It reads the research-mapping doc (previous_doc_id_2, primary — the assigned evidence and flagged GAPs) and the broad-research doc (previous_doc_id_1, secondary — additional source material for gap resolution), applies the Deep Research Skill — deepening every assigned evidence item and resolving flagged GAPs — then publishes the Deep Research Package as a new Doc in folder_id.
-Evaluate Agent
+Evaluate Deep Research with node_name="deep_research".
+Failed canonical evaluation routes to Diagnose; every revised Deep Research Package is evaluated again.
 
-You pass: deep research doc_id, version, folder_id, node_name = "deep_research", plus any chapter context the rubric needs
-Closing line: follow your attached instructions.
-It returns: version, doc_id, comment
-node_name selects the deep_research rubric, which also owns the threshold. This is the same Evaluate Agent the previous nodes used; only the rubric differs.
-Diagnose Agent
+5. Visual Research flow
 
-You pass: deep research doc_id, evaluation doc_id, version, folder_id, trigger_source
-Closing line: follow your attached instructions; on human_feedback, read the user's comments from the doc yourself.
-It returns: version, doc_id, comment
-trigger_source is evaluation_failure or human_feedback. Human feedback is not passed as text — it lives as comments on the Doc, and the agent reads it there.
-After each return: append the row (§3), then update current_doc_id / current_version (Deep Research and Diagnose returns) or current_evaluation_doc_id (Evaluate returns).
+Run only after the current Deep Research Package passes.
 
-5. Flow
-   First run
+Call Visual Research Agent with:
+research_mapping_doc_id = previous_doc_id_2
+deep_research_doc_id = current passing Deep Research doc
+deep_research_folder_id = folder_id
+visual_assets_folder_id
+version
 
-Deep Research (V1, from previous_doc_id_2 + previous_doc_id_1)
--> Evaluate
-pass -> Slack notification -> final output
-failed -> Diagnose -> new version -> Evaluate (repeat until pass)
-Re-entry run (orchestrator returns the node with user comments)
+Visual Research must follow its attached V2 skill: inspect only mapped primary sources plus primary sources added by Deep Research specifically to resolve that subsection's mapped GAP; apply only the three visual-selection criteria; selection happens before extraction; create Visual Review; save exact-source assets where possible.
 
-Read sheet for latest version
--> Diagnose (trigger_source = human_feedback) -> new version
--> Evaluate
-pass -> Slack notification -> final output
-failed -> Diagnose -> new version -> Evaluate (repeat until pass)
-Re-entry does not skip any step. The diagnose–evaluate loop runs until the verdict is pass, exactly as on a first run, and every subagent return gets its own sheet row per §3. Do not shortcut straight to final output because the revision came from a human rather than from a failed verdict.
+Log Visual Research.
 
-Never re-run the Deep Research Agent on a re-entry run — the deep-research artifact already exists and Diagnose produces the next version from it.
+Evaluate the Visual Review with node_name="visual_research" and log as Evaluate Visual.
+If visual evaluation is not pass, stop. Never send a failed Visual Review forward.
 
-6. Routing decision
-   Read the verdict from the Evaluate row's Comment. pass → Slack notification and final output. failed → Diagnose. The rubric owns the threshold; the node applies no threshold of its own and never recomputes or overrides the verdict. If the verdict is missing, unparseable, no_rubric, or failed_run, stop and fail — never guess, and never send an unevaluated artifact to Diagnose.
+If visual evaluation passes, set visual_review_status to pending when any FOUND candidate still says HUMAN DECISION: PENDING, otherwise resolved.
 
-7. Versioning
-   Diagnose always writes a new doc for the next version in the same folder. Never overwrite a prior version. Every revised version re-enters Evaluate — no exceptions, including human-driven revisions. A doc_id: null from Diagnose is an escalation: log the row, halt, surface the comment, and do not retry. Once this node's output is approved and handed off, any further revisions belong to chapter-revision-skill, not to another run of this node.
+6. Apply visual decisions mode
 
-8. Slack
-   Once Evaluate returns a pass verdict, send a Slack notification containing node, chapter, version, score, and the doc URL, asking the reviewer to verify and either approve or add comments in the doc.
+Verify existing Deep Research doc_id, visual_review_doc_id, and visual_assets_folder_id.
+Call Visual Research Agent with those IDs and the human's exact visual_decisions.
+The worker may change only HUMAN DECISION values to KEEP or EXCLUDE and must verify remaining PENDING count.
+Log Apply Visual Decisions.
+Do not rerun Deep Research, discovery, or evaluation.
+Return status resolved only when no PENDING remains. Never guess an ambiguous VIS ID or decision.
 
-This is a notification, not a gate. Send it, then immediately produce the final output (§12) and end the run. Do not wait for a reply, do not poll, do not treat silence as anything. Approval is collected by the orchestrator, not here.
+7. Normal routing
 
-Never transfer artifact content through Slack; review comments belong in the Google Doc.
+First run:
+Deep Research -> Evaluate Deep Research -> if pass Visual Research -> Evaluate Visual -> final return.
+If Deep Research evaluation fails: Diagnose -> next version -> Evaluate Deep Research.
+If Visual evaluation fails/no_rubric/failed_run: stop.
 
-9. Human review
-   Human review happens upstream, after this node has returned. This node does not wait for it, does not collect it, and does not act on it within the same run. If the user leaves comments, the orchestrator sends this node back as a re-entry run (§5), and the comments are read by the Diagnose Agent from the document itself.
+Re-entry after human comments on Deep Research:
+Diagnose -> Evaluate Deep Research -> if pass run fresh Visual Research -> Evaluate Visual -> final return.
+A revised Deep Research Package invalidates the previous visual review, so fresh visual discovery and fresh human decisions are required.
 
-The node never edits the deep-research doc directly, and a human-driven revision never bypasses evaluation.
+8. Human gate
 
-10. Errors
-    Either previous-node doc missing or unopenable → stop before deepening. Deep-research publish fails → stop, do not evaluate. Evaluation fails or returns unparseable metadata → stop, do not diagnose. Diagnose fails or escalates → stop, do not claim a new version exists. Missing doc id → never fabricate; halt and report failure upward. Never continue the loop past a failure.
+The orchestrator collects approval of Deep Research and KEEP/EXCLUDE decisions. Chapter Writing must not start while visual candidates remain PENDING.
 
-11. Boundaries
-    Node: folder setup, all sheet writes, version lookup, routing, Slack notification, final output.
+9. Errors
 
-Deep Research Agent: the deep-research artifact. Evaluate Agent: scoring + report. Diagnose Agent: patch + next version, including reading human comments. Human: review, collected by the orchestrator.
+Missing inputs/Docs/folders, failed publish, invalid evaluator return, or missing IDs -> halt. Never fabricate IDs or silently skip Visual Research.
 
-The node never does another agent's job; no agent writes the sheet.
+10. Boundaries
 
-12. Final Output
-    Your entire response must be a single raw JSON object.
+Node owns folders, Logs, version lookup, routing, final output.
+Deep Research Agent owns evidence deepening/GAP resolution.
+Visual Research Agent owns primary-source visual discovery/extraction/review and applying human decisions.
+Evaluate owns scoring/reporting.
+Diagnose revises only the Deep Research Package.
+Human owns final visual selection.
 
-The first character you output is { . The last is } .
+11. Final Output
 
-No prose, no markdown fences, no explanation before or after.
+Return exactly:
+{"node":"deep_research","doc_id":"<deep_research_doc_id>","visual_review_doc_id":"<visual_review_doc_id>","visual_assets_folder_id":"<visual_assets_folder_id>","visual_review_status":"pending|resolved"}
 
-{"node": "deep_research", "doc_id": "<final_deep_research_doc_id>"}
-Nothing else — no version, no score, no report ids, no previous-node ids. The next node receives the same two-key shape this node received.
+No other text or keys.
