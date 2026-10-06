@@ -1,0 +1,98 @@
+pass_threshold: 0.90
+
+sections:
+  - id: structure_preservation
+    name: "final chapter structure vs canonical chapter"
+    match: fixed
+    weight: 0.20
+    purpose: "Artifact B must remain the same research-backed chapter, not become a redesigned chapter during style transformation."
+    dimensions:
+      structural:
+        weight: 0.60
+        checks:
+          - "Main sections and approved subsections remain in the same order as Artifact A"
+          - "Approved [TECH], [WOW MOMENT], reader transformation, and fixed punch-line commitments remain present"
+          - "Main section headings use numbered punctuation such as 1., 2., 3."
+      consistency:
+        weight: 0.40
+        checks:
+          - "No approved section or subsection is silently added, removed, or moved"
+
+  - id: evidence_preservation
+    name: "facts, evidence, citations, and caveats"
+    match: dynamic
+    weight: 0.25
+    purpose: "LinkedIn-style rewriting may change presentation but cannot change the evidentiary meaning of the canonical chapter."
+    dimensions:
+      content_completeness:
+        weight: 0.45
+        checks:
+          - "Named examples, statistics, citations, and source attributions used in Artifact A remain materially preserved where the supported claim remains"
+          - "No new factual source or unsupported evidence appears in Artifact B"
+      consistency:
+        weight: 0.55
+        checks:
+          - "Claims are not strengthened beyond Artifact A/Deep Research"
+          - "Canonical caveats and uncertainty are not removed for stylistic momentum"
+    red_flags:
+      - "A citation/source is swapped or invented during style transformation"
+      - "A statistic or factual claim changes meaning"
+
+  - id: linkedin_style_gate
+    name: "LinkedIn-derived reader-facing style"
+    match: fixed
+    weight: 0.25
+    purpose: "Artifact B is intentionally a separate reader-facing presentation in the approved LinkedIn-derived house style."
+    dimensions:
+      quality:
+        weight: 0.60
+        checks:
+          - "Opening establishes a familiar shift/tension quickly rather than using a generic Introduction"
+          - "Paragraphs are generally short and readable, usually one idea per paragraph"
+          - "Plain English precedes or accompanies technical jargon"
+          - "Examples and evidence are integrated into causal reasoning rather than stacked like a research report"
+          - "Transitions explain why the next idea follows"
+          - "Conclusion returns to the opening tension and lands the chapter thesis without generic future-hype"
+      purpose_alignment:
+        weight: 0.40
+        checks:
+          - "Voice is conversational/direct product-leader prose rather than academic, consultant, or social-engagement copy"
+          - "No hashtags, emojis, engagement bait, or invented personal anecdotes"
+          - "Bullets appear only for genuine sets/taxonomies/checklists/comparisons"
+
+  - id: clean_reader_facing_gate
+    name: "clean reader-facing Artifact B"
+    match: fixed
+    weight: 0.10
+    purpose: "Workflow and evaluator metadata must stay outside the final manuscript."
+    dimensions:
+      structural:
+        weight: 1.0
+        checks:
+          - "No Chapter Writing Notes in Artifact B"
+          - "No Manuscript Handoff Package in Artifact B"
+          - "No Completeness Summary in Artifact B"
+          - "No evaluator findings/divider blocks in Artifact B"
+          - "No Visual Review metadata, VIS IDs, KEEP/EXCLUDE/PENDING fields, extraction statuses, or placement audit in reader prose"
+
+  - id: visual_accounting
+    name: "human visual decisions and placement report"
+    match: fixed
+    weight: 0.20
+    purpose: "Every human decision must be honored without substitutes and be auditable outside the reader-facing chapter."
+    dimensions:
+      content_completeness:
+        weight: 0.50
+        checks:
+          - "Every KEEP candidate in Visual Review is accounted for in the placement report as INSERTED or FAILED with a specific exact-source/technical reason"
+          - "Every EXCLUDE candidate is accounted for as EXCLUDED"
+          - "Every inserted figure has caption, source attribution, and accessibility description when native alt text is unavailable"
+      consistency:
+        weight: 0.50
+        checks:
+          - "No EXCLUDE candidate appears in Artifact B"
+          - "No substitute, secondary-source, generated, redrawn, or restyled visual is used for a failed KEEP"
+          - "Figure numbering in Artifact B matches the placement report"
+    red_flags:
+      - "Any Visual Review candidate remains PENDING"
+      - "A failed KEEP was silently replaced with another image"
