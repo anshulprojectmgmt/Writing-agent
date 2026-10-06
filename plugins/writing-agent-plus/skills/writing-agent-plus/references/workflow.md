@@ -123,3 +123,6 @@ Keep at the top:
 - last update timestamp
 
 Append a brief chronological checkpoint table below. Do not paste artifact prose or visual-candidate content into this Doc.
+# Execution prerequisites
+
+Before dispatch or recovery, read `execution-policy.md`. Every role uses a fresh `fork_turns="none"` context and actual approved model/reasoning settings. Validate exported current state, the intended dispatch, and exact pending approval with `scripts/state_machine.py`; never treat prompt wording as enforcement. Persist the verified guard metadata in Runs and Resume Record. A failed guard blocks the transition.

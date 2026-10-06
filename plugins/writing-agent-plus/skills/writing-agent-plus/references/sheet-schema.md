@@ -28,6 +28,14 @@ Only READY, recoverable RUNNING, and due PAUSED_LIMIT rows are eligible for sche
 
 Approval columns are written only after explicit human approval for the matching pending artifact. A Visual Review is not an ordinary stage approval: its exact KEEP/EXCLUDE decisions are recorded in Decisions and the run may advance only when no PENDING candidate remains.
 
+### Append-only Runs guard metadata
+
+Append these missing columns at the far right of existing Runs and chapter Run State tabs; never reposition legacy columns:
+
+`Visual Review Status | Visual Review Evaluation Status | Visual Review Evaluated Doc ID | Visual Review Deep Research Doc ID | Visual Candidate IDs | Visual Decisions | Visual Decisions Review Doc ID | Canonical Evaluation Status | Canonical Evaluated Doc ID | Final Chapter Writing Doc ID | Final Evaluation Status | Final Evaluated Doc ID | Final Canonical Doc ID | Final Visual Review Doc ID | Placement Report Doc ID`
+
+Candidate IDs are a JSON array and decisions a JSON object. Store the corresponding snake_case fields listed in `execution-policy.md` in the Resume Record JSON snapshot. Populate statuses and provenance only after direct artifact/report verification. Historical rows retain unknown fields as blank; they are not silently upgraded to passing V2 runs. Compare headers by name before any write and verify readback.
+
 ## Decisions
 
 `Timestamp | Run ID | Stage | Action | Doc ID | Actor | Choice | Source | Decision ID`

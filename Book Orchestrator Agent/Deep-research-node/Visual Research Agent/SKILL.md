@@ -1,6 +1,6 @@
 ---
 name: visual-research-v2
-description: Inspect the primary sources already assigned to each approved chapter subsection, plus primary sources added by Deep Research solely to resolve mapped GAPs, and build a human-reviewable set of original visual candidates. Visual selection uses only three substantive criteria: directly explains the subsection; contains meaningful data, mechanism, or comparison; strong enough to improve the chapter. Selection happens before extraction difficulty is considered.
+description: "Inspect the primary sources already assigned to each approved chapter subsection, plus primary sources added by Deep Research solely to resolve mapped GAPs, and build a human-reviewable set of original visual candidates. Visual selection uses only three substantive criteria: directly explains the subsection; contains meaningful data, mechanism, or comparison; strong enough to improve the chapter. Selection happens before extraction difficulty is considered."
 ---
 
 # VISUAL RESEARCH V2

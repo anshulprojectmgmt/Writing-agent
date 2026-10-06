@@ -81,7 +81,7 @@ Artifact B is the Chapter Writing main-stage pending/approved Doc. Preserve Arti
 
 Before and after every Drive write/workflow transition, update Control Sheet, chapter Logs, and Automation Resume Record using stable operation IDs. Reconcile uncertain operations before repeating them. Google Docs contain content; controller/chat messages carry only IDs, links, scores, decisions, and short status summaries.
 
-At startup, create or confirm recurring ChatGPT Work task `Writing Agent Recovery` using `plugins/writing-agent-plus/skills/writing-agent-plus/references/automation-prompt.md` at 30-minute cadence. It processes at most one eligible transition and remains quiet when none is available. It must never bypass approval, blueprint-selection, or visual-review gates.
+At authorized live setup or production startup, create or confirm recurring ChatGPT Work task `Writing Agent Recovery` using `plugins/writing-agent-plus/skills/writing-agent-plus/references/automation-prompt.md` at hourly cadence. Verify its actual prompt, schedule and enabled status. Installation alone does not enable recovery. It processes at most one eligible transition and remains quiet when none is available. It must never bypass approval, blueprint-selection, or visual-review gates. Read `references/execution-policy.md` in the same skill for actual model settings, mandatory fresh role contexts, and transition guards.
 
 If a temporary plan limit interrupts a run, checkpoint it. Resume later from exact pending transition after reconciliation. Subscription limits cannot be bypassed and no API credits may be purchased/used.
 

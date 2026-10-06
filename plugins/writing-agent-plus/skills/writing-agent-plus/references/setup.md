@@ -13,7 +13,9 @@ Use this preflight before the first real chapter or after upgrading the producti
 6. Create or verify a native Google Doc named `Writing Agent Operating Instructions` and record plugin version, repository branch, control-sheet ID, project-root ID, reviewer emails, and that Google Drive is authoritative.
 7. Verify the production branch contains the V2 role adapters for `visual_research`, `visual_placement`, and `chapter_clean_evaluate`, plus the Book Orchestrator source roles they reference.
 8. Run a test that creates and reads back one Doc, one Sheet row, and one native comment under a disposable Test chapter folder. Also verify a `Visual Assets` child folder can be created inside a test Deep Research folder. Delete nothing automatically; the user may remove the test folder after inspection.
-9. Create/confirm the scheduled cloud task from `automation-prompt.md`. A 30-minute cadence is recommended for recovery checks; it stays quiet when nothing is actionable.
+9. Create/confirm the scheduled cloud task from `automation-prompt.md` at hourly cadence. Verify its actual prompt, schedule and enabled status; installed instructions alone do not create a task. Keep it disabled until live recovery is requested or a production run is started.
+
+Read `execution-policy.md` before setup. Validate actual model/reasoning/fork settings and an exported snapshot before dispatch. Log actual fresh task IDs rather than intended settings. Missing legacy guard metadata must be verified from artifacts; never infer passing V2 evaluations for historical runs.
 
 If a connector action is unavailable in the selected ChatGPT Work/Codex surface, stop setup and report the missing capability. Do not silently fall back to local files or browser automation for production artifacts.
 

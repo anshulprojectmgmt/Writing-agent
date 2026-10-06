@@ -7,7 +7,7 @@ description: Run or resume the Products of Tomorrow six-stage chapter workflow i
 
 This is the subscription edition. It runs inside ChatGPT Work or Codex with the user's included allowance. Never request an OpenAI API key, start the hosted FastAPI edition, or claim guaranteed 24x7 execution. Google Drive is the durable system of record; local files are recoverable scratch.
 
-Before the first run, read `references/setup.md`. For a start, resume, approval, visual decision, revision, status, or scheduled check, read `references/workflow.md` and `references/sheet-schema.md`. Read the role adapter for only the role being executed. Original role packages under `Book Orchestrator Agent/` remain authoritative for research, rubrics, voice, formatting, and diagnosis details unless this subscription adapter replaces Gumloop, Slack, API, storage, or evaluation-mutation behavior.
+Before the first run, read `references/setup.md`. For a start, resume, approval, visual decision, revision, status, or scheduled check, read `references/workflow.md`, `references/sheet-schema.md` and `references/execution-policy.md`. Validate the exported snapshot and dispatch configuration as that policy requires. Read the role adapter for only the role being executed. Original role packages under `Book Orchestrator Agent/` remain authoritative for research, rubrics, voice, formatting, and diagnosis details unless this subscription adapter replaces Gumloop, Slack, API, storage, or evaluation-mutation behavior.
 
 For legacy Evaluate/Diagnose roles, also read `references/safe-evaluation.md`; the subscription edition keeps source artifacts immutable. Chapter Writing uses the dedicated `Chapter Clean Evaluate Agent` and must not use the legacy inline evaluator on either chapter artifact.
 
@@ -63,7 +63,7 @@ The final Chapter Writing stage Doc ID is Artifact B. Artifact A remains preserv
 
 ## Isolation and delegation
 
-The controller carries identifiers and status only. Never place research, analysis, evidence, draft prose, evaluation findings, visual candidate content, or comment text into controller state. When isolated subagents are available, start a fresh context for each worker/evaluator/diagnose/visual role and tell it to read its adapter. Do not fork conversational history. When isolated execution is unavailable, run one role at a time and clear role-specific scratch before switching; retain only IDs/receipts.
+The controller carries identifiers and status only. Never place research, analysis, evidence, draft prose, evaluation findings, visual candidate content, or comment text into controller state. Start a fresh context for every controller/worker/evaluator/diagnose/visual role with fork_turns="none" and tell it to read its adapter. Do not fork conversational history or reuse agents across roles. If isolated execution is unavailable, block and report; clearing scratch inside one conversation is not context isolation. Follow the exact models and audit fields in references/execution-policy.md.
 
 ## Google rules
 
