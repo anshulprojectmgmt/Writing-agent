@@ -1,0 +1,94 @@
+pass_threshold: 0.85
+
+sections:
+  - id: draft_sections
+    name: "each section of the Complete Chapter Draft"
+    match: dynamic
+    weight: 0.55
+    purpose: "Manuscript prose in the canonical Anshul house voice, following the approved blueprint and assigned evidence."
+    dimensions:
+      structural:
+        weight: 0.15
+        checks:
+          - "Present in the same order as the approved blueprint with no silent additions, drops, or reorders"
+      content_completeness:
+        weight: 0.20
+        checks:
+          - "Every factual claim traces to assigned evidence or is explicitly uncertainty/GAP-marked"
+      quality:
+        weight: 0.30
+        checks:
+          - "Jargon is explained in plain English on first use"
+          - "No unsupported hype language"
+          - "Canonical Anshul voice/craft/formatting rules are materially followed"
+      purpose_alignment:
+        weight: 0.35
+        checks:
+          - "Technical explanations establish the failure mode/prior assumption before the mechanism"
+          - "Major concepts are grounded in a real analogy or named example where assigned evidence provides one"
+    red_flags:
+      - "A named example/statistic appears without assigned support"
+      - "The chapter is rewritten into the LinkedIn-derived final style instead of the canonical Anshul style"
+
+  - id: reader_transformation_check
+    name: "the section where Reader Transformation is designed to land"
+    match: fixed
+    weight: 0.10
+    purpose: "The approved before-to-after belief shift must land at one identifiable point."
+    dimensions:
+      purpose_alignment:
+        weight: 1.0
+        checks:
+          - "A specific moment clearly delivers the designated Before and After shift"
+
+  - id: tension_check
+    name: "where the Counterargument is voiced"
+    match: fixed
+    weight: 0.08
+    purpose: "The strongest counterargument must receive a fair hearing before resolution."
+    dimensions:
+      purpose_alignment:
+        weight: 1.0
+        checks:
+          - "The blueprint counterargument is genuinely argued rather than dismissed in one clause"
+
+  - id: chapter_writing_notes
+    name: "Chapter Writing Notes"
+    match: fixed
+    weight: 0.08
+    purpose: "Canonical skill audit trail for evidence, gap-management, and cut decisions."
+    dimensions:
+      content_completeness:
+        weight: 0.50
+        checks:
+          - "Cut/gap-management decisions have specific traceable reasons"
+      consistency:
+        weight: 0.50
+        checks:
+          - "Notes match what actually happened in the draft"
+
+  - id: manuscript_handoff_package
+    name: "Manuscript Handoff Package"
+    match: fixed
+    weight: 0.09
+    purpose: "Canonical handoff package for downstream presentation work."
+    dimensions:
+      structural:
+        weight: 0.30
+        checks:
+          - "Word counts, citation list, and coverage map are present"
+      consistency:
+        weight: 0.70
+        checks:
+          - "Citation list, word counts, and coverage map match the actual canonical draft"
+
+  - id: canonical_separation_gate
+    name: "canonical vs final style separation"
+    match: fixed
+    weight: 0.10
+    purpose: "Artifact A must stay the output of the original Anshul skill; LinkedIn transformation belongs only to Visual Placement."
+    dimensions:
+      consistency:
+        weight: 1.0
+        checks:
+          - "The draft follows the canonical bundled voice/writing/output references and has not been rewritten using the final LinkedIn-style overlay"
