@@ -16,6 +16,12 @@ import pytest
     ("visual_research", "gpt-6-sol", "low"),
     ("visual_placement", "gpt-6-sol", "low"),
     ("chapter_clean_evaluate", "gpt-6-sol", "low"),
+    ("deep_research_worker", "gpt-6-sol", "low"),
+    ("deep_research_evaluate", "gpt-6-sol", "low"),
+    ("canonical_chapter_worker", "gpt-6-sol", "medium"),
+    ("canonical_clean_evaluate", "gpt-6-sol", "low"),
+    ("visual_placement_linkedin", "gpt-6-sol", "low"),
+    ("final_clean_evaluate", "gpt-6-sol", "low"),
 ])
 def test_approved_dispatch(role, model, reasoning):
     state_machine.validate_dispatch_config(role, model, reasoning, "none")

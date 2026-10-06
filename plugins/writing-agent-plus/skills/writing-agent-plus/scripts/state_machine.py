@@ -42,6 +42,7 @@ APPROVAL_FIELDS = {stage: f"approved_{stage}_doc_id" for stage in STAGES}
 MEDIUM_ROLES = {"research_analysis", "chapter_blueprint", "chapter_writing", "canonical_chapter_worker"}
 LOW_ROLES = {"broad_research", "research_mapping", "deep_research", "evaluate", "diagnose", "visual_research", "visual_research_evaluate", "apply_visual_decisions", "visual_placement", "chapter_clean_evaluate", "canonical_clean_evaluate", "final_clean_evaluate"}
 CONTROLLER_ROLES = {"orchestrator", "node_controller"}
+ROLE_ALIASES = {"deep_research_worker": "deep_research", "deep_research_evaluate": "evaluate", "visual_placement_linkedin": "visual_placement"}
 
 
 class InvalidSnapshot(ValueError):
@@ -75,6 +76,7 @@ def validate_dispatch_config(role: str, model: str, reasoning: str, fork_turns: 
     """Fail closed before role dispatch; actual host settings must also be logged."""
     if fork_turns != "none":
         raise InvalidSnapshot("every workflow role requires fork_turns='none'")
+    role = ROLE_ALIASES.get(role, role)
     if role in CONTROLLER_ROLES:
         allowed = {("gpt-6-terra", "medium"), ("gpt-6-sol", "low")}
     elif role in MEDIUM_ROLES:
