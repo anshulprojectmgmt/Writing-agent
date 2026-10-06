@@ -1,104 +1,161 @@
 Chapter Writing Node — Detailed Instructions
 
-1. Inputs
-   previous_node_1, previous_doc_id_1, previous_node_2, previous_doc_id_2, chapter_topic, chapter_details, main_drive_folder_id, tracking_sheet_id.
+## 1. Inputs
 
-previous_node_1 and previous_doc_id_1 come straight from the Research Mapping Node's output. previous_node_2 and previous_doc_id_2 come straight from the Deep Research Node's output. Verify previous_node_1 = "research_mapping" and previous_node_2 = "deep_research", and that both docs open. If any check fails, stop and report failure — never start writing on a missing source. chapter_topic and chapter_details carry the scope and context for the chapter. The rest is workflow config.
+Required normal-run inputs:
+- previous_node_1, previous_doc_id_1 from Research Mapping
+- previous_node_2, previous_doc_id_2 from Deep Research
+- visual_review_doc_id
+- visual_assets_folder_id
+- chapter_topic, chapter_details
+- main_drive_folder_id, tracking_sheet_id
 
-Re-entry inputs (present only when the orchestrator sends the node back after user comments): doc_id — the chapter document the user commented on — together with a statement that the user has added comments and that you should begin from the diagnose step. When these are present, follow the re-entry path in §5.
+Verify previous_node_1 = "research_mapping" and previous_node_2 = "deep_research" and that both upstream Docs, visual_review_doc_id, and visual_assets_folder_id are reachable. If any check fails, stop before writing.
 
-2. Drive setup
-   Search main_drive_folder_id for a folder named Chapter Writing. Reuse if present, create if absent, never duplicate. Hold as folder_id. Every artifact this node produces lands here, flat. The blueprint (previous_doc_id_1) and the Deep Research Package (previous_doc_id_2) both stay where they are — they are read, never moved or modified.
+The Visual Review is a hard gate. Before calling the Chapter Writing Worker, verify every FOUND candidate has HUMAN DECISION = KEEP or EXCLUDE. If any PENDING remains, stop and report that Chapter Writing is blocked.
 
-3. Sheet writing — node-owned
-   Columns, in order: Node | Version | Subagent | Doc ID | Comment.
+Re-entry after user comments on final Artifact B additionally receives `doc_id` (the reviewed final chapter) and the standard human-feedback line. Follow §7.
 
-Subagents return metadata; they never touch the sheet. After every subagent return, append exactly one row before proceeding.
+## 2. Drive setup
 
-Node — always Chapter Writing, on every row.
-Version — the chapter version the row concerns. An Evaluate row carries the version it evaluated, not a new one.
-Subagent — Chapter Writing, Evaluate, or Diagnose.
-Doc ID — the doc that subagent produced.
-Comment — Evaluate: Score = <score>, <pass|failed>. Others: one line describing the artifact.
-Never write document content into the sheet. If a return is missing doc_id, append the row with a null id and the returned comment, then halt that path — do not continue.
+Reuse/create exactly one folder named `Chapter Writing` under main_drive_folder_id as folder_id. Keep all Chapter Writing artifacts flat in this folder.
 
-Determining the current version. Before calling any subagent, read the tracking sheet and find the latest row where Node = Chapter Writing. That row tells you the version currently in play. On a first run there will be no such row, so start at V1. On a re-entry run, continue from the latest recorded version — never assume V1 and never recount from the folder. Previous versions are never updated, re-scored, or rewritten; work only forward from the latest.
+Upstream Research Mapping, Deep Research, Visual Review, and Visual Assets remain read-only except that Visual Placement may add a faithful exact-source extraction into Visual Assets when a KEEP candidate was SOURCE-LINKED and can be persisted without substitution.
 
-4. Subagent calls
-   Every call passes ids only. Subagents open documents from Drive themselves. Never pass blueprint text, evidence text, draft prose, evaluation text, summaries, or citation lists. Each call ends with a line telling the subagent to follow its attached instructions, and nothing else — no task description, no topic restatement.
+## 3. Logs — node-owned
 
-Chapter Writing Agent
+Columns remain Node | Version | Subagent | Doc ID | Comment.
+Node is always `Chapter Writing`.
 
-You pass: previous_doc_id_2, previous_doc_id_1, chapter_topic, chapter_details, folder_id, version = V1
-Closing line: follow your attached instructions.
-It returns: version, doc_id, comment
-It reads the Deep Research Package (previous_doc_id_2 — evidence, citations, GAP status) and the blueprint (previous_doc_id_1 — fixed structure, section order, punch lines, evidence assignments), applies the Chapter Writing Skill, and publishes the chapter package as a new Doc in folder_id. Voice and style guidance ship bundled with the skill; the node does not supply them.
-Evaluate Agent
+Allowed Subagent values:
+- Chapter Writing
+- Evaluate Canonical
+- Visual Placement
+- Evaluate Final
+- Diagnose
 
-You pass: chapter doc_id, version, folder_id, node_name = "chapter_writing", plus any chapter context the rubric needs
-Closing line: follow your attached instructions.
-It returns: version, doc_id, comment
-node_name selects the chapter_writing rubric, which also owns the threshold. This is the same Evaluate Agent the previous nodes used; only the rubric differs. The chapter package ends with a Completeness Summary block the rubric can use for cheap structural checks.
-Diagnose Agent
+Append exactly one row after every subagent return.
 
-You pass: chapter doc_id, evaluation doc_id, version, folder_id, trigger_source
-Closing line: follow your attached instructions; on human_feedback, read the user's comments from the doc yourself.
-It returns: version, doc_id, comment
-trigger_source is evaluation_failure or human_feedback. Human feedback is not passed as text — it lives as comments on the Doc, and the agent reads it there.
-After each return: append the row (§3), then update current_doc_id / current_version (Chapter Writing and Diagnose returns) or current_evaluation_doc_id (Evaluate returns).
+Artifact A row uses the canonical Chapter Writing Doc ID.
+Visual Placement row uses Artifact B Doc ID and includes placement_report_doc_id in Comment.
+Evaluation rows store their separate evaluation-report Doc IDs.
 
-5. Flow
-   First run
+Determine version from the latest Chapter Writing row. First run begins V1. Never overwrite prior versions.
 
-Chapter Writing (V1, from previous_doc_id_2 + previous_doc_id_1)
--> Evaluate
-pass -> Slack notification -> final output
-failed -> Diagnose -> new version -> Evaluate (repeat until pass)
-Re-entry run (orchestrator returns the node with user comments)
+## 4. Artifact A — canonical Anshul chapter
 
-Read sheet for latest version
--> Diagnose (trigger_source = human_feedback) -> new version
--> Evaluate
-pass -> Slack notification -> final output
-failed -> Diagnose -> new version -> Evaluate (repeat until pass)
-Re-entry does not skip any step. The diagnose–evaluate loop runs until the verdict is pass, exactly as on a first run, and every subagent return gets its own sheet row per §3. Do not shortcut straight to final output because the revision came from a human rather than from a failed verdict.
+Call the existing Chapter Writing Agent with:
+- previous_doc_id_2 = approved Deep Research Package
+- previous_doc_id_1 = approved Research Mapping artifact
+- chapter_topic
+- chapter_details
+- folder_id
+- version
 
-Never re-run the Chapter Writing Agent on a re-entry run — the chapter artifact already exists and Diagnose produces the next version from it.
+The worker must follow the existing `anshul-chapter-writing-4` skill and its bundled `anshul-voice.md`, `writing-style.md`, and `output-formatting.md` references exactly.
 
-6. Routing decision
-   Read the verdict from the Evaluate row's Comment. pass → Slack notification and final output. failed → Diagnose. The rubric owns the threshold; the node applies no threshold of its own and never recomputes or overrides the verdict. If the verdict is missing, unparseable, no_rubric, or failed_run, stop and fail — never guess, and never send an unevaluated artifact to Diagnose.
+Important separation rule: DO NOT pass, inject, or apply the LinkedIn-derived style to this worker. Artifact A must remain the canonical Anshul-style chapter package, including the canonical skill's own Notes/Handoff/Summary outputs.
 
-7. Versioning
-   Diagnose always writes a new doc for the next version in the same folder. Never overwrite a prior version — every published chapter version is kept, however confident anyone is that a newer one supersedes it. Every revised version re-enters Evaluate — no exceptions, including human-driven revisions. A doc_id: null from Diagnose is an escalation: log the row, halt, surface the comment, and do not retry. Once this node's output is approved and handed off, further revisions belong to chapter-revision-skill, not to another run of this node.
+Log `Chapter Writing` with Artifact A doc_id.
 
-8. Slack
-   Once Evaluate returns a pass verdict, send a Slack notification containing node, chapter, version, score, and the doc URL, asking the reviewer to verify and either approve or add comments in the doc.
+Evaluate Artifact A using:
+- doc_id = Artifact A
+- version
+- folder_id
+- node_name = `chapter_writing`
+- annotation_mode = `report_only`
 
-This is a notification, not a gate. Send it, then immediately produce the final output (§12) and end the run. Do not wait for a reply, do not poll, do not treat silence as anything. Approval is collected by the orchestrator, not here.
+Log `Evaluate Canonical`.
 
-Never transfer artifact content through Slack; review comments belong in the Google Doc.
+If canonical evaluation fails: route to the existing Diagnose Agent on Artifact A, create the next canonical version, evaluate it again in report_only mode, and repeat within Diagnose limits. Do not run Visual Placement until the current Artifact A passes.
 
-9. Human review
-   Human review happens upstream, after this node has returned. This node does not wait for it, does not collect it, and does not act on it within the same run. If the user leaves comments, the orchestrator sends this node back as a re-entry run (§5), and the comments are read by the Diagnose Agent from the document itself.
+## 5. Artifact B — LinkedIn style + approved visuals
 
-The node never edits the chapter doc directly, and a human-driven revision never bypasses evaluation.
+Only after Artifact A passes, call Visual Placement Agent with:
+- canonical_chapter_doc_id = current passing Artifact A
+- visual_review_doc_id
+- visual_assets_folder_id
+- chapter_writing_folder_id = folder_id
+- version
 
-10. Errors
-    Either previous-node doc missing or unopenable → stop before writing. Chapter publish fails → stop, do not evaluate. Evaluation fails or returns unparseable metadata → stop, do not diagnose. Diagnose fails or escalates → stop, do not claim a new version exists. Missing doc id → never fabricate; halt and report failure upward. Never continue the loop past a failure.
+The Visual Placement Agent must create a NEW document. It never edits Artifact A.
 
-11. Boundaries
-    Node: folder setup, all sheet writes, version lookup, routing, Slack notification, final output.
+Artifact B contains only the reader-facing chapter, transformed to the approved LinkedIn-derived style and populated only with human-KEEP visuals. Workflow notes stay outside Artifact B.
 
-Chapter Writing Agent: the chapter artifact. Evaluate Agent: scoring + report. Diagnose Agent: patch + next version, including reading human comments. Human: review, collected by the orchestrator.
+Log `Visual Placement` using Artifact B doc_id and include its placement_report_doc_id in the Comment.
 
-The node never does another agent's job; no agent writes the sheet.
+Evaluate Artifact B using:
+- doc_id = Artifact B
+- version
+- folder_id
+- node_name = `chapter_writing_final`
+- annotation_mode = `report_only`
+- canonical_chapter_doc_id = Artifact A
+- visual_review_doc_id
+- placement_report_doc_id
 
-12. Final Output
-    Your entire response must be a single raw JSON object.
+Log `Evaluate Final`.
 
-The first character you output is { . The last is } .
+If final evaluation fails, do not modify Artifact A. Regenerate Artifact B through the Visual Placement Agent using the same passing Artifact A and visual review, addressing only final-style/placement issues identified by the evaluation. Re-evaluate the new Artifact B. Never patch evidence or structure only in Artifact B to make the final evaluator pass.
 
-No prose, no markdown fences, no explanation before or after.
+## 6. First-run flow
 
-{"node": "chapter_writing", "doc_id": "<final_chapter_doc_id>"}
-Nothing else — no version, no score, no report ids, no previous-node ids. This is the last node in the pipeline; the orchestrator collects this output and closes the run.
+Chapter Writing Worker -> Artifact A
+-> Evaluate Canonical (report_only)
+-> if failed: Diagnose canonical -> Evaluate Canonical
+-> when pass: Visual Placement -> Artifact B + placement report
+-> Evaluate Final (report_only)
+-> if failed: regenerate Artifact B from same passing Artifact A -> Evaluate Final
+-> when pass: notification -> final output.
+
+Both Artifact A and Artifact B remain in Drive and Logs. Artifact A is never overwritten by Artifact B.
+
+## 7. Re-entry after human comments on Artifact B
+
+The reviewed doc_id is Artifact B.
+
+Call Visual Placement Agent with:
+- canonical_chapter_doc_id = latest passing Artifact A from Logs
+- visual_review_doc_id
+- visual_assets_folder_id
+- chapter_writing_folder_id = folder_id
+- version = next final version as determined by the node
+- previous_final_doc_id = reviewed doc_id
+- feedback_mode = human_feedback
+
+The Visual Placement Agent reads the final Doc comments.
+
+If comments are presentation/voice/formatting/visual-placement only, it creates a new Artifact B from the same canonical Artifact A and those comments, then Evaluate Final runs in report_only mode.
+
+If it returns `Requires canonical revision`, stop and surface that result upward. Do not secretly alter evidence/claims/structure only in Artifact B. A substantive change must be made in the canonical source chapter before a new final presentation is generated.
+
+## 8. Routing
+
+Canonical evaluator failed -> Diagnose canonical.
+Canonical evaluator pass -> Visual Placement.
+Final evaluator failed -> regenerate final presentation from same canonical source unless the failure itself requires canonical evidence/structure changes, in which case stop/escalate.
+Final evaluator pass -> final return.
+
+no_rubric, failed_run, missing IDs, or unparseable evaluator metadata -> halt. Never guess.
+
+## 9. Human review
+
+The orchestrator owns the human approval gate after this node returns. This node does not wait for approval during its run.
+
+## 10. Boundaries
+
+Node owns folder setup, Logs, versioning, routing, notifications, and final envelope.
+Chapter Writing Agent owns canonical Artifact A only.
+Evaluate Canonical scores Artifact A only and runs report-only.
+Visual Placement Agent owns Artifact B and placement report only.
+Evaluate Final scores Artifact B against canonical/style/visual constraints and runs report-only.
+Diagnose revises only canonical Artifact A when canonical content fails.
+Human owns visual KEEP/EXCLUDE decisions upstream and final chapter approval downstream.
+
+## 11. Final Output
+
+Return exactly:
+{"node":"chapter_writing","doc_id":"<passing_final_artifact_b_doc_id>"}
+
+The final doc_id is Artifact B. Artifact A remains preserved in Logs/Drive.
+No other text or keys.
