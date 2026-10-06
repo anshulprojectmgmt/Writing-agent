@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "edition": "chatgpt-plus",
   "uses_openai_api": false,
   "stages": [
@@ -16,7 +16,7 @@
     "chapter_blueprint": ["broad_research", "research_analysis"],
     "research_mapping": ["broad_research", "chapter_blueprint"],
     "deep_research": ["broad_research", "research_mapping"],
-    "chapter_writing": ["research_mapping", "deep_research"]
+    "chapter_writing": ["research_mapping", "deep_research", "visual_review", "visual_assets"]
   },
   "role_adapters": {
     "broad_research": "references/roles/broad_research.md",
@@ -24,10 +24,37 @@
     "chapter_blueprint": "references/roles/chapter_blueprint.md",
     "research_mapping": "references/roles/research_mapping.md",
     "deep_research": "references/roles/deep_research.md",
-    "chapter_writing": "references/roles/chapter_writing.md"
+    "visual_research": "references/roles/visual_research.md",
+    "chapter_writing": "references/roles/chapter_writing.md",
+    "visual_placement": "references/roles/visual_placement.md",
+    "chapter_clean_evaluate": "references/roles/chapter_clean_evaluate.md"
+  },
+  "deep_research_subflow": [
+    "deep_research_worker",
+    "deep_research_evaluate",
+    "visual_research",
+    "visual_research_evaluate",
+    "human_visual_review"
+  ],
+  "chapter_writing_subflow": [
+    "canonical_chapter_worker",
+    "canonical_clean_evaluate",
+    "visual_placement_linkedin",
+    "final_clean_evaluate"
+  ],
+  "visual_selection_criteria": [
+    "directly_explains_subsection",
+    "meaningful_data_mechanism_or_comparison",
+    "strong_enough_to_improve_chapter"
+  ],
+  "chapter_outputs": {
+    "artifact_a": "canonical_anshul_style",
+    "artifact_b": "linkedin_style_plus_human_keep_visuals",
+    "final_stage_doc_id": "artifact_b"
   },
   "max_diagnose_attempts_per_review_cycle": 3,
   "web_search_stages": ["broad_research", "deep_research"],
   "human_approval_after_every_stage": true,
+  "human_visual_review_before_chapter_writing": true,
   "blueprint_structure_selection": true
 }
