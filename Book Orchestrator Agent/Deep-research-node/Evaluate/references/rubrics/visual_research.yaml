@@ -1,0 +1,82 @@
+pass_threshold: 0.90
+
+sections:
+  - id: subsection_coverage
+    name: "every approved subsection in Visual Review"
+    match: dynamic
+    weight: 0.25
+    purpose: "Every approved subsection must be inspected against its allowed primary-source pool; no subsection may silently disappear because it produced no image."
+    dimensions:
+      structural:
+        weight: 0.45
+        checks:
+          - "Every approved subsection appears exactly once as a review section"
+          - "Each subsection is explicitly FOUND with candidates or NOT FOUND with inspected-source reasons"
+      consistency:
+        weight: 0.55
+        checks:
+          - "Visual Review subsection count matches the approved mapped blueprint"
+
+  - id: source_lineage
+    name: "candidate source lineage"
+    match: dynamic
+    weight: 0.25
+    purpose: "Visual Research must stay on the evidence lineage established upstream rather than introducing unrelated image sources."
+    dimensions:
+      content_completeness:
+        weight: 0.40
+        checks:
+          - "Every FOUND candidate has an exact primary-source URL and a figure/asset locator"
+      purpose_alignment:
+        weight: 0.60
+        checks:
+          - "Candidate source is either mapped to that subsection in Research Mapping or was added by Deep Research specifically to resolve that subsection's mapped GAP"
+    red_flags:
+      - "Secondary article, image-search result, stock image, repost, generated visual, or redrawn substitute is used"
+      - "A primary source is introduced only because it has a useful visual but is not part of that subsection's evidence lineage"
+
+  - id: three_rule_selection_gate
+    name: "V2 three-rule candidate selection"
+    match: dynamic
+    weight: 0.30
+    purpose: "A candidate is selected only on the three approved substantive criteria and is not rejected by extra editorial/tooling filters."
+    dimensions:
+      purpose_alignment:
+        weight: 1.0
+        checks:
+          - "Candidate directly explains the subsection"
+          - "Candidate contains meaningful data, mechanism, or comparison"
+          - "Candidate is strong enough that it should improve the chapter"
+    red_flags:
+      - "Candidate was rejected only because it is technical, complex, embedded in a page/PDF, needs cropping, lacks a standalone image URL, or is inconvenient to extract"
+      - "An extra visual-selection criterion beyond the approved three is used to suppress an otherwise qualifying candidate"
+
+  - id: extraction_accounting
+    name: "selection-before-extraction and asset accounting"
+    match: fixed
+    weight: 0.15
+    purpose: "Extraction is an execution state, not a candidate-selection gate."
+    dimensions:
+      structural:
+        weight: 0.45
+        checks:
+          - "Every FOUND candidate has EXTRACTION STATUS = EXTRACTED or SOURCE-LINKED"
+          - "Every EXTRACTED candidate has a concrete Drive asset reference"
+          - "Every SOURCE-LINKED candidate retains exact source URL and asset locator"
+      consistency:
+        weight: 0.55
+        checks:
+          - "No candidate that passes the three selection rules is converted to NOT FOUND because extraction failed"
+          - "No substitute/generated/redrawn asset is used to hide an extraction failure"
+
+  - id: human_review_gate
+    name: "human decision fields"
+    match: fixed
+    weight: 0.05
+    purpose: "The human, not the AI, owns final KEEP/EXCLUDE selection."
+    dimensions:
+      structural:
+        weight: 1.0
+        checks:
+          - "Every FOUND candidate has a HUMAN DECISION field"
+          - "Discovery output uses PENDING before human review; decision-applied output uses only KEEP/EXCLUDE for resolved candidates"
