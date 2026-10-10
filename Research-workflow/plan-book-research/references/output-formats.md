@@ -19,6 +19,10 @@ Distinguish source statements, measured observations, inference, persona interpr
 
 ## 2. Frame, Question Map, knowledge map, and running document
 
+### Common workflow marker — mandatory for every stage output
+
+Precede each stage's dedicated format with `Step: [number — stage name]`, `Round: [0/background, 1, or 2]`, `Focus: [question IDs or scope]`, `Status: [in progress / complete with limitations / complete]`, and `Next: [dependent stage or final delivery]`. In a combined document, the planner may add this marker immediately above an embedded worker output without altering its content. The marker is metadata, not an extra numbered substantive section of the background or synthesis formats.
+
 ### Frame
 
 Record topic verbatim; objective; audience; book profile and GenAI angle; personal-life/product scope; included/excluded territory; time horizon and as-of date; expected chapter contribution; assumptions; supplied/frozen decisions; execution mode (autonomous by default, stepwise only on explicit request); destination; running-document path; and stage artifact paths.
