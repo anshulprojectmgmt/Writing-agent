@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Book Topic"
+  short_description: "Ground book research questions in real evidence"
+  default_prompt: "Use $research-book-topic to investigate this book topic through its question map."
