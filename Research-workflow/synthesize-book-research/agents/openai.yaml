@@ -1,0 +1,4 @@
+interface:
+  display_name: "Synthesize Book Research"
+  short_description: "Synthesize evidence and identify research gaps"
+  default_prompt: "Use $synthesize-book-research to synthesize these research artifacts and question answers."
