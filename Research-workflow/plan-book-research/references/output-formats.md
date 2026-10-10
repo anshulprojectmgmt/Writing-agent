@@ -195,6 +195,11 @@ Default to durable Markdown artifacts using the environment's available persiste
 
 Preserve the source broad-research skill's ten rungs, ground-floor/blind-spot checks, label vocabulary, merged evidence cards, filler-control floor, and background five-per-rung target. Replace its Query Map entirely with a question-first map, obsolete hardcoded years with the run's actual horizon, optional academic/news omissions with all-rung attempts, and platform-specific HTML/Gumloop-only delivery with portable output. Preserve the source analysis skill's Framing Check, seven sections, concept deduplication, live tensions, disconfirmation, falsifier, and twelve-field completeness; adapt the reframe stop to user-selected autonomous/stepwise mode and remove separate evaluator dependency.
 
+Original source skills inspected at Writing-agent revision `c6ae6dd69718e95cb3bf7a68ebb19afbdb6b56ae`:
+
+- [Broad Research](https://github.com/anshulprojectmgmt/Writing-agent/blob/c6ae6dd69718e95cb3bf7a68ebb19afbdb6b56ae/Book%20Orchestrator%20Agent/Broad-research-node/broad-research-agent/SKILL.md), including its `references/output-formatting.md`.
+- [Research Analysis](https://github.com/anshulprojectmgmt/Writing-agent/blob/c6ae6dd69718e95cb3bf7a68ebb19afbdb6b56ae/Book%20Orchestrator%20Agent/research-analysis-node/Research%20Analysis%20Agent/SKILL.md), including its `references/output-formatting.md`.
+
 Condense Co-STORM ideas rather than installing or claiming execution of its engine. Ground the adaptation in official Stanford OVAL source:
 
 - [Expert generation](https://github.com/stanford-oval/storm/blob/main/knowledge_storm/collaborative_storm/modules/expert_generation.py): diverse role perspectives guided by background; focused opposing stands/stakeholders. Adapt these to human company-role archetypes, not named-person impersonation.
