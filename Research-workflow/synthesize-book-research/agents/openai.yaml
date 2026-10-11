@@ -1,4 +1,4 @@
 interface:
   display_name: "Synthesize Book Research"
-  short_description: "Build an evidence-informed picture of tomorrow"
-  default_prompt: "Use $synthesize-book-research to integrate these professional perspectives into plausible futures and chapter insights."
+  short_description: "Analyze evidence into a seven-section vision of tomorrow"
+  default_prompt: "Use $synthesize-book-research to integrate this research using its Research Analysis-derived framing check and seven-section synthesis."

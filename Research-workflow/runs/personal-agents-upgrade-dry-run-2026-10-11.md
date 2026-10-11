@@ -1,3 +1,5 @@
+> **Historical sample — superseded by the corrected workflow.** This earlier sample predates the all-ten-rung mandatory-attempt rule and restored Research Analysis synthesis structure. Its considered-not-pursued rows do not satisfy the current contract. See `personal-agents-corrected-dry-run-2026-10-11.md` for the revised sample.
+
 # Personal Agents — lightweight research dry run
 
 This sample applies `plan-book-research`, `research-book-topic`, `synthesize-book-research` and their shared canonical contract. It is a format and provider-control demonstration, not a completed research workflow or an independent expert consensus.

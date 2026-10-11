@@ -1,4 +1,4 @@
 interface:
   display_name: "Research Book Topic"
-  short_description: "Explore future questions through substantive evidence"
-  default_prompt: "Use $research-book-topic to investigate the future of this topic and preserve sources, reasoning and examples."
+  short_description: "Investigate future questions across all ten source rungs"
+  default_prompt: "Use $research-book-topic to investigate this topic through its professional lens, attempt all ten source rungs and preserve substantive reasoning."
