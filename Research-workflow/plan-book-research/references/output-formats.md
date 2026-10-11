@@ -211,3 +211,7 @@ Condense Co-STORM ideas rather than installing or claiming execution of its engi
 - [Warm-start hierarchical discussion](https://github.com/stanford-oval/storm/blob/main/knowledge_storm/collaborative_storm/modules/warmstart_hierarchical_chat.py): use common background, multiple perspectives, and a growing knowledge map to ask materially advancing questions.
 
 These are workflow inspirations. The three skills implement artifact handoffs and ordinary agent/retrieval work, not Stanford's Python repository runtime.
+
+### Anshul's default stage delivery
+
+Create one new Google Drive folder per research run. Save Steps 01–10 as ten separate native Google Docs, each containing its complete dedicated output, stage marker and source links. Include every parallel stream in the corresponding step document. Save an accepted step before advancing, keep one coordinator as document owner, and update existing step documents by ID rather than creating duplicate revisions. The stage index must include the verified folder URL and each document's numbered title, ID/URL and write status. Verify content and folder placement before reporting success. The final-package document provides a linked reading guide and source/evidence reconciliation. Portable Markdown remains a migration source; use an equivalent document adapter when Google Drive is unavailable on another platform, and disclose unavailable persistence rather than claiming it succeeded.
