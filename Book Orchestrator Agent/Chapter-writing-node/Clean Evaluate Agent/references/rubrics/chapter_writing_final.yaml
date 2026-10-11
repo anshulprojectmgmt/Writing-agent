@@ -22,7 +22,7 @@ sections:
     name: "facts, evidence, citations, and caveats"
     match: dynamic
     weight: 0.25
-    purpose: "LinkedIn-style rewriting may change presentation but cannot change the evidentiary meaning of the canonical chapter."
+    purpose: "Visual Placement preserves authored prose and native formatting while inserting approved visuals."
     dimensions:
       content_completeness:
         weight: 0.45
@@ -39,10 +39,10 @@ sections:
       - "A statistic or factual claim changes meaning"
 
   - id: linkedin_style_gate
-    name: "LinkedIn-derived reader-facing style"
+    name: "integrated Anshul reader-facing style preservation"
     match: fixed
     weight: 0.25
-    purpose: "Artifact B is intentionally a separate reader-facing presentation in the approved LinkedIn-derived house style."
+    purpose: "Artifact B preserves the integrated writing output; there is no second voice rewrite."
     dimensions:
       quality:
         weight: 0.60
@@ -57,7 +57,7 @@ sections:
         weight: 0.40
         checks:
           - "Voice is conversational/direct product-leader prose rather than academic, consultant, or social-engagement copy"
-          - "No hashtags, emojis, engagement bait, or invented personal anecdotes"
+          - "No hashtags, engagement bait or invented personal anecdotes; preserve authorised functional heading icons"
           - "Bullets appear only for genuine sets/taxonomies/checklists/comparisons"
 
   - id: clean_reader_facing_gate
@@ -96,3 +96,9 @@ sections:
     red_flags:
       - "Any Visual Review candidate remains PENDING"
       - "A failed KEEP was silently replaced with another image"
+
+preservation_gate:
+  rules:
+    - "Reader-facing prose, headings, paragraph order, citations, numbers and fixed punchlines match Artifact A after removing workflow appendices and accounting for inserted captions/accessibility text"
+    - "Native bold/italic runs and meaningful bullet lead-ins are preserved; no added preview labels or independent voice rewrite"
+    - "Missing matching integrated writing execution gate blocks final pass regardless of weighted score"

@@ -98,3 +98,13 @@ Success:
 }
 
 No rubric/failure returns doc_id null with a short Failed comment. Never fabricate IDs or scores.
+
+## Mandatory integrated execution and preservation gates
+
+Read the updated Chapter Writing SKILL.md and every mandatory writing/voice/output reference plus skill-sources.json. For Artifact A, verify contract version 1 and all five checks against Notes, actual prose and native/rendered formatting. Missing provenance, skipped steps, templated previews or unverified formatting blocks a pass regardless of weighted score. Self-declaration alone is insufficient. Include checked paths/hashes, matching Artifact A ID and five check results in the separate evaluation report. Controller copies only verified metadata into durable state.
+
+For Artifact B, compare reader-facing wording and native emphasis with A, excluding workflow appendices and inserted figure captions/accessibility descriptions. Visual Placement may not perform another voice rewrite. Preserve author-approved functional icons. Report any drift. A missing/stale integrated execution receipt blocks final pass. Keep source documents unchanged.
+
+### Execution receipt in the canonical evaluation report
+
+After creating the independent report, include one machine-readable JSON receipt with `report_doc_id` equal to that report's actual ID, `artifact_doc_id` equal to A, `artifact_revision_id` from native Doc readback, `status` (passed or failed), and `checks`. Each of the five checks has `{passed: <boolean>, evidence: <specific section/paragraph or rendering/readback locator>}`. Include dependency paths/source hashes in the references_verified evidence. Create/verify the report before filling its real ID; never guess an ID or issue all-true flags without inspection. Missing or failed execution/preservation gates force evaluation status failed irrespective of weighted score. Final report verifies the same matching receipt against current A.

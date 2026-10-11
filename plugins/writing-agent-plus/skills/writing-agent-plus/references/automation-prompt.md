@@ -18,3 +18,5 @@ Use this prompt when creating the recurring ChatGPT Work/Codex automation:
 > or purchase credits.
 
 Supported cadence: hourly. Verify the actual schedule and enabled status. Never claim a 30-minute task exists. A scheduled check does not bypass plan limits and can resume only when the host allowance permits execution.
+
+For Chapter Writing, use the integrated contract: storytelling-article -> anshul-writing-style + internal ai-humanizer-core -> story-integrity review -> verified formatting. Load all mandatory references and validate pinned dependencies. Visual Placement preserves this writing. Validate the matching independent execution receipt before visual handoff; never bypass missing passes during recovery or upgrade historical unknown fields to passing.

@@ -162,21 +162,21 @@ invent a number.
 First section:
 
 ```html
-<h2><strong><font face="Arial" size="6" color="#8e1b1b">{N} {Section title}</font></strong></h2>
+<h2><strong><font face="Arial" size="6" color="#8e1b1b">{N}. {Section title}</font></strong></h2>
 ```
 
 Every later section, including the unnumbered closing section:
 
 ```html
 <hr>
-<h2><strong><font face="Arial" size="6" color="#8e1b1b">{N} {Section title}</font></strong></h2>
+<h2><strong><font face="Arial" size="6" color="#8e1b1b">{N}. {Section title}</font></strong></h2>
 ```
 
 A `[TECH]` or `[WOW MOMENT]` tag on a section title stays inside the same
 `<font>` — the whole heading is already accent-coloured:
 
 ```html
-<h2><strong><font face="Arial" size="6" color="#8e1b1b">4 [TECH] How does the model draw the screen?</font></strong></h2>
+<h2><strong><font face="Arial" size="6" color="#8e1b1b">4. [TECH] How does the model draw the screen?</font></strong></h2>
 ```
 
 ### 3.3 Subsection heading
@@ -364,64 +364,17 @@ Emphasis is decided **after** the Voice Pass, on the finished wording, and never
 changes a word. It is the difference between a grey page and a page whose
 argument can be found on a skim.
 
-### 5.1 Bold
+### 5.1 Bold — selective argumentative emphasis
 
-**Density.** The chapter is bold-rich by design:
+The integrated worker contract and explicit author samples govern emphasis. No per-paragraph, per-page or section-count quota. Bold an existing important opening claim or comparison phrase only where it helps the reader understand the explanation that follows. This is emphasis within the actual sentence, not an added miniature heading or summary sentence. Ordinary setup, evidence narration and transitions may remain plain. Preserve useful middle/end emphasis.
 
-- **Every substantive body paragraph (three or more sentences) carries one or
-  two bold phrases.** A paragraph with none is the exception and needs a reason
-  (a pure bridge, a Scene beat whose force is in its rhythm).
-- **Short bridge paragraphs (one or two sentences)** carry zero or one.
-- **A typical section lands at roughly 10–20 bold items** counting punch lines
-  and its subsection headings' own `<strong>`. A section under 8 is
-  under-formatted; go back through its paragraphs.
+Prefer a short load-bearing phrase, a clearly explained hard result, a term at first definition or a genuine contrast. A full existing claim may be bold when its importance and the author sample justify it; never bold whole ordinary paragraphs. Fixed punchlines remain verbatim and bold. Do not repeatedly bold the same phrase or impose the same opening pattern on every paragraph. Consecutive opening emphasis needs a genuine paired comparison, not a template.
 
-**What gets bolded — the load-bearing phrase**, in this priority:
+For a parallel explanatory list, bold its meaningful lead-in and follow with explanation; avoid tiny fragment bullets. Reader action questions may carry a short useful lead-in. Keep citations plain; never nest bold and italic. Do not alter wording solely to make a formatting label.
 
-1. **The paragraph's claim** — the phrase the paragraph exists to deliver:
-   *whether you know where the thing lives*, *sending data, not code*,
-   *a compiler constrained by a design system*, *govern that output, not design
-   the screens*.
-2. **The hard number that is the paragraph's evidence** — bold the figure with
-   its unit and what it measures, not the citation: *41% increase in onboarding
-   completion*, *702 accessibility-related issues across 288 screens*,
-   *over 40% abandonment within ten seconds*. When a paragraph reports a cluster
-   of results, each result may be bolded (up to three).
-3. **A key term at first definition** where the chapter reuses it:
-   *progressive enhancement*, *the control plane*, *finite state machines*,
-   *a runtime pattern*, *bounded catalog*.
-4. **A paired contrast** — both halves when the paragraph turns on them:
-   *Search demands recall* … *Navigation supports recognition*;
-   *fragmenting, not consolidating*; *direction, not gospel*.
-5. **The turn** — a very short sentence (five words or fewer) that flips the
-   paragraph, bolded without its full stop: *It is a number*, *It got bypassed*,
-   *It is shipped*, *It is a count*.
+### 5.2 Italic — evidence attribution and intentional voice
 
-**Bold phrase length:** two to about ten words. The punch line is the only
-full-sentence bold, plus the ≤5-word turn in rule 5.
-
-**Never bold:**
-
-- whole ordinary sentences,
-- citations or attributions — `(a16z, 2024)` stays plain,
-- text already in `<em>` (never nest `<strong>` and `<em>`),
-- the Your Move list items,
-- anything in the Notes, Handoff or Summary except the field labels,
-- the same phrase twice in the chapter — bold the first occurrence only.
-
-**Placement must not become a template.** Do not bold the first words of every
-paragraph, do not bold the last sentence of every paragraph, and do not let two
-adjacent paragraphs open with bold. The run-in opener (a bold two-to-six word
-phrase that opens a paragraph) is allowed a few times per chapter, never in
-consecutive paragraphs.
-
-### 5.2 Italic
-
-Unchanged from the skill's Formatting section: **two to four per section**,
-each doing one job — a defined technical term at first use, a line voiced as the
-product's or the user's own (*"do you know where this lives?"*), a single pivotal
-word (*what* … *when*), or a phrase held at arm's length. Never a whole paragraph
-of ordinary prose, never twice in one paragraph, never combined with bold.
+Use concise evidence/study attribution italics where helpful to distinguish the source-backed finding inside the argument. Preserve the citation, finding and caveat. Also permit first-use terms or quoted user/product voice where they serve a purpose. No quota. Never italicise an ordinary whole paragraph or overlap with bold. No evidence colouring, background highlighting or underline.
 
 ### 5.3 Worked example
 
@@ -447,7 +400,7 @@ Rendered:
 ```html
 <h1><strong><font face="Arial" size="7">CHAPTER {N} {CHAPTER TITLE}</font></strong></h1>
 <hr>
-<h2><strong><font face="Arial" size="6" color="#8e1b1b">1 {Section title}</font></strong></h2>
+<h2><strong><font face="Arial" size="6" color="#8e1b1b">1. {Section title}</font></strong></h2>
 <p><font face="Georgia" size="4">{Section opening paragraph.}</font></p>
 <p><font size="1">&nbsp;</font></p>
 <h3><strong><font face="Arial" size="5">1.1 {Subsection title}</font></strong></h3>
@@ -458,7 +411,7 @@ Rendered:
 <h3><strong><font face="Arial" size="5">1.2 {Subsection title}</font></strong></h3>
 ...
 <hr>
-<h2><strong><font face="Arial" size="6" color="#8e1b1b">2 {Section title}</font></strong></h2>
+<h2><strong><font face="Arial" size="6" color="#8e1b1b">2. {Section title}</font></strong></h2>
 ...
 <hr>
 <h2><strong><font face="Arial" size="6" color="#8e1b1b">{Unnumbered closing section title}</font></strong></h2>
@@ -498,7 +451,7 @@ document. Nothing precedes the title `<h1>`.
 | `<h3>` | Arial size 5, black, bold; tag in accent | Every subsection and Scene beat |
 | `<strong>` in `<p>` | — | Punch lines, WOW label, Before/After labels, list labels, field labels, and in-paragraph emphasis |
 
-Headings carry no dashes: number, single space, title. `[TECH]` and
+Main section headings use number, period, space, title (1. Title). Subsection numbering and approved heading text remain intact; no inserted dashes. `[TECH]` and
 `[WOW MOMENT]` are the only bracket tags that reach a heading.
 
 ---
@@ -582,13 +535,8 @@ if '<blockquote' in html or FENCE in html:
 if html.count('WOW MOMENT</strong>') != len(re.findall(r'\[WOW MOMENT\]</font>', html)):
     problems.append('WOW labels do not match the number of [WOW MOMENT] subsections')
 
-# 8. Bold density per chapter section
-chapter = html.split('Chapter Writing Notes')[0]
-for sec in re.split(r'<h2><strong><font face="Arial" size="6"[^>]*>', chapter)[1:]:
-    name = re.sub(r'<[^>]+>', '', sec[:sec.find('</h2>')])
-    n = sec.count('<strong>')
-    if n < 8:
-        problems.append(f'under-bolded section ({n} bold): {name[:50]}')
+# 8. Emphasis must be meaningful; inspect placement visually below.
+# No count quota: a formatting quota can force mechanical preview labels.
 
 print('OK' if not problems else '\n'.join(problems))
 ```

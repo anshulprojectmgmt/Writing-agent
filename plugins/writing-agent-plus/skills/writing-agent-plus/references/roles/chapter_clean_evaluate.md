@@ -13,11 +13,11 @@ For final Artifact B use node_name `chapter_writing_final` and also provide cano
 
 Never insert findings into either chapter Doc and never attach evaluator comments to the source artifact. Put all scores/findings in a separate native evaluation report under Chapter Writing.
 
-Canonical evaluation verifies the original `anshul-chapter-writing-4` output remains canonical and has not been transformed into LinkedIn style.
+Canonical evaluation verifies the integrated story/writing/formatting/internal-humanisation contract, all mandatory references and the five execution checks against actual Artifact A. Record verified results in the separate report; a missing gate blocks pass regardless of score.
 
 Final evaluation verifies:
 - approved structure/evidence preserved from Artifact A;
-- LinkedIn-derived reader-facing style applied;
+- completed prose, native emphasis, headings/icons and explanatory bullets preserved without a second style rewrite;
 - final Doc contains no workflow/evaluator/visual-review metadata;
 - all human visual decisions are accounted for in Placement Report;
 - no EXCLUDE visual appears;

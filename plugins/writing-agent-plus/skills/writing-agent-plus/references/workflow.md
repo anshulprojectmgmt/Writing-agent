@@ -60,19 +60,19 @@ If Deep Research is revised after comments, the old Visual Review becomes stale.
 
 Chapter Writing has two deliberate outputs.
 
-### Artifact A — canonical Anshul style
+### Artifact A — integrated Anshul writing
 
-Run the existing canonical Chapter Writing worker only. It uses `anshul-chapter-writing-4` plus its bundled Anshul voice, writing-style, and output-formatting references. Do not inject the LinkedIn-derived final style.
+Run the existing integrated Chapter Writing worker: storytelling-article argument/story development -> anshul-writing-style writing + formatting + internal ai-humanizer-core -> story-integrity review -> verified native formatting. Read all dependencies and bundled inner references. Record execution checks in Notes; the clean evaluator must verify them before controller state records a passing version-1 execution gate.
 
 Evaluate Artifact A with the Chapter Clean Evaluate Agent using the canonical `chapter_writing` rubric. The evaluator writes a separate report only and never annotates Artifact A.
 
 If it fails, revise canonical Artifact A through Diagnose and clean-evaluate the new version. Visual Placement cannot run until the current canonical artifact passes.
 
-### Artifact B — LinkedIn style + visuals
+### Artifact B — preserved writing + approved visuals
 
 After Artifact A passes, run Visual Placement from `references/roles/visual_placement.md`.
 
-It creates a NEW document from Artifact A, applies only the approved LinkedIn-derived reader-facing presentation style, and inserts only human-KEEP primary-source visuals. It never overwrites Artifact A and never conducts new research.
+It creates a NEW document from Artifact A, preserves the completed prose/voice/native formatting, and inserts only human-KEEP primary-source visuals. No second style rewrite is allowed. It never overwrites Artifact A and never conducts new research.
 
 It creates a separate Visual Placement Report accounting for every candidate as INSERTED, EXCLUDED, or FAILED. A failed KEEP gets a specific exact-source/technical reason; it is never silently replaced.
 
@@ -91,7 +91,8 @@ For Blueprint selection, record exact options Doc ID and verbatim choice, then r
 For visual decisions, record exact Visual Review Doc ID and exact KEEP/EXCLUDE choices. Never accept a visual decision against a stale review.
 
 Final Artifact B comments are classified conservatively by Visual Placement:
-- presentation/voice/formatting/placement only -> regenerate Artifact B from unchanged Artifact A;
+- placement/layout/caption only -> regenerate Artifact B from unchanged Artifact A;
+- voice/prose/emphasis/formatting -> targeted integrated Chapter Writing revision, evaluate A, then regenerate B;
 - substantive facts/evidence/citations/statistics/claims/caveats/fixed punch lines/approved structure/reader transformation -> `Requires canonical revision`; do not create a contradictory final-only patch.
 
 ## Scheduled recovery

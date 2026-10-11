@@ -90,3 +90,7 @@ Metadata only — no diffs, no patched text, no diagnostic report. Never fabrica
 Responsible for: diagnosing, patching, creating the next version, returning metadata.
 
 Not responsible for: evaluating or scoring, deciding whether the revision passes, re-running evaluation, resolving or otherwise touching comments on the research doc, producing a diagnostic report as a separate saved artifact, carrying any evaluate-inserted findings block or comment into the revised version, fabricating sources or evidence to make an issue patchable, the Google Sheet, Slack, human review, or routing.
+
+## Chapter Writing integrated revision contract
+
+For chapter_writing, read the current Chapter Writing Agent SKILL.md and every mandatory dependency before revising. Repair the affected story/writing layer using storytelling-article and anshul-writing-style with internal ai-humanizer-core. Fully format and verify the new Artifact A before clean evaluation. Refresh execution evidence for the revised document; do not reuse a stale receipt. No separate formatting stage, no bold quota and no repeated invented previews. Never revise a passing artifact without explicit human feedback.

@@ -22,7 +22,7 @@ Only READY, recoverable RUNNING, and due PAUSED_LIMIT rows are eligible for sche
 
 `Run ID | Topic | Details | Requested By | Chapter Folder ID | Logs Sheet ID | Resume Doc ID | Current Stage | State | Approved Broad Research Doc ID | Approved Research Analysis Doc ID | Approved Chapter Blueprint Doc ID | Approved Research Mapping Doc ID | Approved Deep Research Doc ID | Visual Review Doc ID | Visual Assets Folder ID | Canonical Chapter Writing Doc ID | Approved Chapter Writing Doc ID | Pending Doc ID | Pending Visual Review Doc ID | Pending Version | Last Checkpoint | Next Action | Not Before | Error Code | Error Summary | Updated At`
 
-`Canonical Chapter Writing Doc ID` is Artifact A (canonical Anshul style). `Approved Chapter Writing Doc ID` is Artifact B (LinkedIn-style + human-KEEP visuals), because Artifact B is the main Chapter Writing stage output presented for approval.
+`Canonical Chapter Writing Doc ID` is Artifact A (canonical Anshul style). `Approved Chapter Writing Doc ID` is Artifact B (preserved writing + human-KEEP visuals), because Artifact B is the main Chapter Writing stage output presented for approval.
 
 `Visual Review Doc ID` and `Visual Assets Folder ID` are written after a passing Visual Research evaluation. If Deep Research is revised, replace these fields only after the fresh Visual Research artifacts are verified; old visual artifacts remain in Drive history but are stale for the run.
 
@@ -88,3 +88,12 @@ Use the same columns as the project-level tab, filtered to this run.
 ## Chapter Logs workbook: Events
 
 Use the same columns as the project-level tab, filtered to this run.
+
+## Integrated Chapter Writing execution guards (append only)
+
+Append missing fields at the right of Runs and chapter Run State; preserve historical values and headers:
+`Chapter Writing Contract Version | Chapter Writing Execution Doc ID | Chapter Writing Execution Report Doc ID | Chapter Writing Execution Checks`
+
+Resume JSON names: `chapter_writing_contract_version` (integer 1), `chapter_writing_execution_doc_id` (current Artifact A), `chapter_writing_execution_report_doc_id` (independent canonical clean evaluation report), `chapter_writing_execution_checks` (JSON object with exactly references_verified, story_architecture, write_format_humanize, story_integrity, formatted_document_verified set to true only after report and artifact verification). Blank historical values are unknown, not passing. Never advance an old snapshot into new Visual Placement by inventing receipts; complete targeted integrated writing/re-evaluation first. Preserve completed historical runs.
+
+Append `Canonical Evaluation Report Doc ID | Canonical Revision ID | Chapter Writing Execution Receipt` to the same guard metadata. Resume JSON uses `canonical_evaluation_report_doc_id`, `canonical_revision_id`, `chapter_writing_execution_receipt`. Read back current A revision before handoff. The receipt is copied only from the matching independent evaluation report and contains `report_doc_id`, `artifact_doc_id`, `artifact_revision_id`, `status`, and `checks` with the five names each holding {passed: true, evidence: <specific section/paragraph or verification locator>}. The execution report ID must equal the current canonical evaluation report ID; revision and artifact IDs must match current A. Do not manufacture locators or reuse old report results after revision. These receipts prove recorded verified execution, not guaranteed model quality.

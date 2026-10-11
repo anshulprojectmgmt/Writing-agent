@@ -43,11 +43,11 @@ Selection happens before extraction. Extraction difficulty cannot turn a qualify
 
 ### Chapter Writing subflow
 
-`Canonical Chapter Worker -> Clean Evaluate Canonical -> Visual Placement + LinkedIn Style -> Clean Evaluate Final`
+`Canonical Chapter Worker -> Clean Evaluate Canonical -> Visual Placement preserving written style -> Clean Evaluate Final`
 
-Artifact A is the output of the existing canonical `anshul-chapter-writing-4` skill using its original bundled voice, writing-style, and output-formatting references. Do not inject the LinkedIn-derived style into Artifact A.
+Artifact A is the fully story-developed, written, formatted and humanised output of the existing Chapter Writing worker. Invoke its bundled storytelling-article -> anshul-writing-style + internal ai-humanizer-core -> story-integrity review, with every inner voice/craft/output reference. Verify contract version 1 and all five execution checks before Visual Placement; incomplete execution blocks the handoff.
 
-Artifact B is a NEW separate reader-facing Doc generated only after Artifact A passes. Visual Placement transforms presentation into the approved LinkedIn-derived style, inserts only human-KEEP primary-source visuals, and keeps placement audit in a separate report. Artifact B must not contain Chapter Writing Notes, Handoff Package, Completeness Summary, evaluator blocks, or visual workflow metadata.
+Artifact B is a NEW separate reader-facing Doc generated only after Artifact A passes. Visual Placement preserves completed reader-facing prose and native formatting, inserts only human-KEEP primary-source visuals, and keeps placement audit in a separate report. Artifact B must not contain Chapter Writing Notes, Handoff Package, Completeness Summary, evaluator blocks, or visual workflow metadata.
 
 The final Chapter Writing stage Doc ID is Artifact B. Artifact A remains preserved in Drive and Logs for comparison.
 
@@ -88,7 +88,8 @@ A scheduled wake-up or silence never satisfies either gate.
 ## Chapter revision safety
 
 Final Artifact B feedback is classified conservatively.
-- presentation/voice/formatting/visual-placement only: regenerate Artifact B from the unchanged passing Artifact A and re-evaluate Final.
+- visual-placement/layout/caption only: regenerate Artifact B from passing Artifact A and re-evaluate Final.
+- voice/prose/emphasis/formatting: targeted integrated Chapter Writing revision, clean-evaluate A, then regenerate B.
 - facts/evidence/citations/statistics/claims/caveats/fixed punch lines/approved structure/reader transformation: stop with `Requires canonical revision`; do not create a final-only contradiction.
 
 Canonical Artifact A revision follows its Diagnose -> Clean Evaluate loop before Artifact B is regenerated.
@@ -107,7 +108,7 @@ The ChatGPT plan controls usage. Precise token/credit usage is not programmatica
 - Never use Gumloop, Slack, OpenAI API keys, Agents API, Cloud Run, or Terraform in this edition.
 - Never allow visual work in Research Mapping.
 - Never allow Chapter Writing while Visual Review has PENDING candidates.
-- Never rewrite Artifact A into LinkedIn style.
+- Never let Visual Placement rewrite Artifact A wording, voice or emphasis; writing belongs to the integrated Chapter Writing worker.
 - Never overwrite Artifact A when creating Artifact B.
 - Never use an EXCLUDE visual or replace a failed KEEP with another/generated/redrawn image.
 - Never claim completion until Artifact B passes final clean evaluation and all six main-stage approvals are recorded.

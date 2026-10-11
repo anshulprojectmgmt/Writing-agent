@@ -12,11 +12,27 @@
   ],
   "upstream": {
     "broad_research": [],
-    "research_analysis": ["broad_research"],
-    "chapter_blueprint": ["broad_research", "research_analysis"],
-    "research_mapping": ["broad_research", "chapter_blueprint"],
-    "deep_research": ["broad_research", "research_mapping"],
-    "chapter_writing": ["research_mapping", "deep_research", "visual_review", "visual_assets"]
+    "research_analysis": [
+      "broad_research"
+    ],
+    "chapter_blueprint": [
+      "broad_research",
+      "research_analysis"
+    ],
+    "research_mapping": [
+      "broad_research",
+      "chapter_blueprint"
+    ],
+    "deep_research": [
+      "broad_research",
+      "research_mapping"
+    ],
+    "chapter_writing": [
+      "research_mapping",
+      "deep_research",
+      "visual_review",
+      "visual_assets"
+    ]
   },
   "role_adapters": {
     "broad_research": "references/roles/broad_research.md",
@@ -48,13 +64,35 @@
     "strong_enough_to_improve_chapter"
   ],
   "chapter_outputs": {
-    "artifact_a": "canonical_anshul_style",
-    "artifact_b": "linkedin_style_plus_human_keep_visuals",
+    "artifact_a": "story_developed_written_formatted_humanised",
+    "artifact_b": "same_reader_prose_plus_human_keep_visuals",
     "final_stage_doc_id": "artifact_b"
   },
   "max_diagnose_attempts_per_review_cycle": 3,
-  "web_search_stages": ["broad_research", "deep_research"],
+  "web_search_stages": [
+    "broad_research",
+    "deep_research"
+  ],
   "human_approval_after_every_stage": true,
   "human_visual_review_before_chapter_writing": true,
-  "blueprint_structure_selection": true
+  "blueprint_structure_selection": true,
+  "chapter_writing_contract": {
+    "version": 1,
+    "worker_steps": [
+      "story_architecture",
+      "write_format_humanize",
+      "story_integrity",
+      "formatted_document_verified"
+    ],
+    "required_checks": [
+      "references_verified",
+      "story_architecture",
+      "write_format_humanize",
+      "story_integrity",
+      "formatted_document_verified"
+    ],
+    "worker_skill": "Book Orchestrator Agent/Chapter-writing-node/Chapter Writing Agent/SKILL.md",
+    "dependency_manifest": "Book Orchestrator Agent/Chapter-writing-node/Chapter Writing Agent/references/skill-sources.json",
+    "visual_placement_rewrites_prose": false
+  }
 }

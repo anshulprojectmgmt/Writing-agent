@@ -1,49 +1,13 @@
-# Chapter Writing adapter
+# Chapter Writing adapter — integrated execution
 
-Read these repository files for the active role:
+Read the node instruction and existing Chapter Writing Agent SKILL.md/instruction.md under `Book Orchestrator Agent/Chapter-writing-node/`. Read every mandatory dependency listed in that SKILL.md: storytelling-article, anshul-writing-style, ai-humanizer-core, anshul-voice, writing-style, output-formatting and skill-sources.json. Verify the bundled dependency hashes using `scripts/validate_chapter_contract.py` against the exported production snapshot. Missing/mismatched references block dispatch.
 
-- Canonical worker skill: `Book Orchestrator Agent/Chapter-writing-node/Chapter Writing Agent/SKILL.md`
-- Canonical worker instruction: `Book Orchestrator Agent/Chapter-writing-node/Chapter Writing Agent/instruction.md`
-- Canonical voice: `Book Orchestrator Agent/Chapter-writing-node/Chapter Writing Agent/references/anshul-voice.md`
-- Canonical writing style/output formatting: sibling references under the canonical worker
-- Clean evaluator adapter: `references/roles/chapter_clean_evaluate.md`
-- Visual Placement adapter: `references/roles/visual_placement.md`
-- Diagnose: `Book Orchestrator Agent/Chapter-writing-node/Diagnose/SKILL.md`
-- Node contract: `Book Orchestrator Agent/Chapter-writing-node/instruction.md`
+Require exact approved Research Mapping and Deep Research, current resolved Visual Review and Visual Assets. Any PENDING blocks execution. Keep worker/evaluator/visual roles in separate fresh contexts with actual model settings from execution-policy.md.
 
-Require:
-- exact approved Research Mapping Doc;
-- exact approved Deep Research Doc;
-- current Visual Review Doc;
-- Visual Assets folder;
-- every FOUND visual decision resolved to KEEP or EXCLUDE.
+Inside Chapter Writing, execute storytelling-article argument/story development -> anshul-writing-style WRITE + FORMAT + internal HUMANIZE -> storytelling story-integrity review -> native formatted-document verification. Upstream research is already done; no new sources, redesigned structure or extra thinking/research/visual agents. These steps are one worker, not added skills or separate approval stages. Preserve evidence, citations, numbers, caveats and fixed punchlines.
 
-Any PENDING visual blocks this stage.
+Artifact A is the completed written/formatted/humanised chapter plus Notes/Handoff/Summary. Its Notes must contain contract version 1, reference provenance and locatable evidence of all five execution checks. Evaluate through the report-only clean evaluator. Missing execution evidence or formatting verification is a blocking gate even if a weighted score passes. Controller records contract version, matching execution Doc/report IDs and checks only after evaluator verification, then validates state_machine.py.
 
-## Artifact A — canonical result
+Only after Artifact A and its execution gate pass, run Visual Placement in a fresh role context. It creates distinct Artifact B preserving reader-facing prose and native formatting, inserts only human-KEEP visuals, removes workflow appendices and writes a separate Placement Report. It must not reapply a separate LinkedIn voice overlay. Clean-evaluate final B against A and the visual artifacts; present B for human approval.
 
-Run the existing `anshul-chapter-writing-4` worker exactly as authored. Preserve its bundled Anshul voice, writing style, output formatting, blueprint structure, evidence assignments, citations, canonical Notes/Handoff/Summary outputs, and factual constraints.
-
-Do NOT apply the LinkedIn-derived style to this worker. Artifact A exists specifically so the user can inspect the original Anshul-skill result separately.
-
-Evaluate Artifact A using `references/roles/chapter_clean_evaluate.md` with rubric `chapter_writing`. Source Doc must remain untouched. Canonical failure routes to Diagnose and then clean re-evaluation.
-
-## Artifact B — final presentation result
-
-Only after Artifact A passes, run `references/roles/visual_placement.md`.
-
-Visual Placement creates a NEW Google Doc from Artifact A, applies the approved LinkedIn-derived reader-facing style, and inserts only human-KEEP primary-source visuals. It does not overwrite Artifact A and does not conduct new research.
-
-It also creates a separate Visual Placement Report accounting for all visual decisions.
-
-Evaluate Artifact B through `references/roles/chapter_clean_evaluate.md` with rubric `chapter_writing_final`, cross-checking Artifact A, Visual Review, and Placement Report. Artifact B must remain clean: no evaluator blocks, workflow notes, canonical Notes/Handoff/Completeness, or visual decision metadata in reader-facing prose.
-
-The main Chapter Writing stage Pending/Approved Doc is Artifact B. Preserve Artifact A separately in Logs and Run State as `Canonical Chapter Writing Doc ID`.
-
-## Human feedback on Artifact B
-
-Presentation/voice/formatting/visual-placement feedback may regenerate Artifact B from the unchanged passing Artifact A.
-
-If feedback changes facts, evidence, citations, statistics, claims, caveats, fixed punch lines, approved structure, or designated reader transformation, stop with `Requires canonical revision`; do not patch only Artifact B.
-
-Replace Gumloop/Slack with connected Drive tools. Return metadata only. Controller owns Sheets/checkpoints/approval/completion.
+Failed canonical evaluation -> targeted Diagnose using the same integrated skills -> clean re-evaluation, maximum three attempts. Passing work creates no new version absent explicit human feedback. Voice/argument/emphasis comments route to targeted Chapter Writing revision; placement/layout-only comments may regenerate B. Facts/structure feedback requires canonical revision. Controller owns versioning, Logs, receipts and checkpoints; roles return metadata only.

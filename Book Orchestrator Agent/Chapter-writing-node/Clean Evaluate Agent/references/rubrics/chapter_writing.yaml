@@ -28,7 +28,7 @@ sections:
           - "Major concepts are grounded in a real analogy or named example where assigned evidence provides one"
     red_flags:
       - "A named example/statistic appears without assigned support"
-      - "The chapter is rewritten into the LinkedIn-derived final style instead of the canonical Anshul style"
+      - "Storytelling/writing/humanisation steps were skipped or replaced by an independent later style overlay"
 
   - id: reader_transformation_check
     name: "the section where Reader Transformation is designed to land"
@@ -86,9 +86,19 @@ sections:
     name: "canonical vs final style separation"
     match: fixed
     weight: 0.10
-    purpose: "Artifact A must stay the output of the original Anshul skill; LinkedIn transformation belongs only to Visual Placement."
+    purpose: "Artifact A must be the complete integrated Chapter Writing output before Visual Placement."
     dimensions:
       consistency:
         weight: 1.0
         checks:
-          - "The draft follows the canonical bundled voice/writing/output references and has not been rewritten using the final LinkedIn-style overlay"
+          - "The draft applies storytelling-article, anshul-writing-style and internal ai-humanizer-core with all inner references; Notes contain verifiable execution evidence"
+
+execution_gate:
+  contract_version: 1
+  required_checks: [references_verified, story_architecture, write_format_humanize, story_integrity, formatted_document_verified]
+  rules:
+    - "Missing dependency provenance, skipped pass or unverified formatting fails evaluation regardless of weighted score"
+    - "Verify Notes against actual chapter and native/rendered presentation, not self-declarations"
+    - "Simple nontechnical language, immediate jargon explanations and meaningful causal progression are present"
+    - "Opening emphasis uses existing meaningful claims selectively, not added summary labels or per-paragraph quotas"
+    - "Evidence attribution italics, useful inline emphasis and explanatory parallel bullets follow the writing contract"

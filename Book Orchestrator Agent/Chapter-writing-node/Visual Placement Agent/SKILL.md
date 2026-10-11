@@ -1,6 +1,6 @@
 ---
 name: visual-placement-linkedin-v2
-description: Create a separate final reader-facing chapter from the passing canonical Anshul-style chapter. Transform presentation/voice into the approved LinkedIn-derived house style while preserving structure, facts, evidence, citations, punch lines, and meaning, then insert only human-KEEP primary-source visuals. Never overwrite the canonical chapter.
+description: Create a separate final reader-facing chapter from the passing canonical Anshul-style chapter. Preserve the integrated Chapter Writing prose, voice and native formatting, then insert only human-KEEP primary-source visuals. Never overwrite the canonical chapter.
 ---
 
 # VISUAL PLACEMENT + LINKEDIN STYLE V2
@@ -13,7 +13,7 @@ You receive a passing canonical chapter produced by `anshul-chapter-writing-4`. 
 
 You create Artifact B: a NEW clean reader-facing chapter that:
 1. preserves the approved structure, meaning, evidence, citations, factual claims, named examples, statistics, caveats, punch lines, [TECH] / [WOW MOMENT] commitments, reader transformation, and counterargument from Artifact A;
-2. rewrites only presentation/voice into the LinkedIn-derived house style in `references/linkedin-writing-style.md`;
+2. preserves authored wording, voice and native formatting under `references/linkedin-writing-style.md`;
 3. inserts only visuals whose Visual Review decision is KEEP;
 4. contains no workflow notes, evaluator blocks, Chapter Writing Notes, Handoff Package, Completeness Summary, or visual-review metadata.
 
@@ -26,7 +26,7 @@ Required:
 - `chapter_writing_folder_id` — destination for Artifact B and placement report.
 - `version` — supplied by parent node.
 
-Optional for regeneration after presentation-only human feedback:
+Optional for regeneration after visual/layout-only human feedback:
 - `previous_final_doc_id`
 - human comments are read from that Doc by the parent/diagnose route as configured.
 
@@ -44,11 +44,11 @@ Never edit, overwrite, annotate, or append to Artifact A.
 Create a new Google Doc for Artifact B.
 
 Artifact A remains the canonical Anshul-style result.
-Artifact B is the LinkedIn-style + visuals result.
+Artifact B is the same authored reader-facing chapter plus approved visuals.
 
-## LinkedIn style transformation
+## Authored presentation preservation
 
-Use `references/linkedin-writing-style.md` as the only presentation/voice overlay for Artifact B.
+Use `references/linkedin-writing-style.md` as a preservation contract. Artifact A already owns story, voice, formatting and humanisation. Copy its reader-facing prose and native emphasis faithfully; do not apply a second voice/presentation rewrite.
 
 Preserve exactly in substance:
 - section/subsection order and approved commitments;
@@ -64,7 +64,7 @@ Preserve exactly in substance:
 
 Do not conduct research or add a source. Do not remove a citation merely to improve flow. Do not strengthen a claim beyond the canonical evidence.
 
-The LinkedIn transformation may change sentence/paragraph construction, transitions, opening/closing rhythm, and reader-facing heading punctuation, but not the argument or evidence.
+Do not change sentence/paragraph construction, transitions, opening/closing rhythm, headings, icons, bullets, bold or italics. Only insert approved visuals/captions/accessibility text, remove workflow appendices, and make local layout adjustments necessary for placement. Preserve all prose verbatim. Voice/formatting feedback routes back to Chapter Writing for targeted writing-skill revision before regenerating B; visual/layout-only feedback may be handled here.
 
 ## Clean reader-facing output
 
@@ -137,7 +137,7 @@ Before returning:
 - every EXCLUDE is absent.
 - no substitute/generated/redrawn visual.
 - main section headings use `1.`, `2.`, etc.
-- LinkedIn style reference applied throughout Artifact B.
+- Chapter Writing prose, voice and native emphasis preserved throughout Artifact B; no second rewrite.
 
 ## Output
 
@@ -146,7 +146,7 @@ Success:
   "version":"<version>",
   "doc_id":"<final_linkedin_visual_chapter_doc_id>",
   "placement_report_doc_id":"<visual_placement_report_doc_id>",
-  "comment":"Final LinkedIn-style chapter created from canonical chapter; <N> KEEP inserted, <F> KEEP failed, <E> excluded"
+  "comment":"Final chapter preserved from passing written/formatted chapter; <N> KEEP inserted, <F> KEEP failed, <E> excluded"
 }
 
 Failure:

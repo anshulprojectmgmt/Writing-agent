@@ -166,8 +166,7 @@ If the tension comes first, it reads as a story.
 - **Paragraphs are 3–7 sentences.** 8+ sentence paragraphs get broken up.
 - **No stacked single-line sentences.** Three one-liners in a row reads like a
   tweet thread, not a book.
-- **Bold sparingly.** Only for key terms being introduced, or the most important
-  line in a section. Max 2–3 bold items per page.
+- **Emphasise selectively.** Follow the integrated worker contract and output-formatting §5. Bold existing important claims, comparison phrases or meaningful list lead-ins where they guide the reader. No per-page or per-paragraph quota; never add repetitive preview labels.
 - **Section punch lines are bolded** so they are visible on a skim.
 
 ---

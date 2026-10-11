@@ -116,7 +116,7 @@ Rules:
   than a dry chapter.
 - Humour never replaces the explanation. If the joke is the only thing in the
   paragraph, the paragraph is not finished.
-- No emojis. Not in chapters, not in headings, not in the notes outputs.
+- Functional heading icons are permitted by the integrated author-approved contract. Use them sparingly when the author reference warrants them; never decorate every paragraph or evidence attribution.
 
 ---
 

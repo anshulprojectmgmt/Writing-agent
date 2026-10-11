@@ -116,6 +116,7 @@ def _validate_visuals(snapshot: dict) -> None:
 
 
 def _validate_final(snapshot: dict) -> None:
+    _validate_writing_execution(snapshot)
     canonical = _require(snapshot, "canonical_chapter_writing_doc_id")
     final = _require(snapshot, "final_chapter_writing_doc_id")
     _require(snapshot, "placement_report_doc_id")
@@ -129,6 +130,33 @@ def _validate_final(snapshot: dict) -> None:
         raise InvalidSnapshot("Artifact B must derive from the current Artifact A")
     if snapshot.get("final_visual_review_doc_id") != snapshot["visual_review_doc_id"]:
         raise InvalidSnapshot("Artifact B uses a stale Visual Review")
+
+
+def _validate_writing_execution(snapshot: dict) -> None:
+    """Require independently checked execution receipt for current Artifact A."""
+    if type(snapshot.get("chapter_writing_contract_version")) is not int or snapshot["chapter_writing_contract_version"] != 1:
+        raise InvalidSnapshot("Integrated Chapter Writing contract version 1 is required")
+    canonical = _require(snapshot, "canonical_chapter_writing_doc_id")
+    if _require(snapshot, "chapter_writing_execution_doc_id") != canonical:
+        raise InvalidSnapshot("Writing execution receipt targets a stale Artifact A")
+    report = _require(snapshot, "chapter_writing_execution_report_doc_id")
+    if report != _require(snapshot, "canonical_evaluation_report_doc_id"):
+        raise InvalidSnapshot("Writing execution report must match current canonical evaluation report")
+    receipt = snapshot.get("chapter_writing_execution_receipt")
+    if not isinstance(receipt, dict) or receipt.get("report_doc_id") != report or receipt.get("artifact_doc_id") != canonical:
+        raise InvalidSnapshot("Writing execution receipt has missing or stale document provenance")
+    if receipt.get("artifact_revision_id") != _require(snapshot, "canonical_revision_id") or receipt.get("status") != "passed":
+        raise InvalidSnapshot("Writing execution receipt is failed or stale for the canonical revision")
+    checks = snapshot.get("chapter_writing_execution_checks")
+    required = {"references_verified", "story_architecture", "write_format_humanize", "story_integrity", "formatted_document_verified"}
+    if not isinstance(checks, dict) or set(checks) != required or any(v is not True for v in checks.values()):
+        raise InvalidSnapshot("Every integrated writing execution check must be independently verified")
+    evidence = receipt.get("checks")
+    if not isinstance(evidence, dict) or set(evidence) != required:
+        raise InvalidSnapshot("Execution receipt must include evidence for every check")
+    for result in evidence.values():
+        if not isinstance(result, dict) or result.get("passed") is not True or not _present(result.get("evidence")):
+            raise InvalidSnapshot("Execution checks require passing results and locatable evidence")
 
 
 def validate_approval(snapshot: dict, doc_id: str) -> None:
@@ -181,6 +209,7 @@ def validate(snapshot: dict) -> None:
             if state == "AWAITING_APPROVAL" and snapshot["pending_doc_id"] != snapshot["final_chapter_writing_doc_id"]:
                 raise InvalidSnapshot("Chapter Writing approval must target Artifact B")
         if snapshot.get("next_action") in {"visual_placement", "visual_placement_linkedin", "final_clean_evaluate"}:
+            _validate_writing_execution(snapshot)
             canonical = _require(snapshot, "canonical_chapter_writing_doc_id")
             if snapshot.get("canonical_evaluation_status") != "passed" or snapshot.get("canonical_evaluated_doc_id") != canonical:
                 raise InvalidSnapshot("Visual Placement requires passing current Artifact A")

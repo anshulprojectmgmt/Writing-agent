@@ -26,7 +26,7 @@ Read canonical_chapter_doc_id. Treat it as immutable Artifact A. Identify the re
 If feedback_mode=human_feedback and previous_final_doc_id is supplied, read its open human comments before regenerating.
 
 Classify the requested changes conservatively:
-- presentation/voice/formatting/visual-placement only -> continue and regenerate Artifact B from the same canonical Artifact A while applying those comments;
+- visual-placement/layout/caption only -> continue and regenerate Artifact B from the same Artifact A; voice/prose/emphasis/formatting feedback -> return Requires canonical revision so the integrated Chapter Writing worker handles the affected layer;
 - any request that changes facts, evidence, citations, statistics, claims, caveats, fixed punch lines, approved section/subsection structure, or the designated reader transformation -> STOP and return failure comment `Requires canonical revision: <short reason>`. Do not patch substantive changes only into Artifact B.
 
 3. Create Artifact B
@@ -34,7 +34,7 @@ Classify the requested changes conservatively:
 Follow the attached Visual Placement + LinkedIn Style V2 skill and `references/linkedin-writing-style.md`.
 Create a NEW Google Doc in chapter_writing_folder_id. Never modify Artifact A or previous_final_doc_id.
 
-Transform reader-facing presentation/voice only. Preserve structure, facts, claims, evidence, citations, statistics, examples, caveats, fixed punch lines, [TECH]/[WOW MOMENT] commitments, reader transformation, and counterargument.
+Preserve reader-facing wording, voice and native formatting exactly; do not transform them. Preserve structure, facts, claims, evidence, citations, statistics, examples, caveats, fixed punch lines, [TECH]/[WOW MOMENT] commitments, reader transformation, and counterargument.
 
 Do not conduct new research or introduce a new source.
 

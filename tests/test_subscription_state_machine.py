@@ -157,6 +157,24 @@ def completed_snapshot(**updates):
         final_canonical_doc_id="doc-canonical",
         final_visual_review_doc_id="doc-visual",
         placement_report_doc_id="doc-placement",
+        chapter_writing_contract_version=1,
+        chapter_writing_execution_doc_id="doc-canonical",
+        chapter_writing_execution_report_doc_id="doc-canonical-evaluation",
+        canonical_evaluation_report_doc_id="doc-canonical-evaluation",
+        canonical_revision_id="revision-1",
+        chapter_writing_execution_receipt={
+            "report_doc_id": "doc-canonical-evaluation",
+            "artifact_doc_id": "doc-canonical",
+            "artifact_revision_id": "revision-1",
+            "status": "passed",
+            "checks": {check: {"passed": True, "evidence": "Verified in Notes and section 1"}
+                for check in ["references_verified", "story_architecture", "write_format_humanize",
+                              "story_integrity", "formatted_document_verified"]},
+        },
+        chapter_writing_execution_checks=dict.fromkeys([
+            "references_verified", "story_architecture", "write_format_humanize",
+            "story_integrity", "formatted_document_verified"
+        ], True),
     )
     value.update(updates)
     return value
@@ -234,6 +252,55 @@ def test_completed_rejects_missing_or_mismatched_chapter_provenance(invalid):
 
 def test_completed_accepts_distinct_evaluated_canonical_and_final_documents():
     state_machine.validate(completed_snapshot())
+
+
+@pytest.mark.parametrize("invalid", [
+    {"chapter_writing_contract_version": None},
+    {"chapter_writing_contract_version": True},
+    {"chapter_writing_execution_doc_id": "old-doc"},
+    {"chapter_writing_execution_report_doc_id": None},
+    {"chapter_writing_execution_report_doc_id": "stale-report"},
+    {"canonical_evaluation_report_doc_id": "different-report"},
+    {"canonical_revision_id": "newer-revision"},
+    {"chapter_writing_execution_receipt": None},
+    {"chapter_writing_execution_checks": {}},
+    {"chapter_writing_execution_checks": {"references_verified": True}},
+    {"chapter_writing_execution_checks": dict.fromkeys([
+        "references_verified", "story_architecture", "write_format_humanize",
+        "story_integrity", "formatted_document_verified"
+    ], "passed")},
+])
+def test_integrated_execution_gate_rejects_missing_stale_or_unverified_receipts(invalid):
+    for route in ("visual_placement_linkedin", "final_clean_evaluate"):
+        value = completed_snapshot(state="RUNNING", next_action=route, **invalid)
+        with pytest.raises(state_machine.InvalidSnapshot):
+            state_machine.validate(value)
+
+
+@pytest.mark.parametrize("check", ["references_verified", "story_architecture",
+    "write_format_humanize", "story_integrity", "formatted_document_verified"])
+def test_each_skipped_pass_blocks_visual_handoff(check):
+    value = completed_snapshot(state="RUNNING", next_action="visual_placement_linkedin")
+    value["chapter_writing_execution_checks"][check] = False
+    with pytest.raises(state_machine.InvalidSnapshot):
+        state_machine.validate(value)
+
+
+@pytest.mark.parametrize("field,value", [("report_doc_id", "old-report"),
+    ("artifact_doc_id", "old-artifact"), ("artifact_revision_id", "old-revision"),
+    ("status", "failed"), ("checks", {})])
+def test_stale_or_failed_execution_receipt_blocks_handoff(field, value):
+    candidate = completed_snapshot(state="RUNNING", next_action="visual_placement_linkedin")
+    candidate["chapter_writing_execution_receipt"][field] = value
+    with pytest.raises(state_machine.InvalidSnapshot):
+        state_machine.validate(candidate)
+
+
+def test_true_flags_without_locatable_evidence_do_not_pass():
+    candidate = completed_snapshot()
+    candidate["chapter_writing_execution_receipt"]["checks"]["story_integrity"]["evidence"] = ""
+    with pytest.raises(state_machine.InvalidSnapshot):
+        state_machine.validate(candidate)
 
 
 def test_not_before_blocks_dispatch_until_due():

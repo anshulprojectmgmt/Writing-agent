@@ -27,3 +27,5 @@ The cloud task needs read access to:
 - `WORK_START.md`
 
 Keep the repository private if book material is private. Every collaborator needs their own ChatGPT access and Google Drive permission; subscription allowance is not shared between users.
+
+For the integrated Chapter Writing upgrade, verify contract version 1 with `scripts/validate_chapter_contract.py` against the pinned production snapshot before dispatch. Load both bundled writing dependencies and the internal humanizer, plus all inner references. Append new execution/provenance columns from sheet-schema.md; retain historical blanks as unknown. Do not resume visual handoff with a stale receipt.

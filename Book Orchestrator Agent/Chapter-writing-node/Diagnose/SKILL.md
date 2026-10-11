@@ -373,3 +373,7 @@ fabricate a doc id.
 - Does not guess at a doc, report or block it can't parse — it escalates with a specific reason instead.
 - Does not create a second Doc when the first needs fixing — it repairs that one in place.
 - Does not produce a diagnostic report as a saved artifact — the diagnosis is working reasoning, and only its outcome shows up in the revision and the returned `comment`.
+
+## Chapter Writing integrated revision contract
+
+For chapter_writing, read the current Chapter Writing Agent SKILL.md and every mandatory dependency before revising. Repair the affected story/writing layer using storytelling-article and anshul-writing-style with internal ai-humanizer-core. Fully format and verify the new Artifact A before clean evaluation. Refresh execution evidence for the revised document; do not reuse a stale receipt. No separate formatting stage, no bold quota and no repeated invented previews. Never revise a passing artifact without explicit human feedback.

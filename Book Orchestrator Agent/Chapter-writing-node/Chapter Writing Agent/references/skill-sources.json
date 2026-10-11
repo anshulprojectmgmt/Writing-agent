@@ -1,0 +1,28 @@
+{
+  "contract_version": 1,
+  "registry_repository": "anshulprojectmgmt/anshul-skills-registry",
+  "registry_ref": "main",
+  "dependencies": [
+    {
+      "name": "storytelling-article",
+      "path": "references/storytelling-article.md",
+      "source_path": "skills/storytelling-article/prod/SKILL.md",
+      "source_blob_sha": "8d0322abb6aff2815efa5ae7525693abe6c6ad9b",
+      "sha256": "fa00bd15cd5ff85857ed619185146212fc60f97393719e44dc624d5ab9be9d6d"
+    },
+    {
+      "name": "anshul-writing-style",
+      "path": "references/anshul-writing-style.md",
+      "source_path": "skills/anshul-writing-style/prod/SKILL.md",
+      "source_blob_sha": "ef98c0634023ffad2fb80ac0d462ba18ed842da5",
+      "sha256": "1e14102400d18cf554cf6517d6982c73c4069ed28dd0d714cc94b16cb77c7a3d"
+    },
+    {
+      "name": "ai-humanizer-core",
+      "path": "references/ai-humanizer-core.md",
+      "source_path": "skills/ai-humanizer-core/prod/SKILL.md",
+      "source_blob_sha": "f89cc14ea9b6aa717d064f69991cd0d4fd109ee8",
+      "sha256": "348b2f6f13827f9d9cd51e559bc418c65df7228ce987495f073f74020de8da68"
+    }
+  ]
+}

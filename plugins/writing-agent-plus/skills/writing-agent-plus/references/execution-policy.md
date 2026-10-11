@@ -1,6 +1,6 @@
 # Models, isolated contexts and transition validation
 
-Read this policy before setup and every dispatch. Preserve canonical content skills unchanged.
+Read this policy before setup and every dispatch. Preserve unrelated content skills unchanged. The existing Chapter Writing worker uses its integrated contract version 1; Visual Placement preserves its prose.
 
 | Role | Model | Reasoning |
 |---|---|---|
@@ -14,7 +14,7 @@ Read this policy before setup and every dispatch. Preserve canonical content ski
 | Every legacy evaluator and Diagnose | gpt-6-sol | low |
 | Visual Research and decision-application worker | gpt-6-sol | low |
 | Visual Research evaluator | gpt-6-sol | low |
-| Visual Placement plus LinkedIn style (Artifact B) | gpt-6-sol | low |
+| Visual Placement preserving written style (Artifact B) | gpt-6-sol | low |
 | Clean Evaluate Canonical and Clean Evaluate Final | gpt-6-sol | low |
 
 If Terra is unavailable, disclose and use Sol low for controllers only. Never use Astra, Luna or GPT-5.x. Configure actual host model/reasoning controls; a name in a prompt does not configure a model. If the parent chat's model cannot be changed, use a fresh supported controller subagent and let the parent relay IDs/status/approval only. If required settings are unavailable, stop before dispatch and report the limitation.
@@ -48,3 +48,9 @@ Populate them only after direct verification of the current review, reports and 
 ## Recovery cadence
 
 Use one real recovery task at hourly cadence when supported; never claim 30-minute checks in this environment. Update/verify an existing task only during authorized live setup. A scheduled task processes at most one eligible transition, remains quiet at approval/blueprint/visual gates, and respects known Not Before. Installed instructions do not themselves create or enable a scheduler.
+
+## Mandatory Chapter Writing integration preflight
+
+Before Chapter Writing start/resume/revision, export the verified production snapshot and run `scripts/validate_chapter_contract.py <production-root>`. Load all seven worker dependencies listed in its SKILL.md into the fresh Chapter Writing context. The two writing skills and internal humanizer are bundled exact registry snapshots, not extra registered nodes. Preserve the model mapping above.
+
+Before Visual Placement/final evaluation/approval, verify the separate canonical evaluation report against Artifact A Notes and actual formatting. Store the four integrated execution guard fields from sheet-schema.md, then run state_machine.py. Missing/stale receipt or any skipped check blocks the transition. Keep reference paths/hashes in worker Notes and matching report, only metadata in controller state. Do not silently mark historical unknowns as passed.
