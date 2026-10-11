@@ -376,4 +376,6 @@ fabricate a doc id.
 
 ## Chapter Writing integrated revision contract
 
+For `chapter_writing` only, this section overrides the legacy "Never emit CSS", "No CSS, ever" and "Does not write CSS" instructions above. Preserve the approved chapter's formatting; apply the current Chapter Writing `references/output-formatting.md` HTML templates, including their required inline styles, to revised blocks. Verify the resulting native Google Doc formatting. Other nodes retain their own formatting contracts.
+
 For chapter_writing, read the current Chapter Writing Agent SKILL.md and every mandatory dependency before revising. Repair the affected story/writing layer using storytelling-article and anshul-writing-style with internal ai-humanizer-core. Fully format and verify the new Artifact A before clean evaluation. Refresh execution evidence for the revised document; do not reuse a stale receipt. No separate formatting stage, no bold quota and no repeated invented previews. Never revise a passing artifact without explicit human feedback.

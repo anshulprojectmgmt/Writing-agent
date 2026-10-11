@@ -93,4 +93,6 @@ Not responsible for: evaluating or scoring, deciding whether the revision passes
 
 ## Chapter Writing integrated revision contract
 
+For `chapter_writing` only, the current Chapter Writing `references/output-formatting.md` overrides the legacy no-CSS check above. Preserve existing approved formatting and use the required styled HTML templates in changed blocks, then verify native Doc formatting before evaluation. Other nodes retain their own contracts.
+
 For chapter_writing, read the current Chapter Writing Agent SKILL.md and every mandatory dependency before revising. Repair the affected story/writing layer using storytelling-article and anshul-writing-style with internal ai-humanizer-core. Fully format and verify the new Artifact A before clean evaluation. Refresh execution evidence for the revised document; do not reuse a stale receipt. No separate formatting stage, no bold quota and no repeated invented previews. Never revise a passing artifact without explicit human feedback.
