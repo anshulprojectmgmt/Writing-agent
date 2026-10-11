@@ -31,7 +31,7 @@ def validate(root: Path) -> None:
         git_sha = hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()
         if hashlib.sha256(data).hexdigest() != dep['sha256'] or git_sha != dep['source_blob_sha']:
             raise ValueError('Dependency integrity mismatch: ' + dep['name'])
-    for name in ['anshul-voice.md', 'writing-style.md', 'output-formatting.md']:
+    for name in ['anshul-voice.md', 'writing-style.md', 'output-formatting.md', 'presentation-contract.md', 'presentation-profile.json']:
         if not (worker / 'references' / name).is_file():
             raise ValueError('Missing inner reference: ' + name)
     config = json.loads((root / PLUGIN / 'pipeline.json').read_text())
@@ -40,6 +40,10 @@ def validate(root: Path) -> None:
         raise ValueError('Pipeline execution checks do not match worker contract')
     if contract.get('worker_steps') != CHECKS[1:]:
         raise ValueError('Pipeline writing steps are missing or misordered')
+    if (contract.get('presentation_profile') != 'personal-agents-approved-v1'
+        or contract.get('presentation_required_before_worker_success') is not True
+        or not (root / PLUGIN / 'scripts/validate_chapter_presentation.py').is_file()):
+        raise ValueError('Mandatory approved presentation gate missing')
     if contract.get('visual_placement_rewrites_prose') is not False:
         raise ValueError('Visual Placement must preserve completed prose')
     if config.get('chapter_writing_subflow') != ['canonical_chapter_worker', 'canonical_clean_evaluate', 'visual_placement_linkedin', 'final_clean_evaluate']:

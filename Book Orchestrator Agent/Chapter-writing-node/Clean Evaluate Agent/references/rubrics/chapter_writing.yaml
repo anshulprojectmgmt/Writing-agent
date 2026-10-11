@@ -102,3 +102,14 @@ execution_gate:
     - "Simple nontechnical language, immediate jargon explanations and meaningful causal progression are present"
     - "Opening emphasis uses existing meaningful claims selectively, not added summary labels or per-paragraph quotas"
     - "Evidence attribution italics, useful inline emphasis and explanatory parallel bullets follow the writing contract"
+
+# Mandatory presentation gate (not averaged away by weighted scoring)
+presentation_gate:
+  profile_id: personal-agents-approved-v1
+  rules:
+    - "Native presentation validator passes on current artifact/revision and actual planned locators"
+    - "Functional heading icons and selective existing opening emphasis are implemented; generic feature counts are not sufficient"
+    - "Explanatory parallel lists have native bullets, bold meaningful lead-ins and complete explanations"
+    - "Numbered main headings and unnumbered subsections follow approved profile; internal mapping IDs/tags stay in Notes"
+    - "Reader citations stay plain with concise italic evidence attribution; exact source URLs remain in Handoff"
+    - "Missing, stale or failed presentation proof blocks pass regardless of weighted score"

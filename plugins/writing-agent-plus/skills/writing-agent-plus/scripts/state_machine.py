@@ -147,6 +147,16 @@ def _validate_writing_execution(snapshot: dict) -> None:
         raise InvalidSnapshot("Writing execution receipt has missing or stale document provenance")
     if receipt.get("artifact_revision_id") != _require(snapshot, "canonical_revision_id") or receipt.get("status") != "passed":
         raise InvalidSnapshot("Writing execution receipt is failed or stale for the canonical revision")
+    presentation = receipt.get("presentation")
+    baseline_revision = "AHj4eMShcsUIR1_7O_gd5ZRzjEyxGkKhb61ezsBTwzgqCNTelmC9Ye1uIvXxJ4ZuQD_uL2Y5wDIJMlbyJ8N_4GZkdFTfyl4Oh6jrvRxoS8g"
+    if (not isinstance(presentation, dict)
+        or presentation.get("profile_id") != "personal-agents-approved-v1"
+        or presentation.get("baseline_doc_id") != "1DFhe3Cnd0haepgIPSbJ6tT2L9gV4ilzmW2dsWvgpNrA"
+        or presentation.get("baseline_revision_id") != baseline_revision
+        or presentation.get("artifact_revision_id") != snapshot["canonical_revision_id"]
+        or presentation.get("native_validator_passed") is not True
+        or not _present(presentation.get("evidence"))):
+        raise InvalidSnapshot("Current approved presentation proof is missing, failed or stale")
     checks = snapshot.get("chapter_writing_execution_checks")
     required = {"references_verified", "story_architecture", "write_format_humanize", "story_integrity", "formatted_document_verified"}
     if not isinstance(checks, dict) or set(checks) != required or any(v is not True for v in checks.values()):

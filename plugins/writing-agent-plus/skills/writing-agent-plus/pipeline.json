@@ -93,6 +93,10 @@
     ],
     "worker_skill": "Book Orchestrator Agent/Chapter-writing-node/Chapter Writing Agent/SKILL.md",
     "dependency_manifest": "Book Orchestrator Agent/Chapter-writing-node/Chapter Writing Agent/references/skill-sources.json",
-    "visual_placement_rewrites_prose": false
+    "visual_placement_rewrites_prose": false,
+    "presentation_profile": "personal-agents-approved-v1",
+    "presentation_contract": "Book Orchestrator Agent/Chapter-writing-node/Chapter Writing Agent/references/presentation-contract.md",
+    "presentation_validator": "scripts/validate_chapter_presentation.py",
+    "presentation_required_before_worker_success": true
   }
 }

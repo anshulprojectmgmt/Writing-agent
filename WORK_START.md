@@ -69,7 +69,7 @@ Do not start Chapter Writing until:
 ### Chapter Writing
 Produce and preserve two separate chapter artifacts:
 
-Artifact A — completed chapter from the existing `anshul-chapter-writing-4` worker: storytelling-article argument/story development, then anshul-writing-style writing + formatting + internal ai-humanizer-core, story-integrity review and verified native formatting. Read all bundled references; record and verify contract-version-1 execution evidence before handoff.
+Artifact A — completed chapter from the existing `anshul-chapter-writing-4` worker: storytelling-article argument/story development, then anshul-writing-style writing + formatting + internal ai-humanizer-core, story-integrity review and verified native formatting. Read all bundled references, including the approved presentation contract/profile; run native presentation validation before worker success (including worker-only tests). Record revision-bound presentation evidence and verify contract-version-1 execution evidence before handoff.
 
 Artifact B — NEW reader-facing output created only after Artifact A passes; Visual Placement preserves the completed prose/voice/native formatting and inserts only human-KEEP visuals. It must not perform a second style rewrite.
 

@@ -1,0 +1,37 @@
+{
+  "profile_id": "personal-agents-approved-v1",
+  "version": 1,
+  "baseline": {
+    "doc_id": "1DFhe3Cnd0haepgIPSbJ6tT2L9gV4ilzmW2dsWvgpNrA",
+    "revision_id": "AHj4eMShcsUIR1_7O_gd5ZRzjEyxGkKhb61ezsBTwzgqCNTelmC9Ye1uIvXxJ4ZuQD_uL2Y5wDIJMlbyJ8N_4GZkdFTfyl4Oh6jrvRxoS8g",
+    "purpose": "Presentation reference only; never copy chapter facts or prose"
+  },
+  "main_heading_style": "HEADING_1",
+  "subsection_heading_style": "HEADING_2",
+  "subsection_numbering": false,
+  "functional_heading_icons": true,
+  "selective_existing_opening_emphasis": true,
+  "explanatory_parallel_bullets": true,
+  "reader_inline_source_links": false,
+  "source_urls_location": "Manuscript Handoff Package citation table",
+  "visible_internal_markers": false,
+  "evidence_attribution": "concise italic attribution; plain parenthetical citation; no colour or highlight",
+  "default_for_new_chapters": true,
+  "requires_private_baseline_access": false,
+  "typography": {
+    "font": "Georgia",
+    "title_points": 26,
+    "main_heading_points": 17,
+    "subsection_heading_points": 13,
+    "body_points": 12,
+    "body_points_note": "Explicit production default; baseline body size inherited and unavailable in readback",
+    "color": "#000000",
+    "body_line_spacing": 115,
+    "body_space_below_points": 7,
+    "title_space_above_below_points": 16,
+    "main_heading_space_above_points": 22,
+    "main_heading_space_below_points": 10,
+    "subsection_space_above_points": 14,
+    "subsection_space_below_points": 7
+  }
+}

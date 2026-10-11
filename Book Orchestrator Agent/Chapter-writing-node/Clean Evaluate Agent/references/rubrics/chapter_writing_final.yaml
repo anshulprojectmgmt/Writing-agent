@@ -102,3 +102,14 @@ preservation_gate:
     - "Reader-facing prose, headings, paragraph order, citations, numbers and fixed punchlines match Artifact A after removing workflow appendices and accounting for inserted captions/accessibility text"
     - "Native bold/italic runs and meaningful bullet lead-ins are preserved; no added preview labels or independent voice rewrite"
     - "Missing matching integrated writing execution gate blocks final pass regardless of weighted score"
+
+# Mandatory presentation gate (not averaged away by weighted scoring)
+presentation_gate:
+  profile_id: personal-agents-approved-v1
+  rules:
+    - "Native presentation validator passes on current artifact/revision and actual planned locators"
+    - "Functional heading icons and selective existing opening emphasis are implemented; generic feature counts are not sufficient"
+    - "Explanatory parallel lists have native bullets, bold meaningful lead-ins and complete explanations"
+    - "Numbered main headings and unnumbered subsections follow approved profile; internal mapping IDs/tags stay in Notes"
+    - "Reader citations stay plain with concise italic evidence attribution; exact source URLs remain in Handoff"
+    - "Missing, stale or failed presentation proof blocks pass regardless of weighted score"

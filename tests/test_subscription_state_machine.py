@@ -167,6 +167,14 @@ def completed_snapshot(**updates):
             "artifact_doc_id": "doc-canonical",
             "artifact_revision_id": "revision-1",
             "status": "passed",
+            "presentation": {
+                "profile_id": "personal-agents-approved-v1",
+                "baseline_doc_id": "1DFhe3Cnd0haepgIPSbJ6tT2L9gV4ilzmW2dsWvgpNrA",
+                "baseline_revision_id": "AHj4eMShcsUIR1_7O_gd5ZRzjEyxGkKhb61ezsBTwzgqCNTelmC9Ye1uIvXxJ4ZuQD_uL2Y5wDIJMlbyJ8N_4GZkdFTfyl4Oh6jrvRxoS8g",
+                "artifact_revision_id": "revision-1",
+                "native_validator_passed": True,
+                "evidence": "Native plan validation: heading/paragraph/list/citation locators"
+            },
             "checks": {check: {"passed": True, "evidence": "Verified in Notes and section 1"}
                 for check in ["references_verified", "story_architecture", "write_format_humanize",
                               "story_integrity", "formatted_document_verified"]},
@@ -329,3 +337,22 @@ def test_approval_requires_exact_pending_document_and_approval_gate():
     )
     with pytest.raises(state_machine.InvalidSnapshot):
         state_machine.validate_approval(visual_gate, "doc-visual")
+
+
+@pytest.mark.parametrize("field,value", [
+    ("profile_id", "old-profile"), ("baseline_doc_id", "wrong-doc"),
+    ("baseline_revision_id", "old"), ("artifact_revision_id", "old"),
+    ("native_validator_passed", False), ("native_validator_passed", "true"),
+    ("evidence", "")])
+def test_presentation_proof_blocks_handoff_when_stale_or_failed(field, value):
+    candidate = completed_snapshot()
+    candidate["chapter_writing_execution_receipt"]["presentation"][field] = value
+    with pytest.raises(state_machine.InvalidSnapshot, match="presentation proof"):
+        state_machine.validate(candidate)
+
+
+def test_missing_presentation_proof_blocks_handoff():
+    candidate = completed_snapshot()
+    candidate["chapter_writing_execution_receipt"].pop("presentation")
+    with pytest.raises(state_machine.InvalidSnapshot, match="presentation proof"):
+        state_machine.validate(candidate)

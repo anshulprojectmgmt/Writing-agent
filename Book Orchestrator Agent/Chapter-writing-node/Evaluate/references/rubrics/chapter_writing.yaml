@@ -8,3 +8,14 @@ rules:
   - "No bold-density quota, repetitive invented previews, evidence colouring or separate formatting node"
   - "Fully format and verify before clean evaluation; record fresh execution provenance for the revised Artifact A"
   - "Use Chapter Clean Evaluate for scoring; this file is a revision formatting reference only"
+
+# Mandatory presentation gate (not averaged away by weighted scoring)
+presentation_gate:
+  profile_id: personal-agents-approved-v1
+  rules:
+    - "Native presentation validator passes on current artifact/revision and actual planned locators"
+    - "Functional heading icons and selective existing opening emphasis are implemented; generic feature counts are not sufficient"
+    - "Explanatory parallel lists have native bullets, bold meaningful lead-ins and complete explanations"
+    - "Numbered main headings and unnumbered subsections follow approved profile; internal mapping IDs/tags stay in Notes"
+    - "Reader citations stay plain with concise italic evidence attribution; exact source URLs remain in Handoff"
+    - "Missing, stale or failed presentation proof blocks pass regardless of weighted score"

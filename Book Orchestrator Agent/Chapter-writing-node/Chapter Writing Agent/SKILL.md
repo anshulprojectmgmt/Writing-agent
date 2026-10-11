@@ -26,7 +26,8 @@ Read these complete files, not only their names, summaries or metadata:
 4. `references/anshul-voice.md` — thought movement, first-person policy, honest uncertainty and voice QA.
 5. `references/writing-style.md` — simple language, explained jargon, paragraph rhythm and book craft.
 6. `references/output-formatting.md` — typography, heading levels, spacing, emphasis, lists, tables and native-document verification.
-7. `references/skill-sources.json` — pinned registry sources, blob SHAs and local SHA-256 values. Verify bundled dependencies before dispatch with the plugin contract validator.
+7. `references/presentation-contract.md` and `references/presentation-profile.json` — mandatory approved presentation, native verification and baseline provenance.
+8. `references/skill-sources.json` — pinned registry sources, blob SHAs and local SHA-256 values. Verify bundled dependencies before dispatch with the plugin contract validator.
 
 All are mandatory on start, resume, diagnose or human-comment revision. If a dependency is missing or integrity validation fails, block. Do not substitute personal formatting logic.
 
@@ -38,7 +39,7 @@ All are mandatory on start, resume, diagnose or human-comment revision. If a dep
 4. `anshul-writing-style` for writing, voice and visible presentation; `ai-humanizer-core` is subordinate and runs internally.
 5. Bundled book craft, voice and output references within their territories.
 
-This author-approved integration supersedes former per-paragraph bold quotas, minimum section bold counts, italic quotas, a mandatory later LinkedIn voice rewrite and a blanket emoji prohibition. Do not improvise a compromise between obsolete rules. Use functional heading icons sparingly when consistent with the supplied author reference; never invent a recurring icon template. Preserve approved heading text and markers. Use main-section numbering 1., 2., etc. consistently in Artifact A and B. Use native bold, not Unicode bold in Google Docs.
+This author-approved integration supersedes former per-paragraph bold quotas, minimum section bold counts, italic quotas, a mandatory later LinkedIn voice rewrite and a blanket emoji prohibition. Do not improvise a compromise between obsolete rules. Use functional heading icons sparingly when consistent with the supplied author reference; never invent a recurring icon template. Preserve approved heading words/order and internal commitment mapping; render heading levels, numbering, icons and citation presentation exactly under `presentation-contract.md`. That contract overrides conflicting legacy templates. Main headings use 1., 2., etc.; subsection numbers and internal markers stay in Notes, not reader headings. Use native bold, not Unicode bold in Google Docs.
 
 Typical full-chapter length is 4,000–7,000 words unless the approved brief specifies otherwise. Use assigned evidence selectively rather than forcing every available source.
 
@@ -79,6 +80,8 @@ Run storytelling-article's story-integrity review against the written and format
 The storytelling skill's visualization stage is fulfilled by this pipeline's Visual Research, human KEEP/EXCLUDE gate and downstream Visual Placement. Do not invoke another visual skill, image search or image generation here.
 
 ### 5. Deliver a fully formatted Artifact A
+
+Execute `references/presentation-contract.md`: plan the chosen presentation opportunities, apply them, then run `validate_chapter_presentation.py` on actual native Doc readback and the revision-bound plan. Missing icons, zero selected opening emphasis, unimplemented explanatory lists or heading/citation profile drift block worker success, including worker-only tests. Generic feature counts are insufficient.
 
 Produce the complete chapter once, Chapter Writing Notes, Manuscript Handoff Package and Completeness Summary in one native Google Doc. Notes contain the story spine/transition decisions, evidence/gap decisions, voice/humanizer changes and execution audit. Handoff includes verified word counts, citation list, evidence coverage and unresolved decisions. Summary covers protected structure, punchlines, transformation, tension, sources, language, story integrity and formatting.
 
