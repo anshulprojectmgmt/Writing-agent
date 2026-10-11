@@ -159,3 +159,19 @@ def test_icon_symbol_may_follow_main_section_number():
     doc, plan = fixture()
     plan["icons"][0]["symbol"] = "🧭"
     assert module.validate(doc, plan)["valid"]
+
+
+def test_native_heading_styles_inherit_actual_named_style_values():
+    doc, plan = fixture()
+    heading_style = doc['body']['content'][0]['paragraph']['elements'][0]['textRun']['textStyle']
+    heading_style.pop('foregroundColor')
+    tabbed = {'documentId': doc['documentId'], 'revisionId': doc['revisionId'],
+              'tabs': [{'body': doc['body'], 'namedStyles': {'styles': [
+                  {'namedStyleType': 'NORMAL_TEXT', 'textStyle': {'foregroundColor': {'color': {'rgbColor': {}}}}},
+                  {'namedStyleType': 'HEADING_1', 'textStyle': {'fontSize': {'magnitude': 20, 'unit': 'PT'}}}
+              ]}}]}
+    assert module.validate(tabbed, plan)['valid']
+    # Actual run's 17pt override must win over inherited 20pt heading default.
+    heading_style.pop('fontSize')
+    with pytest.raises(ValueError, match='heading typography differs'):
+        module.validate(tabbed, plan)

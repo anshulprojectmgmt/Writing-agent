@@ -15,23 +15,24 @@ from pathlib import Path
 
 
 def _paragraphs(document):
-    def visit(content):
+    def visit(content, styles=None):
         for item in content or []:
             if 'paragraph' in item:
-                yield item['paragraph']
+                yield dict(item['paragraph'], _namedStyles=styles)
             if 'table' in item:
                 for row in item['table'].get('tableRows', []):
                     for cell in row.get('tableCells', []):
-                        yield from visit(cell.get('content'))
+                        yield from visit(cell.get('content'), styles)
             if 'tableOfContents' in item:
-                yield from visit(item['tableOfContents'].get('content'))
+                yield from visit(item['tableOfContents'].get('content'), styles)
     if document.get('tabs'):
         def tabs(items):
             for tab in items:
-                yield from visit((tab.get('documentTab') or tab).get('body', {}).get('content'))
+                resource = tab.get('documentTab') or tab
+                yield from visit(resource.get('body', {}).get('content'), resource.get('namedStyles') or tab.get('namedStyles') or document.get('namedStyles'))
                 yield from tabs(tab.get('childTabs', []))
         return list(tabs(document['tabs']))
-    return list(visit((document.get('body') or {}).get('content')))
+    return list(visit((document.get('body') or {}).get('content'), document.get('namedStyles')))
 
 
 def _runs(paragraph):
@@ -45,6 +46,16 @@ def _text(paragraph):
 def _approved_exception(plan, feature):
     # A worker-authored plan cannot grant itself an exception to this profile.
     return False
+
+
+def _effective_text_style(paragraph, run):
+    named = paragraph.get('_namedStyles') or {}
+    values = named.get('styles', []) if isinstance(named, dict) else named
+    styles = {value.get('namedStyleType'): value.get('textStyle', {}) for value in values}
+    result = dict(styles.get('NORMAL_TEXT', {}))
+    result.update(styles.get(paragraph.get('paragraphStyle', {}).get('namedStyleType'), {}))
+    result.update(run.get('textStyle', {}))
+    return result
 
 
 def _is_black(rgb):
@@ -112,7 +123,7 @@ def validate(document: dict, plan: dict) -> dict:
                 errors.append('title text differs from plan')
             for run in _runs(p):
                 if run.get('content', '').strip():
-                    style = run.get('textStyle', {})
+                    style = _effective_text_style(p, run)
                     if (style.get('fontSize', {}).get('magnitude') != 26 or
                         (style.get('weightedFontFamily', {}).get('fontFamily') or style.get('fontFamily')) != 'Georgia' or
                         not _is_black(style.get('foregroundColor', {}).get('color', {}).get('rgbColor'))):
@@ -135,7 +146,7 @@ def validate(document: dict, plan: dict) -> dict:
         for run in _runs(chapter[i]):
             if not run.get('content', '').strip():
                 continue
-            style = run.get('textStyle', {})
+            style = _effective_text_style(chapter[i], run)
             size = style.get('fontSize', {}).get('magnitude')
             family = style.get('weightedFontFamily', {}).get('fontFamily') or style.get('fontFamily')
             rgb = style.get('foregroundColor', {}).get('color', {}).get('rgbColor')
