@@ -3,7 +3,7 @@
 Read:
 - Skill: `Book Orchestrator Agent/Chapter-writing-node/Visual Placement Agent/SKILL.md`
 - Instruction: `Book Orchestrator Agent/Chapter-writing-node/Visual Placement Agent/instruction.md`
-- Presentation preservation reference: `Book Orchestrator Agent/Chapter-writing-node/Visual Placement Agent/references/linkedin-writing-style.md`
+- Image placement and preservation contract: `Book Orchestrator Agent/Chapter-writing-node/Visual Placement Agent/references/placement-contract.md`
 
 Require:
 - passing canonical Artifact A Doc ID;

@@ -5,7 +5,7 @@ sections:
     name: "final chapter structure vs canonical chapter"
     match: fixed
     weight: 0.20
-    purpose: "Artifact B must remain the same research-backed chapter, not become a redesigned chapter during style transformation."
+    purpose: "Artifact B preserves the written chapter while approved visuals are placed."
     dimensions:
       structural:
         weight: 0.60
@@ -35,10 +35,10 @@ sections:
           - "Claims are not strengthened beyond Artifact A/Deep Research"
           - "Canonical caveats and uncertainty are not removed for stylistic momentum"
     red_flags:
-      - "A citation/source is swapped or invented during style transformation"
+      - "A citation/source is swapped or invented during visual placement"
       - "A statistic or factual claim changes meaning"
 
-  - id: linkedin_style_gate
+  - id: authored_style_preservation
     name: "integrated Anshul reader-facing style preservation"
     match: fixed
     weight: 0.25

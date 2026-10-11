@@ -12,12 +12,18 @@ contract = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(contract)
 
 def copy_contract(tmp_path):
-    for directory in [contract.WORKER, contract.PLUGIN]:
+    for directory in [contract.WORKER, contract.PLUGIN, contract.VISUAL]:
         shutil.copytree(ROOT / directory, tmp_path / directory)
     return tmp_path
 
 def test_pinned_production_dependencies_and_routing():
     contract.validate(ROOT)
+
+def test_missing_image_only_contract_blocks_dispatch(tmp_path):
+    root = copy_contract(tmp_path)
+    (root / contract.VISUAL / 'references/placement-contract.md').unlink()
+    with pytest.raises(ValueError, match='Missing image-only placement contract'):
+        contract.validate(root)
 
 @pytest.mark.parametrize('name', ['storytelling-article', 'anshul-writing-style', 'ai-humanizer-core'])
 def test_modified_dependency_blocks_dispatch(tmp_path, name):

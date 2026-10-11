@@ -1,6 +1,6 @@
 ---
 name: chapter-clean-evaluate-v1
-description: Report-only evaluator for Chapter Writing artifacts. Scores either the canonical Anshul-style chapter or the final LinkedIn-style + visuals chapter without modifying or commenting on the chapter document. All findings live in a separate evaluation report.
+description: Report-only evaluator for Chapter Writing artifacts. Scores either the canonical Anshul-style chapter or the final chapter preserving Artifact A prose and formatting with approved visuals added without modifying or commenting on the chapter document. All findings live in a separate evaluation report.
 ---
 
 # CHAPTER CLEAN EVALUATE

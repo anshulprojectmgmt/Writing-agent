@@ -8,10 +8,13 @@ from pathlib import Path
 
 WORKER = Path('Book Orchestrator Agent/Chapter-writing-node/Chapter Writing Agent')
 PLUGIN = Path('plugins/writing-agent-plus/skills/writing-agent-plus')
+VISUAL = Path('Book Orchestrator Agent/Chapter-writing-node/Visual Placement Agent')
 CHECKS = ['references_verified', 'story_architecture', 'write_format_humanize',
           'story_integrity', 'formatted_document_verified']
 
 def validate(root: Path) -> None:
+    if not (root / VISUAL / 'references/placement-contract.md').is_file():
+        raise ValueError('Missing image-only placement contract')
     worker = root / WORKER
     manifest = json.loads((worker / 'references/skill-sources.json').read_text())
     if manifest.get('contract_version') != 1:

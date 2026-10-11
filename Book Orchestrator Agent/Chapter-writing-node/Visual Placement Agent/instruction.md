@@ -31,7 +31,7 @@ Classify the requested changes conservatively:
 
 3. Create Artifact B
 
-Follow the attached Visual Placement + LinkedIn Style V2 skill and `references/linkedin-writing-style.md`.
+Follow the attached Visual Placement V2 skill and `references/placement-contract.md`. This worker places approved images only; never invoke writing, humanizing or a LinkedIn-style transformation. Historical dispatch/skill names remain compatibility identifiers.
 Create a NEW Google Doc in chapter_writing_folder_id. Never modify Artifact A or previous_final_doc_id.
 
 Preserve reader-facing wording, voice and native formatting exactly; do not transform them. Preserve structure, facts, claims, evidence, citations, statistics, examples, caveats, fixed punch lines, [TECH]/[WOW MOMENT] commitments, reader transformation, and counterargument.
