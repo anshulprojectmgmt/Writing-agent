@@ -153,3 +153,9 @@ def test_main_numbering_cannot_be_overridden_by_plan():
     plan['icons'][0]['symbol'] = '3. 🧭'
     with pytest.raises(ValueError, match='main heading numbering'):
         module.validate(doc, plan)
+
+
+def test_icon_symbol_may_follow_main_section_number():
+    doc, plan = fixture()
+    plan["icons"][0]["symbol"] = "🧭"
+    assert module.validate(doc, plan)["valid"]

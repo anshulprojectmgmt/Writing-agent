@@ -158,7 +158,8 @@ def validate(document: dict, plan: dict) -> dict:
         if p is None:
             continue
         symbol = entry.get('symbol')
-        if not isinstance(symbol, str) or not _has_emoji(symbol) or not _text(p).startswith(symbol):
+        if (not isinstance(symbol, str) or not _has_emoji(symbol) or
+            not (_text(p).startswith(symbol) or re.match(r'^\d+\.\s+' + re.escape(symbol) + r'\s+', _text(p)))):
             errors.append(f'icon missing at paragraph {entry["paragraph_index"]}')
         if entry.get('location') != 'heading':
             errors.append('production profile requires icons in headings')
