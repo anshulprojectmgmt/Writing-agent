@@ -1,42 +1,49 @@
 ---
 name: research-book-topic
-description: Investigate nonfiction book questions with real sources and an all-ten-rung Source Ladder, preserving evidence labels, cards, provenance, and answer-to-question links. Use for broad background research, expert-perspective research, or targeted gap research assigned by plan-book-research, or when asked to research a book topic directly.
+description: Investigate the future of a nonfiction book topic through lightweight background, professional-role questions or targeted gaps; screen sources and write substantive evidence-informed research notes. Use for book background research, expert investigations, targeted research or a standalone book-topic inquiry.
 ---
 
 # Research Book Topic
 
-Read [the canonical output contracts](../plan-book-research/references/output-formats.md) before research or drafting. Resolve this path from this skill directory; do not create a local copy.
+Read [the canonical contracts](../plan-book-research/references/output-formats.md) before retrieval and drafting. Resolve this from the skill directory; do not duplicate it.
 
-## Question-first invariant
+## Research stance
 
-Use a **Question Map**, never a Query Map. Stable Q IDs drive source selection, retrieval, evidence, answers, and handoffs. In standalone background work, first create broad questions from the stated objective. In assigned work, read the supplied map and keep its Q IDs; propose linked child questions when evidence exposes a missing issue. Derive search strings under each question only as retrieval operations. Record question → retrieval → source/evidence → answer links. Do not organize research around a term, synonym, or keyword map.
+Explore the future through the assigned professional lens: what is changing, why, what product forms and behaviors could emerge, who benefits, what follows and what could prevent it. Present-day facts are inputs, not the endpoint. Investigate plausible alternatives and unexpected possibilities; distinguish evidence, signals, interpretation and speculation. Follow supplied audience, scope, time horizon and frozen decisions.
 
-Run in a fresh separate context. When asked to coordinate a complete workflow, invoke `$plan-book-research` in a fresh planner context instead of collapsing planning, research, and synthesis into this instance. For actual worker launches use `fork_turns: "none"` or equivalent and minimal artifact-based briefs; do not inherit the chat. Do not modify the canonical running document, which has one planner writer.
+Use a **Question Map, never a Term Map or Query Map**. In background mode, start with lightweight guiding prompts; no detailed initial map is required. Give retained sources a link to at least one guiding question, then transfer those links when the expert map is established. In expert/targeted modes, apply the shared question gate, preserve Q IDs and develop supporting questions as evidence warrants. Search strings are temporary operations beneath questions. Review the map after every pass; record added, revised, merged or retired questions without losing source links.
 
-## Select the mode
+Work in a fresh separate context with artifact handoffs when supported. Write only assigned artifacts, not the planner's running index. Route a full workflow to `plan-book-research`; disclose any context-isolation limitation.
 
-- **Background:** establish broad grounding before expert selection; target at least five strong findings per rung across all ten rungs. Require at least five platform findings across relevant major platforms and five named verifiable case studies. Record 3–5 named products already serving users, first checking generative AI products such as ChatGPT, Claude, Gemini, Copilot, and agent features in existing products. Run the senior-PM blind spot question and add qualifying findings to their correct rung.
-- **Expert:** apply the assigned human company-role perspective to assigned Q IDs. Read and cite background evidence where useful; deepen relevant sources and challenge incentives or assumptions. Attempt every rung and document relevance/results, without recreating five findings per rung in every expert brief. Treat the persona as an analytic lens, not an interview or source.
-- **Targeted:** investigate specified G/Q IDs and exit conditions from synthesis 1. Prioritize missing evidence, contradictory observations, and disconfirmation. Read prior evidence before searching; return what changed and what remains unresolved. Attempt each rung for the assigned questions and log relevance/null results; do not repeat the background quota.
+## Modes
 
-## Retrieve and assess
+- **Background:** explain meaning/significance, developments, changing forces, uncertainty and promising expert dimensions. Aim for enough breadth to select experts, with concrete examples and citations. Usually up to 1,000–1,500 words when warranted; shorter is acceptable. Do not create fifty findings or a detailed initial map.
+- **Expert:** use a generic professional role, specialized only when warranted; never a company identity. Start from broad future questions, then deepen important mechanisms and cases. A current feature inventory or narrow use case must not consume the whole professional perspective.
+- **Targeted:** investigate consequential G/Q gaps and exit conditions. Read prior evidence first, seek missing/disconfirming observations and return what changed. Do not repeat earlier work or pursue irrelevant categories to fill a template.
 
-Anchor every pass to the GenAI angle where genuine and the supplied book frame, audience, and scope. For Products of Tomorrow, investigate future digital products for a broad audience; do not impose a PM-only audience, personal-life-only scope, or invented pillars. Follow supplied book decisions; note missing context rather than inventing files.
+## Discovery and screening
 
-Attempt the complete ladder in order: (1) Consulting & Analyst, (2) VC / Investor Research, (3) Academic / Research, (4) Practitioner & Product, (5) Big Platforms & Major Products, (6) Case Studies, (7) Ethics / Regulatory, (8) Trend & Futures, (9) Newsletters & Long-form, (10) General / Recent News. All ten remain mandatory, even for a narrow topic. The canonical reference defines coverage and source channels. Do not treat rung order as a substitute for assessing authority; company claims and independent observations carry different incentives.
+Validate the supplied `search_provider` record using the shared decision table before any provider call. Default to native ChatGPT web search. Exa is opt-in per run, never an automatic fallback; verify explicit authorization and tool availability for `exa` or `compare`. Do not invent access, credentials or a mandatory integration. Pass the effective provider and any disclosed fallback into the handoff.
 
-Prioritize primary company blogs, official product documentation, founder/company writing, keynotes, and investor-relations transcripts for product facts. Attempt academic sources, but use papers as secondary to primary company/product evidence for current shipping behavior. An original study remains primary evidence for its own measured result. Use journalism and newsletters for corroboration, critique, and discovery rather than laundering a company claim into independent evidence.
+Consider all ten Source Ladder categories to expose blind spots. Select depth by question relevance and intellectual value, not rung order, equal coverage or source quotas. Keep a compact coverage note for each category: investigated with useful result, checked with no useful result, blocked, or considered but not pursued with a reason. Record actual searches only where performed. Do not silently omit academic/research or recent-news categories, but do not require irrelevant retrieval.
 
-Search and open promising sources with available tools; verify dates and source contents beyond snippets for material claims. Note blocked/paywalled or unavailable pages. Use publication date in FRESHNESS, never access date; use unknown when unavailable. Distinguish announcement, demo, pilot, availability, adoption, and measured outcomes. Separate observed findings from forecasts and persona inference. Corroborate claims of user demand, impact, and scale; an official announcement proves what was announced, not user adoption.
+Prioritize primary company/product blogs, documentation, founder writing, keynotes and firsthand practitioner accounts for product facts and strategic signals. Use original studies for their measured findings, analytical essays for arguments, and reporting/newsletters for discovery, critique and original observations. Explore credible unconventional perspectives and serious counterarguments. Company ambition is not adoption evidence; category prestige is not proof of quality.
 
-Assign stable E IDs in the allocated namespace and S IDs to canonical sources. Keep the original labels and card fields exactly as defined in the shared contract. Add Q links and provenance without replacing those fields. Reuse existing IDs when referring to prior evidence, retain original labels, and record a justified revised assessment separately. Consolidate duplicate claims and shared-source dependencies. A cross-reference is not another finding and cannot count toward a minimum.
+Use provider relevance ranking for discovery, then apply **relevance, intellectual value and evidence quality**. Internally classify sources considered for use as **Deep Read / Selective Read / Skip**; keep a short rationale for material decisions, not a score or evaluation card for every result. Open promising sources beyond snippets. Deep-read sources that materially shape an insight; read relevant passages for supporting facts. Note inaccessible pages and verify dates. In comparison mode, search equivalent questions, deduplicate URLs/underlying claims and compare usefulness, not just hit counts.
 
-Use a quality floor, not a quantity ceiling: retain strong, relevant findings even beyond the quota; exclude unsupported generic claims, redundant weaker copies, and unverified marketing assertions. Never pad or fabricate findings to meet five. Document attempts, achieved count, shortfall reason, and implication under the rung. Use named examples, plain language, checkable claims, and explained jargon. Keep uncertainty explicit in confidence/authority and answer limitations. Write WHY IT MATTERS as concrete relevance to the book/topic audience, not hype.
+Distinguish announcement, demonstration, pilot, availability, adoption and measured outcomes. Preserve publication and observation dates separately; access date is not freshness. Corroborate broad claims of impact, demand or scale. Multiple reports repeating one announcement are one underlying source. Allocate stable S/E IDs in the assigned namespace and associate every retained source with a question.
 
-For every assigned Q ID, answer with supporting E/S IDs and source links; state the strongest counterevidence, confidence, limitations, and answered/partial/open status. Record null results honestly. A source that merely mentions the topic does not answer the question.
+## Write substantive notes
 
-## Deliver and check
+Organize the main report by ideas and themes. For important insights preserve the central idea, motivating problem, author reasoning/evidence, concrete illustrations, future implications, writer's value and material limitations. Develop these in coherent prose, not six compulsory fields per article. Rich sources may deserve several paragraphs; minor facts may need only a sentence. Explain why a possibility might arise, not merely that it might.
 
-Use the exact mode contract in the shared reference. Background has exactly three sections: Research Objective, Question Map, Source Ladder Findings (Rungs 1–10). Put coverage notes within the rung and question status within the Question Map; do not append synthesis sections. Expert and targeted briefs use their respective fixed formats.
+Preserve important disagreements and use counterevidence to qualify scenarios. Label your own connections and forecasts as interpretation/speculation. Do not inflate a vendor assertion into independent proof or flatten an insightful article into a one-line claim. Cite material claims inline; keep evidence IDs and search logs in the compact traceability layer.
 
-Check every retained finding for labels, card fields, valid source link, Q linkage, date honesty, and duplication. Verify all ten rung headings/attempts, background quotas or honest shortfalls, and all assigned-question answer statuses. Return the assigned artifact path, source/evidence index additions, and concise handoff status to the planner. Save only assigned worker artifacts; leave the running document to its single writer. Honor explicit output destinations and use available persistence tools. Apply canonical HTML markup rules only when HTML/Google Docs delivery is requested.
+Apply the shared editorial pass: space by importance, meaningful bold emphasis, no generic introductions, repeated caveats, forced headings, word-count padding or explanations of trivial points. Compression must preserve causal reasoning and uncertainty.
+
+## Deliver
+
+Use the mode's dedicated output contract. Return research narrative, source/traceability appendix, updated question links/status and a concise handoff. Record actual coverage, blocked/null results and remaining consequential uncertainty. Check source links, date honesty, source dispositions, question associations, duplicated claims and evidence labels before returning.
+
+Save only assigned worker artifacts. The planner consolidates and persists accepted stages; for standalone work honor the user's destination using available adapters. Use proper native Google Docs styles when requested and verify readback rather than assuming successful conversion.
+

@@ -1,4 +1,4 @@
 interface:
   display_name: "Plan Book Research"
-  short_description: "Plan and coordinate question-led book research"
-  default_prompt: "Use $plan-book-research to run question-led research for my book topic."
+  short_description: "Coordinate future-oriented book research"
+  default_prompt: "Use $plan-book-research to explore the future of this book topic through professional perspectives."
