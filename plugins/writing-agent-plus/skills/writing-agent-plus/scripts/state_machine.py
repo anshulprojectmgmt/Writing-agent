@@ -40,9 +40,29 @@ STATES = {
 
 APPROVAL_FIELDS = {stage: f"approved_{stage}_doc_id" for stage in STAGES}
 MEDIUM_ROLES = {"research_analysis", "chapter_blueprint", "chapter_writing", "canonical_chapter_worker"}
-LOW_ROLES = {"broad_research", "research_mapping", "deep_research", "evaluate", "diagnose", "visual_research", "visual_research_evaluate", "apply_visual_decisions", "visual_placement", "chapter_clean_evaluate", "canonical_clean_evaluate", "final_clean_evaluate"}
+LOW_ROLES = {
+    "broad_research",
+    "research_mapping",
+    "deep_research",
+    "evaluate",
+    "diagnose",
+    "visual_research",
+    "visual_research_evaluate",
+    "visual_generation",
+    "apply_visual_decisions",
+    "visual_placement",
+    "chapter_clean_evaluate",
+    "canonical_clean_evaluate",
+    "final_clean_evaluate",
+}
 CONTROLLER_ROLES = {"orchestrator", "node_controller"}
-ROLE_ALIASES = {"deep_research_worker": "deep_research", "deep_research_evaluate": "evaluate", "visual_placement_linkedin": "visual_placement"}
+ROLE_ALIASES = {
+    "deep_research_worker": "deep_research",
+    "deep_research_evaluate": "evaluate",
+    "main_deep_research": "deep_research",
+    "visual_extraction": "visual_research",
+    "visual_placement_linkedin": "visual_placement",
+}
 
 
 class InvalidSnapshot(ValueError):
