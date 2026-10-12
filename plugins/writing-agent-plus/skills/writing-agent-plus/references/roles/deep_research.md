@@ -20,7 +20,7 @@ Deep Research contains exactly three durable sub-agents:
 2. `Visual Extraction`
 3. `Visual Generation`
 
-Selector/Adapt/Render/generated evaluation/Unified Review are internal executions owned by Visual Generation, not additional durable workflow agents.
+Selector/Adapt/Render/installed Render Review/generated evaluation/Unified Review are internal executions owned by Visual Generation, not additional durable workflow agents.
 
 ## 1. Main Deep Research
 
@@ -46,9 +46,10 @@ After Source Visual Review passes:
 
 1. Run `references/roles/visual_generation.md` with current Deep Research Package + Source Visual Review.
 2. Generate fallbacks only where no usable EXTRACTED source visual exists.
-3. Preserve exact VIS candidates and add only passing GEN candidates.
-4. Publish and verify one Unified Visual Review.
-5. Surface only the passing Unified Visual Review + Visual Assets to the human.
+3. For every GEN attempt, require the pinned installed Render article-review/validator to pass first, then require the separate Writing Agent generated-image evidence rubric to pass.
+4. Preserve exact VIS candidates and add only GEN candidates that passed both gates.
+5. Publish and verify one Unified Visual Review.
+6. Surface only the passing Unified Visual Review + Visual Assets to the human.
 
 Do not permit Chapter Writing while any current VIS/GEN candidate remains `HUMAN DECISION: PENDING`.
 
@@ -58,7 +59,7 @@ If Deep Research is revised after comments, all prior visual outputs become stal
 
 ## Isolation
 
-Each durable sub-agent uses a fresh role context. Inside Visual Generation, each Selector/Adapt/Render/generated-evaluator/Unified-Review verification execution also uses a fresh context as defined by its skill. Controller carries only identifiers/status.
+Each durable sub-agent uses a fresh role context. Inside Visual Generation, Selector, each candidate Adapt, Render, installed Render Review, Writing Agent generated evaluator, and Unified Review verification each use fresh contexts as defined by its skill. Controller carries only identifiers/status.
 
 Never allow Chapter Writing to consume a failed/unapproved Deep Research Package or unresolved Unified Visual Review.
 
