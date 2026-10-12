@@ -1,12 +1,12 @@
-# Visual Review V2 — Output Format
+# Source Visual Review V3 — Output Format
 
 Use one clean Google Doc covering every approved subsection in chapter order.
 
 ## Document header
 
-# <Chapter> — Visual Review <Version>
+# <Chapter> — Source Visual Review <Version>
 
-Status: HUMAN REVIEW REQUIRED
+Status: SOURCE EXTRACTION COMPLETE — INTERNAL V3 ARTIFACT
 
 Selection rule used for every candidate:
 1. directly explains the subsection;
@@ -15,6 +15,8 @@ Selection rule used for every candidate:
 
 Primary-source lineage: Research Mapping sources for the subsection plus a primary source added by Deep Research only when resolving that subsection's mapped GAP.
 
+This is not the final human visual-review artifact in V3. Visual Generation later combines these VIS candidates with passing GEN candidates into Unified Visual Review.
+
 ## Per subsection
 
 ### <N.X> — <Subsection title>
@@ -22,6 +24,7 @@ Primary-source lineage: Research Mapping sources for the subsection plus a prima
 If candidates exist, repeat this block for each candidate:
 
 VIS ID: VIS-###
+ORIGIN: PRIMARY_SOURCE
 IMAGE STATUS: FOUND
 SOURCE TITLE / OWNER: <title / owner>
 PRIMARY SOURCE: <exact URL>
@@ -33,7 +36,9 @@ CHAPTER VALUE: <why it should improve the chapter>
 AI RECOMMENDATION: RECOMMEND | SKIP
 EXTRACTION STATUS: EXTRACTED | SOURCE-LINKED
 DRIVE ASSET: <asset id/path when extracted, otherwise N/A>
-HUMAN DECISION: PENDING | KEEP | EXCLUDE
+HUMAN DECISION: PENDING
+
+`HUMAN DECISION: PENDING` is only a placeholder carried into Unified Visual Review. New V3 human decisions are not applied to this source-only artifact.
 
 If no candidate qualifies:
 
@@ -51,9 +56,8 @@ At the end include:
 - Total NOT FOUND subsections
 - EXTRACTED candidates
 - SOURCE-LINKED candidates
-- Human KEEP count
-- Human EXCLUDE count
-- Human PENDING count
+
+Do not present KEEP/EXCLUDE counts in a newly created V3 Source Visual Review; human decisions occur later in Unified Visual Review.
 
 ## Rules
 
@@ -61,4 +65,5 @@ At the end include:
 - Never convert extraction failure into NOT FOUND.
 - Never introduce a secondary-source or generated substitute.
 - Keep exact URLs visible and clickable.
-- Human Decision is the authoritative final selection field.
+- Preserve stable VIS IDs for carry-forward into Unified Visual Review.
+- Do not treat this source-only artifact as the V3 human gate.
