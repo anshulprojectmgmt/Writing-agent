@@ -1,0 +1,43 @@
+pass_threshold: 0.90
+
+hard_fail:
+  - invented_or_changed_number
+  - unsupported_factual_claim
+  - wrong_relationship_or_mechanism
+  - humour_changes_meaning
+  - data_lock_violation
+  - unreadable_core_copy
+  - decorative_without_explanatory_value
+  - collage_batch_or_multi_section_output
+
+dimensions:
+  factual_fidelity:
+    weight: 0.30
+    checks:
+      - "Every factual statement/relationship is supported by the bound subsection evidence"
+      - "No claim is stronger than the Deep Research evidence"
+      - "DATA_EXPLAINER exactly matches DATA_LOCK"
+  selected_mode_fit:
+    weight: 0.15
+    checks:
+      - "The visual clearly fits the selected DATA/TOPIC/HUMOUR mode"
+      - "Humour, when selected, clarifies rather than decorates or trivializes"
+  explanatory_value:
+    weight: 0.25
+    checks:
+      - "One main semantic mechanism explains the subsection quickly"
+      - "The image adds understanding beyond repeating the headline"
+  render_accuracy:
+    weight: 0.15
+    checks:
+      - "Rendered labels/copy match the approved Visual Story Brief"
+      - "The output is one standalone subsection visual, not a batch/collage"
+  visual_quality:
+    weight: 0.15
+    checks:
+      - "Article-section hierarchy is readable with appropriate breathing room"
+      - "Installed article visual/design/gold-standard conventions are materially followed"
+
+retry_policy:
+  max_render_attempts: 2
+  exhausted_status: GENERATION_FAILED
