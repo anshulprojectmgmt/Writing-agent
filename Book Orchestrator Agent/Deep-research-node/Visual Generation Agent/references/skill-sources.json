@@ -29,7 +29,20 @@
         "gold-standard-quality-bar.md": "797d2109d510da81267cea848fb163d97e5ce177",
         "news-signal.md": "9e9baa8db0b295d163c51e708cd179bb6b0b36c6"
       },
-      "load_policy": "Load the full installed package including article-section references and bundled assets. Use ChatGPT native image generation; do not replace with an external renderer."
+      "load_policy": "Load the full installed package including article-section references and bundled assets. Use ChatGPT native image generation; do not replace with an external renderer. Run its pinned review-linkedin-visual-post dependency before accepting a render."
+    },
+    "review-linkedin-visual-post": {
+      "root": "installed/review-linkedin-visual-post",
+      "skill_path": "installed/review-linkedin-visual-post/SKILL.md",
+      "skill_blob_sha": "4f3d8ec12742e085836e6fe7ed1bd6f0dfb79f36",
+      "agents_tree_sha": "0bc1f46324d788944893e1f2acd910cdadff3b63",
+      "references_tree_sha": "2da9f3b371dd632aa4eb659a84be7084c83d0570",
+      "assets_tree_sha": "4b7dfa7c3ef0119936d4175f42b6e89dac7d6ad7",
+      "scripts_tree_sha": "4cab8fe8f9b8f29c609952266fa797a700d67528",
+      "required_references": {
+        "anshul-review-standard.md": "de4c14b17ad0648281c0b6f054ffb4a211c7d85a"
+      },
+      "load_policy": "Load the full installed review package required by render-linkedin-visual-post. In article-section mode use its article validator/review behavior before the Writing Agent generated_visual rubric."
     }
   }
 }
