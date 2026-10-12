@@ -9,52 +9,47 @@ Receive exactly:
 - visual_assets_folder_id
 - version
 
-Optional only when the parent node is applying human decisions:
-- visual_review_doc_id
-- visual_decisions
+If any required ID is missing or cannot be opened, stop and return failure metadata. Do not invent an asset location.
 
-If any required ID is missing or cannot be opened, stop and return a failure envelope matching the skill contract.
+2. V3 role
 
-2. Mode selection
+In new production runs this worker is the `Visual Extraction` sub-agent. It performs primary-source inspection/extraction only.
 
-If visual_review_doc_id and visual_decisions are both present, run apply-decisions mode only. Do not rerun source inspection or candidate discovery.
+It does not generate fallback visuals and it does not own the final human review. Visual Generation runs later and builds the Unified Visual Review.
 
-Otherwise run discovery mode.
+3. Discovery/extraction
 
-3. Discovery mode
-
-Read Research Mapping first. For every approved subsection, collect the exact source URLs assigned to that subsection.
+Read Research Mapping first. For every approved subsection collect the exact source URLs assigned to that subsection.
 
 Read Deep Research second. Add a source to that subsection's allowed pool only when Deep Research explicitly introduced it to resolve that subsection's mapped GAP.
 
 Inspect only those allowed primary-source URLs.
 
-Apply the attached Visual Research V2 skill exactly. Candidate selection is governed by only these three criteria:
+Apply the attached Visual Research V2 skill exactly. Candidate selection is governed only by:
 1. directly explains the subsection;
 2. contains meaningful data, mechanism, or comparison;
 3. strong enough that it should improve the chapter.
 
-Do not add stricter editorial filters. Selection happens before extraction.
+Selection happens before extraction. Do not add stricter editorial filters.
 
-Create/reuse exactly the supplied visual_assets_folder_id; do not invent another asset location. Attempt faithful extraction of every FOUND candidate there. If extraction cannot be completed faithfully, preserve FOUND and mark SOURCE-LINKED with the exact source/figure locator.
+Use exactly the supplied visual_assets_folder_id. Attempt faithful extraction of every FOUND candidate there. If extraction cannot be completed faithfully, preserve FOUND and mark SOURCE-LINKED with exact source/figure locator.
 
-Create one Visual Review Google Doc in deep_research_folder_id. Cover every subsection, including those marked NOT FOUND. Every FOUND candidate starts with HUMAN DECISION: PENDING.
+Create one native Source Visual Review in deep_research_folder_id covering every approved subsection, including NOT FOUND.
 
-Return metadata only per the skill contract.
+Return metadata only per the source-extraction contract.
 
-4. Apply-decisions mode
+4. Evaluation boundary
 
-Read the existing visual_review_doc_id.
-Apply only the human's exact KEEP/EXCLUDE decisions supplied in visual_decisions.
-Do not alter candidate selection, source URLs, locators, extraction status, or AI recommendation.
-Reject any decision value other than KEEP/EXCLUDE.
-Verify all candidate decision fields after the update.
-Return visual_review_status resolved only when no PENDING candidate remains; otherwise pending.
+The parent Deep Research node evaluates Source Visual Review against the existing visual_research rubric before Visual Generation can start.
 
-5. Boundaries
+This worker never evaluates itself and never writes Sheets.
 
-Responsible for primary-source visual inspection, candidate selection under the three-rule gate, exact-source extraction/manifesting, Visual Review creation, and application of human KEEP/EXCLUDE decisions.
+5. Legacy compatibility
 
-Not responsible for Research Mapping, Deep Research prose/evidence changes, chapter writing, LinkedIn transformation, visual placement, evaluation, Logs writes, Slack, or workflow routing.
+Historical pre-V3 runs may explicitly re-enter the legacy source-only decision mode defined in SKILL.md. New V3 runs never apply human decisions here; they route VIS+GEN decisions through Visual Generation Agent.
 
-The Deep Research node owns Logs and routing. This worker never touches the tracking sheet.
+6. Boundaries
+
+Responsible for primary-source visual inspection, candidate selection under the three-rule gate, exact-source extraction/manifesting, and Source Visual Review creation.
+
+Not responsible for generated fallback selection, Adapt, Render, generated evaluation, Unified Visual Review, chapter writing, Visual Placement, Logs writes, or workflow routing.
