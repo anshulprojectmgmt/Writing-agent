@@ -43,35 +43,71 @@ Every main stage retains:
 
 Blueprint additionally pauses for A/B/C/mix/comments before completing the selected blueprint.
 
-## V2 boundaries and internal subflows
+## V3 boundaries and internal subflows
 
 ### Research Mapping
 Evidence mapping only. No IMAGE NEEDED, image yes/no, visual candidates, visual reasons, visual recommendations, image search, or extraction.
 
 ### Deep Research
-After the canonical Deep Research Package passes, continue inside the same main stage:
+After canonical Deep Research begins, keep exactly three durable sub-agents inside the same main stage:
 
-`Deep Research → Evaluate → Visual Research → Evaluate Visual → Human Visual Review`
+`Main Deep Research → Visual Extraction → Visual Generation → Human Visual Review`
 
-Visual Research inspects only the exact primary sources mapped to each subsection plus a primary source added by Deep Research specifically to fill that subsection's mapped GAP.
+#### Main Deep Research
+Run existing Deep Research evidence worker plus its Evaluate/Diagnose loop. No visual work starts until the current Deep Research Package passes.
+
+#### Visual Extraction
+Run existing Visual Research V2 as the source-only extraction agent.
+
+It inspects only exact primary sources mapped to each subsection plus a primary source added by Deep Research specifically to fill that subsection's mapped GAP.
 
 Candidate selection uses only:
 1. directly explains the subsection;
 2. contains meaningful data, mechanism, or comparison;
 3. strong enough to improve the chapter.
 
-Selection precedes extraction. Do not reject a qualifying visual because extraction is difficult. Persist exact-source assets in `Deep Research/Visual Assets` where possible; otherwise keep the candidate FOUND + SOURCE-LINKED with exact source/locator.
+Selection precedes extraction. Do not reject a qualifying visual because extraction is difficult. Persist faithful exact-source assets in `Deep Research/Visual Assets` where possible; otherwise keep candidate FOUND + SOURCE-LINKED with exact source/locator.
+
+Publish and evaluate `Source Visual Review`. This is an internal artifact, not the V3 human gate.
+
+#### Visual Generation
+After Source Visual Review passes, run the Visual Generation Agent.
+
+Generation is fallback-only:
+- usable EXTRACTED source visual exists → no generated fallback by default;
+- SOURCE-LINKED only → generate fallback;
+- NOT FOUND → generate fallback.
+
+Choose `DATA_EXPLAINER`, `TOPIC_EXPLAINER`, or `HUMOUR_METAPHOR` with the approved short selector rubric.
+
+For each target subsection independently:
+- fresh Adapt context using the full pinned installed `adapt-linkedin-visual-content` package;
+- fresh Render context using the full pinned installed `render-linkedin-visual-post` package, Article-section mode, and ChatGPT native image generation;
+- fresh generated-image evaluator context;
+- maximum two render attempts.
+
+Do not paraphrase the installed skills into simplified prompts. Load their exact pinned installed references/assets automatically; user does not manually supply style references.
+
+Passing `GEN-*` images are explanatory visuals derived from approved evidence, not evidence sources.
+
+Visual Generation publishes and verifies one `Unified Visual Review` containing unchanged `VIS-*` source candidates plus passing `GEN-*` candidates.
 
 Do not start Chapter Writing until:
 - the exact Deep Research Package is explicitly approved; and
-- every FOUND Visual Review candidate is KEEP or EXCLUDE.
+- every current VIS/GEN candidate in Unified Visual Review is KEEP or EXCLUDE.
+
+New V3 human visual decisions are applied through Visual Generation decision mode. A revised Deep Research Package invalidates prior source/generated visual routing and requires a fresh current Unified Visual Review.
 
 ### Chapter Writing
 Produce and preserve two separate chapter artifacts:
 
 Artifact A — completed chapter from the existing `anshul-chapter-writing-4` worker: storytelling-article argument/story development, then anshul-writing-style writing + formatting + internal ai-humanizer-core, story-integrity review and verified native formatting. Read all bundled references, including the approved presentation contract/profile; run native presentation validation before worker success (including worker-only tests). Record revision-bound presentation evidence and verify contract-version-1 execution evidence before handoff.
 
-Artifact B — NEW reader-facing output created only after Artifact A passes; Visual Placement preserves the completed prose/voice/native formatting and inserts only human-KEEP visuals. It must not perform a second style rewrite.
+Artifact B — NEW reader-facing output created only after Artifact A passes; Visual Placement preserves completed prose/voice/native formatting and inserts only exact human-KEEP assets from Unified Visual Review:
+- VIS → exact approved primary-source asset;
+- GEN → exact approved generated asset.
+
+Visual Placement never regenerates a GEN asset, never replaces a failed KEEP, and does not perform a second style rewrite.
 
 Evaluate both through the Chapter Clean Evaluate Agent. Evaluators write separate reports only and never inject findings into either chapter Doc.
 
@@ -83,7 +119,7 @@ Before and after every Drive write/workflow transition, update Control Sheet, ch
 
 At authorized live setup or production startup, create or confirm recurring ChatGPT Work task `Writing Agent Recovery` using `plugins/writing-agent-plus/skills/writing-agent-plus/references/automation-prompt.md` at hourly cadence. Verify its actual prompt, schedule and enabled status. Installation alone does not enable recovery. It processes at most one eligible transition and remains quiet when none is available. It must never bypass approval, blueprint-selection, or visual-review gates. Read `references/execution-policy.md` in the same skill for actual model settings, mandatory fresh role contexts, and transition guards.
 
-If a temporary plan limit interrupts a run, checkpoint it. Resume later from exact pending transition after reconciliation. Subscription limits cannot be bypassed and no API credits may be purchased/used.
+If a temporary plan limit interrupts a run, checkpoint it. Resume later from exact pending transition after reconciliation. During Visual Generation, preserve exact candidate/step/attempt and do not rerun already passing candidates unnecessarily. Subscription limits cannot be bypassed and no API credits may be purchased/used.
 
 ## User interaction
 
@@ -92,7 +128,7 @@ Do not ask the user to install/deploy/clone/run/configure anything during a work
 Notify the user when:
 - a stage Doc needs approval;
 - a Blueprint choice is needed;
-- a Visual Review needs KEEP/EXCLUDE decisions;
+- a Unified Visual Review needs KEEP/EXCLUDE decisions;
 - the run completes;
 - the workflow is blocked.
 
