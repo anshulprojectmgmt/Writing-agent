@@ -15,91 +15,192 @@ visual_assets_folder_id
 visual_decisions
 and the existing Deep Research doc_id.
 
-When mode=apply_visual_decisions, do not rerun Deep Research or visual discovery. Use section 6.
+When mode=apply_visual_decisions, do not rerun research, extraction, selection, adaptation, rendering, or evaluation. Use section 7.
 
 2. Drive setup
 
 Reuse/create one `Deep Research` folder under main_drive_folder_id as folder_id.
 Inside it reuse/create one `Visual Assets` folder as visual_assets_folder_id.
-Keep Deep Research Package, Visual Review, and evaluation reports in Deep Research. Put extracted visual files in Visual Assets. Upstream Docs are read-only.
+Visual Extraction may persist exact-source assets in Visual Assets. Visual Generation creates/reuses `Visual Assets/Generated` for generated assets.
 
-3. Logs
+Keep these audit artifacts in Deep Research:
+- Deep Research Package
+- Source Visual Review
+- Visual Generation Plan
+- Generated Visual Manifest
+- Unified Visual Review
+- evaluation reports
+
+Upstream Docs are read-only.
+
+3. Three durable sub-agents
+
+The Deep Research node has exactly three durable sub-agents:
+
+1. `Main Deep Research`
+   - canonical Deep Research evidence work
+   - internal Evaluate/Diagnose loop
+
+2. `Visual Extraction`
+   - implemented by the existing Visual Research V2 worker
+   - source inspection/extraction only
+   - internal Source Visual evaluation
+
+3. `Visual Generation`
+   - fallback selector
+   - pinned installed Adapt skill
+   - pinned installed Render skill
+   - generated-image evaluation
+   - Unified Visual Review build/evaluation
+   - application of human VIS/GEN decisions
+
+Do not promote Selector, Adapt, Render, generated evaluation, or Unified Review to additional durable workflow agents/stages. They are internal skill executions of Visual Generation.
+
+Context separation remains mandatory. Every internal worker/evaluator/diagnose/selector/adapt/render/evaluation execution runs in its own fresh context as required by the active runtime policy. Persist only artifact IDs/status between executions.
+
+4. Logs
 
 Columns remain Node | Version | Subagent | Doc ID | Comment.
 Node is always Deep Research.
-Allowed Subagent values: Deep Research, Evaluate, Visual Research, Evaluate Visual, Apply Visual Decisions, Diagnose.
-Append one row after every subagent return.
 
-For Visual Research, Doc ID is visual_review_doc_id and Comment includes visual_assets_folder_id plus candidate/status summary.
-For Apply Visual Decisions, Doc ID is visual_review_doc_id and Comment records resolved/pending.
+For new V3 runs use only these durable Subagent values:
+- Main Deep Research
+- Visual Extraction
+- Visual Generation
+- Diagnose
 
-4. Deep Research flow
+Historical V2 rows using Deep Research / Evaluate / Visual Research / Evaluate Visual / Apply Visual Decisions remain valid history and are not rewritten.
+
+Append one row after every internal execution, even when several rows share the same durable Subagent. Put the internal step in Comment and operation metadata, for example:
+- Main Deep Research — `Step=Research`
+- Main Deep Research — `Step=Evaluate`
+- Visual Extraction — `Step=Extract`
+- Visual Extraction — `Step=Evaluate Source Visuals`
+- Visual Generation — `Step=Selector`
+- Visual Generation — `Step=Adapt GEN-003`
+- Visual Generation — `Step=Render GEN-003 Attempt=1`
+- Visual Generation — `Step=Evaluate GEN-003 Attempt=1`
+- Visual Generation — `Step=Unified Review`
+- Visual Generation — `Step=Evaluate Unified Review`
+- Visual Generation — `Step=Apply Visual Decisions`
+
+Every logged internal step records its exact input/output IDs, outcome, candidate ID when applicable, and retry count when applicable.
+
+5. Sub-agent 1 — Main Deep Research
 
 Deep Research Agent receives Research Mapping doc, Broad Research doc, chapter context, folder_id, version. It deepens assigned evidence and resolves mapped GAPs only; it does not make visual decisions.
 
-Evaluate Deep Research with node_name="deep_research".
-Failed canonical evaluation routes to Diagnose; every revised Deep Research Package is evaluated again.
+Evaluate the current Deep Research Package against `deep_research` using the active safe-evaluation protocol.
 
-5. Visual Research flow
+Failed canonical evaluation routes to Diagnose; every revised Deep Research Package is evaluated again. Cap Diagnose according to the existing workflow policy.
 
-Run only after the current Deep Research Package passes.
+Do not start visual work until the current Deep Research Package passes.
 
-Call Visual Research Agent with:
-research_mapping_doc_id = previous_doc_id_2
-deep_research_doc_id = current passing Deep Research doc
-deep_research_folder_id = folder_id
-visual_assets_folder_id
-version
+6. Sub-agent 2 — Visual Extraction
 
-Visual Research must follow its attached V2 skill: inspect only mapped primary sources plus primary sources added by Deep Research specifically to resolve that subsection's mapped GAP; apply only the three visual-selection criteria; selection happens before extraction; create Visual Review; save exact-source assets where possible.
+After the current Deep Research Package passes, call the existing Visual Research Agent as the Visual Extraction sub-agent with:
+- research_mapping_doc_id = previous_doc_id_2
+- deep_research_doc_id = current passing Deep Research doc
+- deep_research_folder_id = folder_id
+- visual_assets_folder_id
+- version
 
-Log Visual Research.
+Visual Extraction follows Visual Research V2 exactly:
+- inspect only mapped primary sources plus primary sources added by Deep Research specifically to resolve that subsection's mapped GAP;
+- select using only the three source-visual criteria;
+- selection happens before extraction;
+- persist faithful exact-source assets where possible;
+- keep SOURCE-LINKED when faithful persistence is unavailable;
+- never generate/redraw/substitute.
 
-Evaluate the Visual Review with node_name="visual_research" and log as Evaluate Visual.
-If visual evaluation is not pass, stop. Never send a failed Visual Review forward.
+Its output for V3 is a `Source Visual Review`, not the final human review.
 
-If visual evaluation passes, set visual_review_status to pending when any FOUND candidate still says HUMAN DECISION: PENDING, otherwise resolved.
+Evaluate Source Visual Review against the existing `visual_research` rubric using safe evaluation. If source visual evaluation fails, stop. Never send failed extraction output to Visual Generation.
 
-6. Apply visual decisions mode
+7. Sub-agent 3 — Visual Generation
 
-Verify existing Deep Research doc_id, visual_review_doc_id, and visual_assets_folder_id.
-Call Visual Research Agent with those IDs and the human's exact visual_decisions.
-The worker may change only HUMAN DECISION values to KEEP or EXCLUDE and must verify remaining PENDING count.
-Log Apply Visual Decisions.
-Do not rerun Deep Research, discovery, or evaluation.
-Return status resolved only when no PENDING remains. Never guess an ambiguous VIS ID or decision.
+After Source Visual Review passes, call `Visual Generation Agent` with:
+- deep_research_doc_id = current passing Deep Research doc
+- source_visual_review_doc_id = current passing Source Visual Review
+- deep_research_folder_id = folder_id
+- visual_assets_folder_id
+- version
 
-7. Normal routing
+Visual Generation follows its attached V3 skill exactly.
+
+Internally it must:
+1. select generation targets only where no usable EXTRACTED primary-source visual exists;
+2. choose DATA_EXPLAINER / TOPIC_EXPLAINER / HUMOUR_METAPHOR using the approved short selector rubric;
+3. run the full pinned installed `adapt-linkedin-visual-content` package in a fresh context for each target subsection;
+4. run the full pinned installed `render-linkedin-visual-post` package in another fresh context for each candidate using ChatGPT native image generation and Article-section mode;
+5. evaluate the actual rendered asset in another fresh context, with max two render attempts;
+6. build Generated Visual Manifest;
+7. build a Unified Visual Review containing unchanged VIS candidates + passing GEN candidates;
+8. evaluate the Unified Visual Review.
+
+The human must never be required to manually provide style references. Visual Generation loads the pinned installed skill references/assets automatically.
+
+The returned `visual_review_doc_id` from this V3 flow is always the passing Unified Visual Review.
+
+If Visual Generation or Unified Review evaluation fails, stop. Never send a failed review to the human or Chapter Writing.
+
+8. Apply visual decisions mode
+
+Verify existing Deep Research doc_id, current Unified visual_review_doc_id, and visual_assets_folder_id.
+
+Call Visual Generation Agent in decision-application mode with those IDs and the human's exact visual_decisions.
+
+It may change only HUMAN DECISION values for exact current VIS/GEN candidate IDs to KEEP or EXCLUDE.
+
+Do not call Visual Extraction to apply V3 decisions. Do not rerun research, extraction, selector, Adapt, Render, or evaluation.
+
+Return status resolved only when no current candidate remains PENDING and the decision set exactly covers the current candidate set. Never guess an ambiguous candidate ID or decision.
+
+9. Normal routing
 
 First run:
-Deep Research -> Evaluate Deep Research -> if pass Visual Research -> Evaluate Visual -> final return.
-If Deep Research evaluation fails: Diagnose -> next version -> Evaluate Deep Research.
-If Visual evaluation fails/no_rubric/failed_run: stop.
+Main Deep Research -> internal Evaluate -> Visual Extraction -> internal Source Visual Evaluate -> Visual Generation -> internal generated/unified evaluations -> final return.
+
+If Main Deep Research evaluation fails:
+Diagnose -> next version -> Evaluate Main Deep Research.
+
+If source extraction evaluation fails:
+stop/block according to active runtime policy.
+
+If Visual Generation/Unified Review evaluation fails:
+stop/block according to active runtime policy.
 
 Re-entry after human comments on Deep Research:
-Diagnose -> Evaluate Deep Research -> if pass run fresh Visual Research -> Evaluate Visual -> final return.
-A revised Deep Research Package invalidates the previous visual review, so fresh visual discovery and fresh human decisions are required.
+Diagnose -> Evaluate Main Deep Research -> fresh Visual Extraction -> fresh source evaluation -> fresh Visual Generation -> fresh Unified Visual Review.
 
-8. Human gate
+A revised Deep Research Package invalidates all prior source/generated visual artifacts and prior human visual decisions for downstream routing. Preserve them as history but require a fresh current review.
 
-The orchestrator collects approval of Deep Research and KEEP/EXCLUDE decisions. Chapter Writing must not start while visual candidates remain PENDING.
+10. Human gate
 
-9. Errors
+The orchestrator collects:
+1. explicit approval of the Deep Research Package; and
+2. KEEP/EXCLUDE decisions for every current VIS/GEN candidate in the passing Unified Visual Review.
 
-Missing inputs/Docs/folders, failed publish, invalid evaluator return, or missing IDs -> halt. Never fabricate IDs or silently skip Visual Research.
+Chapter Writing must not start while any current candidate remains PENDING.
 
-10. Boundaries
+11. Errors
+
+Missing inputs/Docs/folders, failed publish, invalid evaluator result, unavailable required installed visual skill package, inability to create required isolated render context, missing IDs, or failed Unified Visual Review -> halt. Never fabricate IDs, silently skip generation, or bypass evaluation.
+
+A subsection may still end with no candidate when source extraction finds none and generated rendering fails twice. Record that failure explicitly in Unified Visual Review; do not fabricate a fallback.
+
+12. Boundaries
 
 Node owns folders, Logs, version lookup, routing, final output.
-Deep Research Agent owns evidence deepening/GAP resolution.
-Visual Research Agent owns primary-source visual discovery/extraction/review and applying human decisions.
-Evaluate owns scoring/reporting.
-Diagnose revises only the Deep Research Package.
+Main Deep Research owns evidence deepening/GAP resolution.
+Visual Extraction owns primary-source visual discovery/extraction and Source Visual Review.
+Visual Generation owns fallback selection, Adapt, Render, generated evaluation, Unified Visual Review, and applying human VIS/GEN decisions.
 Human owns final visual selection.
+Chapter Writing/Visual Placement own later manuscript creation/placement.
 
-11. Final Output
+13. Final Output
 
-Return exactly:
-{"node":"deep_research","doc_id":"<deep_research_doc_id>","visual_review_doc_id":"<visual_review_doc_id>","visual_assets_folder_id":"<visual_assets_folder_id>","visual_review_status":"pending|resolved"}
+Keep the existing downstream contract unchanged. Return exactly:
+{"node":"deep_research","doc_id":"<deep_research_doc_id>","visual_review_doc_id":"<unified_visual_review_doc_id>","visual_assets_folder_id":"<visual_assets_folder_id>","visual_review_status":"pending|resolved"}
 
-No other text or keys.
+Do not add generation-plan/manifest keys to this envelope. Their IDs remain auditable in Deep Research Logs/artifacts without breaking downstream contracts.
