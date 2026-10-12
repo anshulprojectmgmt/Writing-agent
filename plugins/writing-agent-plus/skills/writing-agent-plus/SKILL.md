@@ -66,11 +66,12 @@ Visual Generation selects one mode using the approved short rubric:
 For every target subsection separately it must:
 1. run the full pinned installed `adapt-linkedin-visual-content` package in a fresh context using only that subsection's evidence;
 2. run the full pinned installed `render-linkedin-visual-post` package in another fresh context using Article-section mode and ChatGPT native image generation;
-3. evaluate the actual rendered image in another fresh context;
-4. allow no more than two render attempts;
-5. preserve only passing `GEN-*` candidates for human review.
+3. run Render's pinned installed `review-linkedin-visual-post` dependency in another fresh context with its article-section reviewer/validator; a failed review discards that complete render attempt rather than patching it;
+4. only after that visual-quality review passes, evaluate the actual rendered image in another fresh context using the Writing Agent generated-image rubric for factual fidelity, mode fit and DATA_LOCK;
+5. allow no more than two complete render attempts across both acceptance gates;
+6. preserve only `GEN-*` candidates that pass both the installed visual-quality review and Writing Agent evidence gate.
 
-Do not paraphrase/reimplement the installed Adapt/Render skills from memory. Load the exact pinned installed package, required references and bundled assets from the dependency manifest. The human must not manually pass style references.
+Do not paraphrase/reimplement the installed Adapt/Render/Render-review skills from memory. Load the exact pinned installed packages, required references and bundled assets/scripts from the dependency manifest. The human must not manually pass style references.
 
 Generated visuals explain already-approved evidence; they are never new evidence.
 
@@ -106,7 +107,7 @@ The final Chapter Writing stage Doc ID is Artifact B. Artifact A remains preserv
 
 The controller carries identifiers and status only. Never place research, analysis, evidence, draft prose, evaluation findings, visual candidate content, or comment text into controller state. Start a fresh context for every controller/worker/evaluator/diagnose/visual role with fork_turns="none" and tell it to read its adapter. Do not fork conversational history or reuse agents across roles.
 
-Deep Research has exactly three durable sub-agents, but internal skill execution isolation is still mandatory. Inside Visual Generation, Selector, each subsection's Adapt, each candidate's Render, each candidate's evaluator and Unified Review verification run in fresh contexts and exchange only persisted artifact IDs/metadata.
+Deep Research has exactly three durable sub-agents, but internal skill execution isolation is still mandatory. Inside Visual Generation, Selector, each subsection's Adapt, each candidate's Render, each candidate's installed Render Review, each candidate's Writing Agent generated evaluator and Unified Review verification run in fresh contexts and exchange only persisted artifact IDs/metadata.
 
 If isolated execution is unavailable, block and report; clearing scratch inside one conversation is not context isolation. Follow the exact models and audit fields in references/execution-policy.md.
 
@@ -157,6 +158,7 @@ The ChatGPT plan controls usage. Precise token/credit usage is not programmatica
 - Never let Visual Extraction generate/redraw/substitute an image.
 - Never let Visual Generation introduce new research/evidence.
 - Never batch multiple subsection renders into one collage.
+- Never admit a GEN candidate to Unified Visual Review unless both installed Render Review and Writing Agent generated evaluation pass.
 - Never allow Chapter Writing while Unified Visual Review has PENDING candidates.
 - Never let Visual Placement rewrite Artifact A wording, voice or emphasis; writing belongs to the integrated Chapter Writing worker.
 - Never overwrite Artifact A when creating Artifact B.
