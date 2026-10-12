@@ -3,6 +3,7 @@ pass_threshold: 0.95
 hard_fail:
   - stale_source_visual_review
   - duplicate_candidate_id
+  - generated_candidate_without_passing_installed_render_review
   - generated_candidate_without_passing_generated_evaluation
   - missing_candidate_origin
   - missing_human_decision_field
@@ -24,7 +25,8 @@ dimensions:
     weight: 0.25
     checks:
       - "Every GEN candidate binds to one subsection and current Deep Research evidence"
-      - "Every GEN candidate has exact render asset provenance and a passing generated evaluation"
+      - "Every GEN candidate has exact render asset provenance and a passing pinned installed Render review verdict"
+      - "Every GEN candidate has a separate passing Writing Agent generated_visual evaluation"
       - "Generated visuals are labelled GENERATED_EXPLAINER and are not represented as evidence"
   human_gate_readiness:
     weight: 0.20
@@ -35,5 +37,5 @@ dimensions:
   auditability:
     weight: 0.10
     checks:
-      - "GEN mode, evidence basis, Adapt brief locator, asset locator and evaluation status are recorded"
+      - "GEN mode, evidence basis, Adapt brief locator, asset locator, installed Render review verdict and Writing Agent evaluation status are recorded"
       - "VIS primary-source URL/owner and exact figure locator are recorded"
