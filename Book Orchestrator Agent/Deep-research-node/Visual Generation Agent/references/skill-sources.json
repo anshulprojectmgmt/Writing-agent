@@ -1,0 +1,35 @@
+{
+  "registry": "anshulprojectmgmt/anshul-skills-registry",
+  "ref": "30a5d06b12cf6baf29c7ff0977595018179529c7",
+  "dependencies": {
+    "adapt-linkedin-visual-content": {
+      "root": "installed/adapt-linkedin-visual-content",
+      "skill_path": "installed/adapt-linkedin-visual-content/SKILL.md",
+      "skill_blob_sha": "864b5322dfe2bae9f77ae182bb798380f281393f",
+      "references_tree_sha": "c2549e5e287d951467784c40fcfc4aef45c32e1a",
+      "assets_tree_sha": "d53089c68d68d988ac76bff5386c0c6ec5ea69bd",
+      "required_references": {
+        "content-rules.md": "b8de440da9404fb4c671c3dad51ab9bb129c4ebb",
+        "coverage-ledger.md": "8b0607a7a8819772b791f80feba998510d1042de",
+        "visual-story-brief.md": "943816e7b43caea6c1905568764e48103ddedf21"
+      },
+      "load_policy": "Load the full installed package plus all references required by SKILL.md; do not substitute prod/SKILL.md alone."
+    },
+    "render-linkedin-visual-post": {
+      "root": "installed/render-linkedin-visual-post",
+      "skill_path": "installed/render-linkedin-visual-post/SKILL.md",
+      "skill_blob_sha": "dc9cbcbb96282514f93d866de01162b50dd9b015",
+      "references_tree_sha": "a477e4ba3958d849fcdf5aff3045eb4646a11702",
+      "assets_tree_sha": "5ef6aa5a3c5c522e71205a5ef0bd0860b1134ccb",
+      "scripts_tree_sha": "f4319be085a0579721a356313dd941f287e5b7cc",
+      "required_references": {
+        "article-visuals.md": "724a4268600b109f0559985c1ba9f54e058917d9",
+        "dense-reference-layouts.md": "684dc36623ec700f30fdeeb9db47efe781ebbdc7",
+        "design-systems.md": "4de09751afd3d2ba27b21581b573d7856edb6595",
+        "gold-standard-quality-bar.md": "797d2109d510da81267cea848fb163d97e5ce177",
+        "news-signal.md": "9e9baa8db0b295d163c51e708cd179bb6b0b36c6"
+      },
+      "load_policy": "Load the full installed package including article-section references and bundled assets. Use ChatGPT native image generation; do not replace with an external renderer."
+    }
+  }
+}
