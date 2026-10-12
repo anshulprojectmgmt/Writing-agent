@@ -12,9 +12,13 @@ Use this preflight before the first real chapter or after upgrading the producti
    - Verify headers after the migration before starting a run.
 6. Create or verify a native Google Doc named `Writing Agent Operating Instructions` and record plugin version, repository branch, control-sheet ID, project-root ID, reviewer emails, and that Google Drive is authoritative.
 7. Verify the production branch contains the role adapters for `visual_research` (Visual Extraction), `visual_generation`, `visual_placement`, and `chapter_clean_evaluate`, plus the Book Orchestrator source roles they reference.
-8. Verify `Book Orchestrator Agent/Deep-research-node/Visual Generation Agent/references/skill-sources.json` resolves the pinned full installed Adapt and Render packages from `anshulprojectmgmt/anshul-skills-registry`, including required references/assets. Fail setup if the exact pinned dependency cannot be read; do not silently fall back to only `prod/SKILL.md` or to remembered prompt text.
+8. Verify `Book Orchestrator Agent/Deep-research-node/Visual Generation Agent/references/skill-sources.json` resolves the exact pinned full installed packages from `anshulprojectmgmt/anshul-skills-registry` for:
+   - `adapt-linkedin-visual-content`;
+   - `render-linkedin-visual-post`;
+   - `review-linkedin-visual-post` required by the Render skill.
+   Verify required references/assets/scripts listed in that manifest. Fail setup if any exact pinned dependency cannot be read; do not silently fall back to only `prod/SKILL.md`, remembered prompt text, or a different review path.
 9. Run a disposable test that creates and reads back one Doc, one Sheet row, and one native comment under a Test chapter folder. Also verify a `Visual Assets` child folder and `Visual Assets/Generated` child can be created inside a test Deep Research folder. Delete nothing automatically; the user may remove the test folder after inspection.
-10. Confirm ChatGPT native image generation is available for Visual Generation. Do not configure Runway or another external renderer as a fallback.
+10. Confirm ChatGPT native image generation is available for Visual Generation. Confirm the installed Render article-review/validator can inspect the resulting article-section image. Do not configure Runway or another external renderer as a fallback.
 11. Create/confirm the scheduled cloud task from `automation-prompt.md` at hourly cadence. Verify its actual prompt, schedule and enabled status; installed instructions alone do not create a task. Keep it disabled until live recovery is requested or a production run is started.
 
 Read `execution-policy.md` before setup. Validate actual model/reasoning/fork settings and an exported snapshot before dispatch. Log actual fresh task IDs rather than intended settings. Missing legacy guard metadata must be verified from artifacts; never infer passing evaluations for historical runs.
