@@ -44,7 +44,7 @@ Run strictly in this order and never in parallel:
 3. `chapter_blueprint` — Chapter Blueprint Node
 4. `research_mapping` — Research Mapping Node
 5. `deep_research` — Deep Research Node with exactly three durable sub-agents: Main Deep Research -> Visual Extraction -> Visual Generation -> Human Visual Review
-6. `chapter_writing` — Chapter Writing Node (canonical Anshul artifact -> final LinkedIn-style + visuals artifact)
+6. `chapter_writing` — Chapter Writing Node (canonical Artifact A -> separate final reader-facing Artifact B with approved visuals)
 
 Never advance past a node until its required human gate is satisfied.
 
@@ -62,7 +62,7 @@ Deep Research keeps the existing downstream contract and returns exactly:
 
 {"node":"deep_research","doc_id":"<deep_research_doc_id>","visual_review_doc_id":"<unified_visual_review_doc_id>","visual_assets_folder_id":"<visual_assets_folder_id>","visual_review_status":"pending|resolved"}
 
-`visual_review_doc_id` is the passing Unified Visual Review for new V3 runs. Internal Source Visual Review, Visual Generation Plan, Generated Visual Manifest and evaluation-report IDs remain in Deep Research Logs/artifacts and are not added to the downstream envelope.
+`visual_review_doc_id` is the passing Unified Visual Review for new V3 runs. Internal Source Visual Review, Visual Generation Plan, Generated Visual Manifest and evaluation/review-report IDs remain in Deep Research Logs/artifacts and are not added to the downstream envelope.
 
 All four IDs/status fields are required. Never silently downgrade this to the two-key contract.
 
@@ -175,13 +175,13 @@ Chapter Writing itself re-checks the Unified Visual Review and must stop if any 
 The Chapter Writing node intentionally creates two chapter documents:
 
 - Artifact A: canonical Anshul-style chapter produced only by the existing `anshul-chapter-writing-4` worker and its bundled canonical references.
-- Artifact B: a separate reader-facing document produced by Visual Placement, transformed to the approved LinkedIn-derived style and populated with human-KEEP visuals.
+- Artifact B: a separate reader-facing document produced by Visual Placement that preserves Artifact A reader-facing prose/voice/native formatting and adds only exact human-KEEP visuals.
 
-The node's final `doc_id` is Artifact B. Artifact A is preserved separately in the Chapter Writing folder and Logs. Never ask the canonical Chapter Writing Worker to apply the LinkedIn style.
+The node's final `doc_id` is Artifact B. Artifact A is preserved separately in the Chapter Writing folder and Logs. Visual Placement must not perform a second writing/style rewrite.
 
 ## Re-entry after Chapter Writing comments
 
-Pass the reviewed final `doc_id` back to Chapter Writing with the same upstream IDs and visual IDs. The Chapter Writing node owns classification of feedback into presentation/visual-only vs substantive. It must preserve Artifact A when feedback is only presentation/visual, and regenerate from a revised canonical artifact when the requested change affects evidence, claims, meaning, or approved structure.
+Pass the reviewed final `doc_id` back to Chapter Writing with the same upstream IDs and visual IDs. The Chapter Writing node owns classification of feedback into presentation/visual-only vs substantive. It must preserve Artifact A when feedback is only placement/layout/caption related, route prose/voice/formatting feedback to canonical writing revision, and require canonical revision when feedback affects evidence, claims, meaning, or approved structure.
 
 ## ID rules
 
@@ -199,4 +199,4 @@ When Chapter Writing Artifact B is approved, give a short summary containing:
 - Logs sheet ID
 - ordered list of all six approved node `doc_id`s
 - Deep Research Unified Visual Review ID and Visual Assets folder ID
-- note that Chapter Writing folder contains both the canonical Anshul artifact (Artifact A, recorded in Logs) and the approved final LinkedIn-style + visuals artifact (Artifact B, the Chapter Writing node `doc_id`).
+- note that Chapter Writing folder contains both the canonical Artifact A (recorded in Logs) and approved final reader-facing Artifact B with exact approved visuals (the Chapter Writing node `doc_id`).
