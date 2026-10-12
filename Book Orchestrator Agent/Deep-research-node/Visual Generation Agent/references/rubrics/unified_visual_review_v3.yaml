@@ -1,0 +1,39 @@
+pass_threshold: 0.95
+
+hard_fail:
+  - stale_source_visual_review
+  - duplicate_candidate_id
+  - generated_candidate_without_passing_generated_evaluation
+  - missing_candidate_origin
+  - missing_human_decision_field
+  - generated_asset_missing
+  - subsection_coverage_missing
+
+dimensions:
+  subsection_coverage:
+    weight: 0.25
+    checks:
+      - "Every approved subsection is represented in order"
+      - "Subsections with no source/generated candidate explicitly record the verified absence/failure state"
+  source_candidate_integrity:
+    weight: 0.20
+    checks:
+      - "VIS candidates are carried forward from the passing current Source Visual Review without changed provenance"
+      - "VIS extraction/source-linked states and asset/source locators remain intact"
+  generated_candidate_integrity:
+    weight: 0.25
+    checks:
+      - "Every GEN candidate binds to one subsection and current Deep Research evidence"
+      - "Every GEN candidate has exact render asset provenance and a passing generated evaluation"
+      - "Generated visuals are labelled GENERATED_EXPLAINER and are not represented as evidence"
+  human_gate_readiness:
+    weight: 0.20
+    checks:
+      - "Every actual VIS/GEN candidate has HUMAN DECISION: PENDING in a new review"
+      - "Candidate IDs are unique and stable"
+      - "Actual image previews/assets are available for human inspection when technically supported"
+  auditability:
+    weight: 0.10
+    checks:
+      - "GEN mode, evidence basis, Adapt brief locator, asset locator and evaluation status are recorded"
+      - "VIS primary-source URL/owner and exact figure locator are recorded"
