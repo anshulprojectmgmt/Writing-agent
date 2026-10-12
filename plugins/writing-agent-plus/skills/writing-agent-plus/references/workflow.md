@@ -7,7 +7,7 @@
 3. Reject a second active run by the same user unless explicitly queued. Keep at most three queued rows per user.
 4. Create a run ID and stable operation ID before any Drive write.
 5. Search the project root for a matching chapter folder. Reuse one unambiguous match, create one if absent, and stop if several match.
-6. Under the chapter folder, create/reuse exactly one direct child for each of the six main stages plus native `Logs` and `Automation Resume Record`. Deep Research later creates/reuses its `Visual Assets` child folder.
+6. Under the chapter folder, create/reuse exactly one direct child for each of the six main stages plus native `Logs` and `Automation Resume Record`. Deep Research later creates/reuses its `Visual Assets` child folder and Visual Generation may create `Visual Assets/Generated`.
 7. Verify every object after creation and write Queue, Runs, chapter Run State, Resume Record, and Events checkpoints before Broad Research.
 
 ## Perform a standard stage
@@ -36,25 +36,69 @@ It maps approved Broad Research sources to Blueprint subsections, preserves exac
 
 It must not produce IMAGE NEEDED, YES/NO image decisions, visual IDs, visual reasons, candidate suggestions, figure recommendations, image searches, extraction steps, or Human Decision fields. Its evaluator must fail such output.
 
-## Deep Research + Visual Research protocol
+## Deep Research V3 — three durable sub-agents
+
+Deep Research has exactly three durable sub-agents:
+
+`Main Deep Research -> Visual Extraction -> Visual Generation -> Human Visual Review`
+
+Selector/Adapt/Render/generated evaluation/Unified Review are internal skill executions of Visual Generation, not additional durable workflow stages.
+
+### 1. Main Deep Research
+
+Run the existing canonical Deep Research worker and safe evaluation/Diagnose loop. It deepens mapped evidence and resolves mapped GAPs only.
+
+No visual work starts until the current Deep Research Package passes.
+
+### 2. Visual Extraction
 
 After a passing Deep Research Package:
 
 1. Create/reuse `Deep Research/Visual Assets`.
-2. Run Visual Research from `references/roles/visual_research.md`.
-3. Visual Research inspects every approved subsection using only primary sources already mapped to that subsection plus a primary source added by Deep Research specifically to resolve that subsection's mapped GAP.
+2. Run Visual Extraction from `references/roles/visual_research.md`.
+3. Inspect every approved subsection using only primary sources already mapped to that subsection plus a primary source added by Deep Research specifically to resolve that subsection's mapped GAP.
 4. Candidate selection uses only three substantive criteria:
    - directly explains the subsection;
    - contains meaningful data, mechanism, or comparison;
    - strong enough to improve the chapter.
 5. Selection happens before extraction. Extraction inconvenience cannot turn a valid candidate into NOT FOUND.
-6. Publish a Visual Review covering every subsection and persist exact-source candidate assets to Visual Assets where possible.
-7. Evaluate Visual Review with the `visual_research` rubric. A failed visual evaluation blocks the run.
-8. After both the Deep Research Package and Visual Review are valid, require explicit human decisions for every FOUND candidate. State becomes `AWAITING_VISUAL_REVIEW` while any candidate is PENDING.
-9. Human can edit the Visual Review directly or supply exact VIS-ID KEEP/EXCLUDE decisions. Never infer a choice.
-10. Chapter Writing cannot begin until the Deep Research Package is approved AND all candidates are KEEP/EXCLUDE.
+6. Publish `Source Visual Review` covering every subsection and persist exact-source candidate assets to Visual Assets where possible.
+7. Evaluate Source Visual Review with the existing source-visual rubric. Failure blocks Visual Generation.
 
-If Deep Research is revised after comments, the old Visual Review becomes stale. Run fresh Visual Research, fresh visual evaluation, and fresh human visual decisions.
+Visual Extraction never generates/redraws/substitutes a visual.
+
+### 3. Visual Generation
+
+After Source Visual Review passes:
+
+1. Run `references/roles/visual_generation.md` with current Deep Research Package + Source Visual Review.
+2. Generation is fallback-only:
+   - usable EXTRACTED source visual -> no generation by default;
+   - SOURCE-LINKED only -> generate fallback;
+   - NOT FOUND -> generate fallback.
+3. Select DATA_EXPLAINER / TOPIC_EXPLAINER / HUMOUR_METAPHOR using the approved short rubric.
+4. For each target independently:
+   - fresh Adapt context using only that subsection's evidence;
+   - fresh Render context using the pinned installed Render package, Article-section mode and ChatGPT native image generation;
+   - fresh generated-image evaluator context;
+   - maximum two render attempts.
+5. Publish Visual Generation Plan and Generated Visual Manifest.
+6. Build one Unified Visual Review containing unchanged VIS candidates plus passing GEN candidates.
+7. Evaluate Unified Visual Review in a fresh context. A failed review blocks the run.
+
+The installed Adapt/Render packages and their required references/assets are loaded from the exact pinned registry commit. Do not rewrite the skills into simplified prompts and do not ask the human to provide style references.
+
+Generated visuals explain approved evidence; they are not evidence sources.
+
+### Human visual review
+
+After both the Deep Research Package and Unified Visual Review are valid, require explicit human decisions for every current VIS/GEN candidate. State becomes `AWAITING_VISUAL_REVIEW` while any candidate is PENDING.
+
+The human can edit Unified Visual Review directly or supply exact candidate-ID KEEP/EXCLUDE decisions. New V3 chat decisions are applied through Visual Generation decision mode. Never infer a choice.
+
+Chapter Writing cannot begin until the Deep Research Package is approved AND all current VIS/GEN candidates are KEEP/EXCLUDE.
+
+If Deep Research is revised after comments, all previous source/generated visual artifacts become stale for routing. Run fresh Visual Extraction, fresh Visual Generation, and require fresh human decisions.
 
 ## Chapter Writing dual-artifact protocol
 
@@ -72,11 +116,15 @@ If it fails, revise canonical Artifact A through Diagnose and clean-evaluate the
 
 After Artifact A passes, run Visual Placement from `references/roles/visual_placement.md`.
 
-It creates a NEW document from Artifact A, preserves the completed prose/voice/native formatting, and inserts only human-KEEP primary-source visuals. No second style rewrite is allowed. It never overwrites Artifact A and never conducts new research.
+It creates a NEW document from Artifact A, preserves the completed prose/voice/native formatting, and inserts only exact human-KEEP assets from the current Unified Visual Review:
+- VIS -> exact approved source asset;
+- GEN -> exact approved generated asset.
 
-It creates a separate Visual Placement Report accounting for every candidate as INSERTED, EXCLUDED, or FAILED. A failed KEEP gets a specific exact-source/technical reason; it is never silently replaced.
+No second style rewrite is allowed. Visual Placement never regenerates a GEN candidate and never replaces a failed KEEP with another asset. It never overwrites Artifact A and never conducts new research.
 
-Evaluate Artifact B through Chapter Clean Evaluate using `chapter_writing_final` and cross-check against Artifact A, Visual Review, and Placement Report. The final evaluator never writes to Artifact B.
+It creates a separate Visual Placement Report accounting for every candidate as INSERTED, EXCLUDED, or FAILED.
+
+Evaluate Artifact B through Chapter Clean Evaluate using `chapter_writing_final` and cross-check against Artifact A, Unified Visual Review, and Placement Report. The final evaluator never writes to Artifact B.
 
 The Chapter Writing main-stage pending/approved Doc is Artifact B. Preserve Artifact A separately in Logs and Run State for comparison.
 
@@ -88,7 +136,7 @@ For `COMMENTS_READY`, confirm open comments exist on the exact pending Doc and s
 
 For Blueprint selection, record exact options Doc ID and verbatim choice, then resume the existing worker operation.
 
-For visual decisions, record exact Visual Review Doc ID and exact KEEP/EXCLUDE choices. Never accept a visual decision against a stale review.
+For visual decisions, record exact current Unified Visual Review Doc ID and exact VIS/GEN KEEP/EXCLUDE choices. Never accept a visual decision against a stale review.
 
 Final Artifact B comments are classified conservatively by Visual Placement:
 - placement/layout/caption only -> regenerate Artifact B from unchanged Artifact A;
@@ -115,7 +163,7 @@ Keep at the top:
 - Current state, stage, version, attempt
 - Last completed checkpoint
 - Approved upstream Doc IDs
-- Deep Research Visual Review Doc ID and Visual Assets folder ID when created
+- Deep Research Unified Visual Review Doc ID and Visual Assets folder ID when created
 - Canonical Chapter Artifact A Doc ID when created
 - Pending Doc ID and operation ID
 - exact next transition
@@ -124,10 +172,10 @@ Keep at the top:
 - last update timestamp
 
 Append a brief chronological checkpoint table below. Do not paste artifact prose or visual-candidate content into this Doc.
+
 # Execution prerequisites
 
-Before dispatch or recovery, read `execution-policy.md`. Every role uses a fresh `fork_turns="none"` context and actual approved model/reasoning settings. Validate exported current state, the intended dispatch, and exact pending approval with `scripts/state_machine.py`; never treat prompt wording as enforcement. Persist the verified guard metadata in Runs and Resume Record. A failed guard blocks the transition.
-
+Before dispatch or recovery, read `execution-policy.md`. Every durable role uses a fresh `fork_turns="none"` context and actual approved model/reasoning settings. Visual Generation also requires fresh internal contexts for Selector, each candidate Adapt, each candidate Render, each candidate evaluator, and Unified Review verification. Validate exported current state, intended dispatch, and exact pending approval with `scripts/state_machine.py`; never treat prompt wording as enforcement. Persist verified guard metadata in Runs and Resume Record. A failed guard blocks the transition.
 
 ## Mandatory approved presentation gate
 Read Chapter Writing references/presentation-contract.md and presentation-profile.json. Use personal-agents-approved-v1 and run scripts/validate_chapter_presentation.py on actual native Doc JSON plus the revision-bound presentation plan. Counts/self-declarations cannot substitute. Worker-only tests also require this before returning success. Independently inspect semantic placement in clean evaluation. The execution receipt must include matching presentation profile/baseline provenance, current Artifact A revision, passing native_validator_passed and locatable evidence. Missing/stale/failed presentation blocks handoff regardless of score. Use numbered main HEADING_1, unnumbered HEADING_2, functional icons, meaningful existing opening emphasis, explanatory lists, plain reader citations and exact linked source URLs in Handoff. No new formatting node or Visual Placement rewrite.
