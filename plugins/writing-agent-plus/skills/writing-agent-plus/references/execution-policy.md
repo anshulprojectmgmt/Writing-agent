@@ -14,7 +14,7 @@ Read this policy before setup and every dispatch. Preserve unrelated content ski
 | Every legacy evaluator and Diagnose | gpt-6-sol | low |
 | Visual Extraction (Visual Research V2) | gpt-6-sol | low |
 | Visual Generation durable agent | gpt-6-sol | low |
-| Visual Generation Selector / Adapt controller / Render controller / generated evaluator / Unified Review verifier | gpt-6-sol | low |
+| Visual Generation Selector / Adapt controller / Render controller / installed Render reviewer / generated evaluator / Unified Review verifier | gpt-6-sol | low |
 | Visual Placement preserving written style (Artifact B) | gpt-6-sol | low |
 | Clean Evaluate Canonical and Clean Evaluate Final | gpt-6-sol | low |
 
@@ -32,10 +32,11 @@ Inside Visual Generation, context isolation continues at skill-execution level:
 - Selector runs in a fresh context.
 - Every target subsection's Adapt runs in its own fresh context.
 - Every GEN candidate's Render runs in its own fresh context and sees only that candidate's approved brief/evidence lock.
-- Every GEN candidate's generated evaluator runs in its own fresh context and inspects the actual rendered asset.
+- Every GEN candidate's pinned installed Render Review runs in its own fresh context against the complete rendered asset using article-section review/validation behavior.
+- Every GEN candidate's Writing Agent generated evaluator runs in its own fresh context and inspects the actual rendered asset after installed Render Review passes.
 - Unified Visual Review build/verification uses a fresh context.
 
-Do not reuse a candidate's Adapt/Render/evaluation context for another candidate. Do not pass previous rendered images/conversation history into the next candidate unless the pinned installed Render skill explicitly loads its own approved bundled reference assets. The user must not manually supply style references for normal production runs.
+Do not reuse a candidate's Adapt/Render/review/evaluation context for another candidate. Do not pass previous rendered images/conversation history into the next candidate unless the pinned installed Render skill explicitly loads its own approved bundled reference assets. The user must not manually supply style references for normal production runs.
 
 Load only the active adapter, required original package/instruction/references and matching rubric. Pass IDs, labelled chapter runtime values, operation/version metadata and instruction paths. Never pass parent conversation history, draft prose, research summaries, findings, or comment text; roles read these from authorized Docs themselves. Human visual decisions are exact role inputs when applying decisions, not inferred context.
 
@@ -57,7 +58,7 @@ Persist guard metadata in the Runs row and mirrored chapter Run State using the 
 
 `visual_review_status`, `visual_review_evaluation_status`, `visual_review_evaluated_doc_id`, `visual_review_deep_research_doc_id`, `visual_candidate_ids`, `visual_decisions`, `visual_decisions_review_doc_id`, `canonical_evaluation_status`, `canonical_evaluated_doc_id`, `final_chapter_writing_doc_id`, `final_evaluation_status`, `final_evaluated_doc_id`, `final_canonical_doc_id`, `final_visual_review_doc_id`, `placement_report_doc_id`.
 
-These fields remain sufficient for V3 because `visual_review_doc_id` now points to the current passing Unified Visual Review and `visual_candidate_ids` may contain both VIS and GEN IDs. Internal Source Visual Review, Visual Generation Plan and Generated Visual Manifest IDs are logged in Artifact Log/Events rather than added to the main downstream snapshot contract.
+These fields remain sufficient for V3 because `visual_review_doc_id` now points to the current passing Unified Visual Review and `visual_candidate_ids` may contain both VIS and GEN IDs. Internal Source Visual Review, Visual Generation Plan, installed Render Review receipts and Generated Visual Manifest IDs are logged in Artifact Log/Events rather than added to the main downstream snapshot contract.
 
 Populate metadata only after direct verification of current review, reports and artifacts. If a source changes, mark dependent review/final metadata stale and return to the appropriate stage. Preserve earlier versions rather than inventing a new approval. Report disagreements between Sheet and Resume Record rather than silently selecting one.
 
@@ -65,7 +66,7 @@ Populate metadata only after direct verification of current review, reports and 
 
 Use one real recovery task at hourly cadence when supported; never claim 30-minute checks in this environment. Update/verify an existing task only during authorized live setup. A scheduled task processes at most one eligible transition, remains quiet at approval/blueprint/visual gates, and respects known Not Before. Installed instructions do not themselves create or enable a scheduler.
 
-If a limit interrupts Visual Generation, checkpoint the exact internal step/candidate/attempt and resume only that recorded step after reconciliation. Do not rerun already passing GEN candidates or rebuild source extraction unnecessarily.
+If a limit interrupts Visual Generation, checkpoint the exact internal step/candidate/attempt and resume only that recorded step after reconciliation. Do not rerun already passing GEN candidates or rebuild source extraction unnecessarily. A completed installed Render Review receipt belongs to that exact candidate/attempt and must not be reused for another asset.
 
 ## Mandatory Chapter Writing integration preflight
 
