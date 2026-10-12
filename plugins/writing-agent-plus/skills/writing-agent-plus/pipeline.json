@@ -41,27 +41,45 @@
     "research_mapping": "references/roles/research_mapping.md",
     "deep_research": "references/roles/deep_research.md",
     "visual_research": "references/roles/visual_research.md",
+    "visual_generation": "references/roles/visual_generation.md",
     "chapter_writing": "references/roles/chapter_writing.md",
     "visual_placement": "references/roles/visual_placement.md",
     "chapter_clean_evaluate": "references/roles/chapter_clean_evaluate.md"
   },
   "deep_research_subflow": [
-    "deep_research_worker",
-    "deep_research_evaluate",
-    "visual_research",
-    "visual_research_evaluate",
+    "main_deep_research",
+    "visual_extraction",
+    "visual_generation",
     "human_visual_review"
   ],
+  "deep_research_durable_subagents": 3,
+  "visual_selection_criteria": [
+    "directly_explains_subsection",
+    "meaningful_data_mechanism_or_comparison",
+    "strong_enough_to_improve_chapter"
+  ],
+  "visual_generation_contract": {
+    "version": 1,
+    "policy": "fallback_only_when_no_usable_extracted_source_visual",
+    "modes": [
+      "DATA_EXPLAINER",
+      "TOPIC_EXPLAINER",
+      "HUMOUR_METAPHOR"
+    ],
+    "adapter": "references/roles/visual_generation.md",
+    "worker_skill": "Book Orchestrator Agent/Deep-research-node/Visual Generation Agent/SKILL.md",
+    "dependency_manifest": "Book Orchestrator Agent/Deep-research-node/Visual Generation Agent/references/skill-sources.json",
+    "image_engine": "chatgpt_native",
+    "render_attempts_max": 2,
+    "final_visual_review": "unified_vis_and_gen_review",
+    "human_style_references_required": false,
+    "generated_visual_is_evidence": false
+  },
   "chapter_writing_subflow": [
     "canonical_chapter_worker",
     "canonical_clean_evaluate",
     "visual_placement_linkedin",
     "final_clean_evaluate"
-  ],
-  "visual_selection_criteria": [
-    "directly_explains_subsection",
-    "meaningful_data_mechanism_or_comparison",
-    "strong_enough_to_improve_chapter"
   ],
   "chapter_outputs": {
     "artifact_a": "story_developed_written_formatted_humanised",
