@@ -26,7 +26,7 @@ Only READY, recoverable RUNNING, and due PAUSED_LIMIT rows are eligible for sche
 
 For new V3 runs, `Visual Review Doc ID` is the current passing **Unified Visual Review** created by Visual Generation after Source Visual Review passes. It may contain both `VIS-*` primary-source candidates and `GEN-*` generated explanatory candidates. `Visual Assets Folder ID` is the Deep Research Visual Assets root; generated assets are stored under its `Generated` child when used.
 
-Internal V3 artifacts such as Source Visual Review, Visual Generation Plan and Generated Visual Manifest are recorded in Artifact Log/Events rather than requiring new Runs columns. Historical V2 source-only Visual Review IDs remain valid history and are not rewritten.
+Internal V3 artifacts such as Source Visual Review, Visual Generation Plan, installed Render Review receipts and Generated Visual Manifest are recorded in Artifact Log/Events rather than requiring new Runs columns. Historical V2 source-only Visual Review IDs remain valid history and are not rewritten.
 
 If Deep Research is revised, replace current visual fields only after fresh Visual Extraction + Visual Generation artifacts are verified; old visual artifacts remain in Drive history but are stale for routing.
 
@@ -62,13 +62,13 @@ Decision ID is stable and unique; duplicates are ignored.
 
 Precise plan token/credit usage is not programmatically exposed. Leave unknown values blank. Estimated Effort may be LOW, MEDIUM, HIGH and must stay labeled as an estimate. Never convert it to dollars or use zero for unavailable data.
 
-For Visual Generation internal executions, keep Role = `visual_generation` and use Notes/Operation ID to identify Selector, Adapt <GEN-ID>, Render <GEN-ID> Attempt N, Evaluate <GEN-ID> Attempt N, Unified Review, and Unified Review verification. Log the actual fresh task/context ID for each internal execution.
+For Visual Generation internal executions, keep Role = `visual_generation` and use Notes/Operation ID to identify Selector, Adapt <GEN-ID>, Render <GEN-ID> Attempt N, Review Render <GEN-ID> Attempt N, Evaluate <GEN-ID> Attempt N, Unified Review, and Unified Review verification. Log the actual fresh task/context ID for each internal execution.
 
 ## Events
 
 `Timestamp | Run ID | Event Type | Actor | Operation ID | Stage | Doc ID | Details`
 
-Append-only. Include starts, checkpoints, artifact creation, evaluations, retries, pauses, notifications, approvals, blueprint selections, source visual review/evaluation, Visual Generation Plan creation, GEN render/evaluation attempts, Unified Visual Review creation/evaluation/decisions, Visual Assets creation, Artifact A creation/evaluation, Artifact B creation/evaluation, resumptions, cancellations, and completion.
+Append-only. Include starts, checkpoints, artifact creation, evaluations, retries, pauses, notifications, approvals, blueprint selections, source visual review/evaluation, Visual Generation Plan creation, GEN render/installed-review/generated-evaluation attempts, Unified Visual Review creation/evaluation/decisions, Visual Assets creation, Artifact A creation/evaluation, Artifact B creation/evaluation, resumptions, cancellations, and completion.
 
 ## Chapter Logs workbook: Artifact Log
 
@@ -83,7 +83,7 @@ V3 Deep Research uses exactly three durable sub-agent labels plus Diagnose:
 Multiple rows may share the same durable Subagent. Put the internal step in Comment/operation metadata:
 - Main Deep Research: Research, Evaluate
 - Visual Extraction: Extract, Evaluate Source Visuals
-- Visual Generation: Selector, Adapt GEN-ID, Render GEN-ID attempt, Evaluate GEN-ID attempt, Unified Review, Evaluate Unified Review, Apply Visual Decisions
+- Visual Generation: Selector, Adapt GEN-ID, Render GEN-ID attempt, Review Render GEN-ID attempt, Evaluate GEN-ID attempt, Unified Review, Evaluate Unified Review, Apply Visual Decisions
 
 Historical V2 values (`Deep Research`, `Evaluate`, `Visual Research`, `Evaluate Visual`, `Apply Visual Decisions`) remain valid historical data and are not rewritten.
 
