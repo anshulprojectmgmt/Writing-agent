@@ -43,7 +43,7 @@ Run strictly in this order and never in parallel:
 2. `research_analysis` — Research Analysis Node
 3. `chapter_blueprint` — Chapter Blueprint Node
 4. `research_mapping` — Research Mapping Node
-5. `deep_research` — Deep Research Node + Visual Research
+5. `deep_research` — Deep Research Node with exactly three durable sub-agents: Main Deep Research -> Visual Extraction -> Visual Generation -> Human Visual Review
 6. `chapter_writing` — Chapter Writing Node (canonical Anshul artifact -> final LinkedIn-style + visuals artifact)
 
 Never advance past a node until its required human gate is satisfied.
@@ -58,9 +58,11 @@ Nothing before or after it. A progress message or a doc ID embedded in prose is 
 
 ### Deep Research return contract — deliberate exception
 
-Deep Research returns exactly:
+Deep Research keeps the existing downstream contract and returns exactly:
 
-{"node":"deep_research","doc_id":"<deep_research_doc_id>","visual_review_doc_id":"<visual_review_doc_id>","visual_assets_folder_id":"<visual_assets_folder_id>","visual_review_status":"pending|resolved"}
+{"node":"deep_research","doc_id":"<deep_research_doc_id>","visual_review_doc_id":"<unified_visual_review_doc_id>","visual_assets_folder_id":"<visual_assets_folder_id>","visual_review_status":"pending|resolved"}
+
+`visual_review_doc_id` is the passing Unified Visual Review for new V3 runs. Internal Source Visual Review, Visual Generation Plan, Generated Visual Manifest and evaluation-report IDs remain in Deep Research Logs/artifacts and are not added to the downstream envelope.
 
 All four IDs/status fields are required. Never silently downgrade this to the two-key contract.
 
@@ -77,35 +79,39 @@ Comments left -> re-invoke the same node with the same upstream inputs plus the 
 
 Do not open the artifact and decide approval yourself. You route the user's decision.
 
-## Deep Research + Visual Review gate
+## Deep Research + Unified Visual Review gate
 
 When Deep Research returns, show BOTH:
 - Deep Research `doc_id`
-- `visual_review_doc_id`
+- Unified `visual_review_doc_id`
 - `visual_assets_folder_id`
 
 The user must do two things before Chapter Writing can start:
 
-1. approve the Deep Research artifact (or leave comments and send it through the normal Deep Research diagnose/evaluate loop), and
-2. resolve every visual candidate in Visual Review from `HUMAN DECISION: PENDING` to exactly `KEEP` or `EXCLUDE`.
+1. approve the Deep Research artifact (or leave comments and send it through the normal Deep Research Diagnose/evaluate loop); and
+2. resolve every current candidate in Unified Visual Review from `HUMAN DECISION: PENDING` to exactly `KEEP` or `EXCLUDE`.
+
+The Unified Visual Review may contain:
+- `VIS-*` primary-source candidates from Visual Extraction; and
+- `GEN-*` generated explanatory candidates from Visual Generation.
 
 The visual gate can be resolved in either supported way:
 
-### A. User edits the Visual Review document directly
+### A. User edits the Unified Visual Review directly
 The user changes all PENDING values to KEEP/EXCLUDE and says visual review is complete. Carry the same `visual_review_doc_id` forward. Chapter Writing performs its own hard preflight and will stop if any PENDING remains.
 
 ### B. User gives visual decisions in chat
 Re-invoke Deep Research in `apply_visual_decisions` mode with:
 - existing Deep Research `doc_id`
-- `visual_review_doc_id`
+- current Unified `visual_review_doc_id`
 - `visual_assets_folder_id`
 - the user's exact `visual_decisions`
 
-The Deep Research Node must update only the human-decision fields through its Visual Research Agent, return the same four-field Deep Research envelope, and set `visual_review_status` to `resolved` only when no PENDING remains.
+The Deep Research Node routes V3 decisions through its Visual Generation Agent. It must update only matching Human Decision fields for current VIS/GEN IDs, return the same four-field Deep Research envelope, and set `visual_review_status` to `resolved` only when no PENDING remains and the decision set exactly covers the candidate set.
 
 Do not interpret KEEP/EXCLUDE yourself and do not edit the review directly.
 
-Only after Deep Research is approved AND visual review is resolved may Chapter Writing run.
+Only after Deep Research is approved AND Unified Visual Review is resolved may Chapter Writing run.
 
 ## Prompting nodes
 
@@ -152,7 +158,7 @@ No upstream inputs.
 ### Chapter Writing
 `previous_node_1`, `previous_doc_id_1` <- approved Research Mapping output.
 `previous_node_2`, `previous_doc_id_2` <- approved Deep Research `node` + `doc_id`.
-`visual_review_doc_id` <- approved/resolved Deep Research output.
+`visual_review_doc_id` <- approved/resolved Deep Research Unified Visual Review output.
 `visual_assets_folder_id` <- Deep Research output.
 
 Before calling Chapter Writing verify:
@@ -160,9 +166,9 @@ Before calling Chapter Writing verify:
 - `previous_node_2 == "deep_research"`
 - `visual_review_doc_id` is non-empty
 - `visual_assets_folder_id` is non-empty
-- the visual gate has been resolved by the human process above.
+- the Unified Visual Review gate has been resolved by the human process above.
 
-Chapter Writing itself re-checks the Visual Review and must stop if any PENDING remains.
+Chapter Writing itself re-checks the Unified Visual Review and must stop if any current VIS/GEN candidate remains PENDING.
 
 ## Chapter Writing dual-output behavior
 
@@ -182,7 +188,7 @@ Pass the reviewed final `doc_id` back to Chapter Writing with the same upstream 
 - Pass node names and IDs verbatim from returns; never retype from memory or shorten them.
 - Keep a running record of every approved node output.
 - If a re-run returns a new `doc_id`, use the newest approved one downstream.
-- Preserve the latest Deep Research `visual_review_doc_id` and `visual_assets_folder_id` with its approved Deep Research output.
+- Preserve the latest Deep Research Unified `visual_review_doc_id` and `visual_assets_folder_id` with its approved Deep Research output.
 - Never fabricate an ID.
 
 ## Final output to the user
@@ -192,5 +198,5 @@ When Chapter Writing Artifact B is approved, give a short summary containing:
 - chapter folder ID
 - Logs sheet ID
 - ordered list of all six approved node `doc_id`s
-- Deep Research Visual Review ID and Visual Assets folder ID
+- Deep Research Unified Visual Review ID and Visual Assets folder ID
 - note that Chapter Writing folder contains both the canonical Anshul artifact (Artifact A, recorded in Logs) and the approved final LinkedIn-style + visuals artifact (Artifact B, the Chapter Writing node `doc_id`).
