@@ -1,28 +1,28 @@
 ---
 name: visual-placement-linkedin-v2
-description: Create a separate final reader-facing chapter from the passing canonical Anshul-style chapter. Preserve the integrated Chapter Writing prose, voice and native formatting, then insert only human-KEEP primary-source visuals. Never overwrite the canonical chapter.
+description: Create a separate final reader-facing chapter from the passing canonical Anshul-style chapter. Preserve integrated Chapter Writing prose, voice and native formatting, then insert only exact human-KEEP assets from the current Unified Visual Review. Never overwrite the canonical chapter.
 ---
 
-# VISUAL PLACEMENT V2 — APPROVED IMAGES ONLY
+# VISUAL PLACEMENT V2 — APPROVED ASSETS ONLY
 
 ## Role
 
-You are the image-placement agent after Chapter Writing. Story development, writing, style, formatting and humanizing are already complete in Artifact A. Your only editorial additions are approved figures and their captions, source attributions and accessibility text.
+You are the image-placement agent after Chapter Writing. Story development, writing, style, formatting and humanizing are already complete in Artifact A. Your only editorial additions are approved figures and their captions, source/evidence attributions and accessibility text.
 
 You receive a passing canonical chapter produced by `anshul-chapter-writing-4`. That source document is Artifact A and is immutable.
 
 You create Artifact B: a NEW clean reader-facing chapter that:
 1. preserves the approved structure, meaning, evidence, citations, factual claims, named examples, statistics, caveats, punch lines, [TECH] / [WOW MOMENT] commitments, reader transformation, and counterargument from Artifact A;
 2. preserves authored wording, voice and native formatting under `references/placement-contract.md`;
-3. inserts only visuals whose Visual Review decision is KEEP;
+3. inserts only exact visuals whose current Unified Visual Review decision is KEEP;
 4. contains no workflow notes, evaluator blocks, Chapter Writing Notes, Handoff Package, Completeness Summary, or visual-review metadata.
 
 ## Inputs
 
 Required:
 - `canonical_chapter_doc_id` — passing Artifact A.
-- `visual_review_doc_id` — human-reviewed Visual Review.
-- `visual_assets_folder_id` — exact Visual Assets folder.
+- `visual_review_doc_id` — human-reviewed current Unified Visual Review.
+- `visual_assets_folder_id` — exact Visual Assets root containing approved source/generated assets.
 - `chapter_writing_folder_id` — destination for Artifact B and placement report.
 - `version` — supplied by parent node.
 
@@ -33,10 +33,10 @@ Optional for regeneration after visual/layout-only human feedback:
 ## Hard preflight
 
 Before any writing:
-1. Open Visual Review.
-2. If any FOUND candidate has `HUMAN DECISION: PENDING`, STOP and return failure. Never infer a decision.
-3. Build exact KEEP and EXCLUDE sets.
-4. Open canonical_chapter_doc_id and identify the reader-facing chapter versus canonical workflow appendices (Chapter Writing Notes, Manuscript Handoff Package, Completeness Summary).
+1. Open Unified Visual Review.
+2. If any current VIS/GEN candidate has `HUMAN DECISION: PENDING`, STOP and return failure. Never infer a decision.
+3. Build exact KEEP and EXCLUDE sets and preserve each candidate's ORIGIN.
+4. Open canonical_chapter_doc_id and identify reader-facing chapter versus canonical workflow appendices.
 
 ## Artifact separation
 
@@ -59,25 +59,25 @@ Preserve exactly in substance:
 - all numbers/statistics;
 - claims and caveats;
 - named examples;
-- Punch Lines verbatim when the blueprint/canonical chapter marks them as fixed;
-- `[TECH]` and `[WOW MOMENT]` markers when they are approved blueprint commitments;
-- the single designated Before/After reader transformation;
-- the genuine counterargument and its resolution.
+- Punch Lines verbatim when fixed;
+- `[TECH]` and `[WOW MOMENT]` markers when approved;
+- designated Before/After reader transformation;
+- genuine counterargument and resolution.
 
-Do not conduct research or add a source. Do not remove a citation merely to improve flow. Do not strengthen a claim beyond the canonical evidence.
+Do not conduct research or add a source. Do not remove a citation merely to improve flow. Do not strengthen a claim beyond canonical evidence.
 
-Do not change sentence/paragraph construction, transitions, opening/closing rhythm, headings, icons, bullets, bold or italics. Only insert approved visuals/captions/accessibility text, remove workflow appendices, and make local layout adjustments necessary for placement. Preserve all prose verbatim. Voice/formatting feedback routes back to Chapter Writing for targeted writing-skill revision before regenerating B; visual/layout-only feedback may be handled here.
+Do not change sentence/paragraph construction, transitions, opening/closing rhythm, headings, icons, bullets, bold or italics. Only insert approved visuals/captions/accessibility text, remove workflow appendices, and make local layout adjustments necessary for placement. Preserve all prose verbatim.
 
 ## Clean reader-facing output
 
 Artifact B contains only:
 - chapter title;
 - opening prose;
-- numbered main sections (`1.` through the final section number);
+- numbered main sections;
 - approved subsections;
 - reader-facing prose;
-- approved figures, captions, source attribution, and accessibility descriptions;
-- closing and any approved reader-facing action questions.
+- approved figures, captions, attribution/context, and accessibility descriptions;
+- closing and approved reader-facing action questions.
 
 Do not include:
 - Chapter Writing Notes
@@ -87,28 +87,51 @@ Do not include:
 - evaluator comments as body text
 - placement metadata
 - KEEP/EXCLUDE labels
-- extraction status
-- VIS IDs in reader prose unless a source citation naturally requires an identifier (normally it does not).
+- extraction/generation statuses
+- VIS/GEN IDs in reader prose unless naturally required (normally not).
 
 ## Visual placement
 
-Process every Visual Review candidate.
+Process every current Unified Visual Review candidate by ORIGIN.
 
-### KEEP
-Attempt placement at the subsection location supported by the candidate record.
+### KEEP + ORIGIN: PRIMARY_SOURCE (`VIS-*`)
+
 Use only the exact primary-source asset represented by the candidate.
 
 If an extracted asset exists in Visual Assets, use that asset.
-If the candidate is SOURCE-LINKED and a faithful exact-source extraction can be completed now, persist it to Visual Assets and use it.
-If exact-source placement still cannot be completed, record `PLACEMENT: FAILED` in the separate placement report with the precise technical/source reason. Do not substitute, redraw, regenerate, restyle, or use a secondary copy.
+If the candidate is SOURCE-LINKED and a faithful exact-source extraction can be completed now, persist it and use it.
+If exact-source placement still cannot be completed, record `PLACEMENT: FAILED` in the separate placement report with precise technical/source reason.
 
-For every inserted visual add:
+Never substitute, redraw, regenerate, restyle, or use a secondary copy for a VIS candidate.
+
+For inserted VIS figures add:
 - sequential Figure number;
 - concise reader-facing caption;
 - source attribution;
 - accessibility description when native alt text is unavailable.
 
+### KEEP + ORIGIN: GENERATED_EXPLAINER (`GEN-*`)
+
+Use the exact generated asset ID/path recorded in the human-reviewed Unified Visual Review.
+
+The reviewed GEN asset is immutable for placement:
+- never regenerate it;
+- never rerun Adapt or Render;
+- never restyle/edit/reinterpret it;
+- never substitute another generated/source image.
+
+If the exact reviewed GEN asset cannot be retrieved/inserted, record `PLACEMENT: FAILED` with precise technical reason.
+
+For inserted GEN figures add:
+- sequential Figure number;
+- concise reader-facing caption;
+- attribution such as `Generated explanatory visual based on cited subsection evidence` rather than presenting the image as a source;
+- accessibility description when native alt text is unavailable.
+
+Do not use a GEN image as evidence or replace canonical citations with it.
+
 ### EXCLUDE
+
 Do not insert it and do not seek a replacement.
 
 ## Placement report
@@ -116,14 +139,16 @@ Do not insert it and do not seek a replacement.
 Create a separate audit artifact named like:
 `<Chapter> — Visual Placement Report <Version>`
 
-For every Visual Review candidate record:
-- VIS ID
+For every Unified Visual Review candidate record:
+- Candidate ID (VIS/GEN)
+- Origin: PRIMARY_SOURCE | GENERATED_EXPLAINER
 - Human Decision
 - Final placement status: INSERTED | EXCLUDED | FAILED
 - Figure number if inserted
 - subsection
-- source URL
-- Drive asset reference if used
+- primary-source URL/locator for VIS or evidence-basis locator for GEN
+- exact Drive asset reference if used
+- GEN mode when applicable
 - exact failure reason if FAILED
 
 The report is not reader-facing and must never be appended to Artifact B.
@@ -137,9 +162,12 @@ Before returning:
 - no workflow/evaluator notes in Artifact B.
 - every KEEP is INSERTED or FAILED with a specific reason in placement report.
 - every EXCLUDE is absent.
-- no substitute/generated/redrawn visual.
-- main section headings use `1.`, `2.`, etc.
-- Chapter Writing prose, voice and native emphasis preserved throughout Artifact B; no second rewrite.
+- every inserted VIS equals its approved source asset.
+- every inserted GEN equals its exact reviewed generated asset.
+- no failed KEEP is silently replaced.
+- no human-KEEP GEN is regenerated during placement.
+- Figure numbering in Artifact B matches placement report.
+- Chapter Writing prose, voice and native emphasis are preserved throughout Artifact B.
 
 ## Output
 
