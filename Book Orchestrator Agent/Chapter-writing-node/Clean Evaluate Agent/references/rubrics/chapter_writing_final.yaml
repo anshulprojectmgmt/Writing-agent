@@ -34,9 +34,11 @@ sections:
         checks:
           - "Claims are not strengthened beyond Artifact A/Deep Research"
           - "Canonical caveats and uncertainty are not removed for stylistic momentum"
+          - "Generated explanatory visuals are not presented as evidence and do not replace canonical citations"
     red_flags:
       - "A citation/source is swapped or invented during visual placement"
       - "A statistic or factual claim changes meaning"
+      - "A generated explanatory visual is cited as though it were an evidence source"
 
   - id: authored_style_preservation
     name: "integrated Anshul reader-facing style preservation"
@@ -73,29 +75,35 @@ sections:
           - "No Manuscript Handoff Package in Artifact B"
           - "No Completeness Summary in Artifact B"
           - "No evaluator findings/divider blocks in Artifact B"
-          - "No Visual Review metadata, VIS IDs, KEEP/EXCLUDE/PENDING fields, extraction statuses, or placement audit in reader prose"
+          - "No Unified Visual Review metadata, VIS/GEN IDs, KEEP/EXCLUDE/PENDING fields, extraction/generation statuses, or placement audit in reader prose"
 
   - id: visual_accounting
     name: "human visual decisions and placement report"
     match: fixed
     weight: 0.20
-    purpose: "Every human decision must be honored without substitutes and be auditable outside the reader-facing chapter."
+    purpose: "Every human decision must be honored using the exact approved asset and remain auditable outside the reader-facing chapter."
     dimensions:
       content_completeness:
         weight: 0.50
         checks:
-          - "Every KEEP candidate in Visual Review is accounted for in the placement report as INSERTED or FAILED with a specific exact-source/technical reason"
+          - "Every KEEP candidate in Unified Visual Review is accounted for in the placement report as INSERTED or FAILED with a specific reason"
           - "Every EXCLUDE candidate is accounted for as EXCLUDED"
-          - "Every inserted figure has caption, source attribution, and accessibility description when native alt text is unavailable"
+          - "Every inserted figure has a caption, appropriate attribution, and accessibility description when native alt text is unavailable"
+          - "Placement Report records candidate origin so VIS and GEN accounting is distinguishable"
       consistency:
         weight: 0.50
         checks:
           - "No EXCLUDE candidate appears in Artifact B"
-          - "No substitute, secondary-source, generated, redrawn, or restyled visual is used for a failed KEEP"
+          - "Every inserted VIS candidate uses its exact approved primary-source asset or faithful exact-source extraction"
+          - "Every inserted GEN candidate uses the exact generated asset reviewed and kept by the human"
+          - "No GEN candidate is rerendered, restyled, edited, or substituted during placement"
+          - "No failed KEEP is silently replaced with another source or generated image"
           - "Figure numbering in Artifact B matches the placement report"
     red_flags:
-      - "Any Visual Review candidate remains PENDING"
+      - "Any current Unified Visual Review candidate remains PENDING"
       - "A failed KEEP was silently replaced with another image"
+      - "A human-KEEP GEN asset was regenerated or replaced during placement"
+      - "A VIS candidate was replaced by a generated approximation of the source figure"
 
 preservation_gate:
   rules:
