@@ -21,14 +21,16 @@ Require the current passing Deep Research Package and current passing Source Vis
 2. Apply the short DATA/TOPIC/HUMOUR selector and publish Visual Generation Plan.
 3. For each target separately, run the full pinned installed `adapt-linkedin-visual-content` package in a fresh context using only that subsection's evidence.
 4. For that candidate separately, run the full pinned installed `render-linkedin-visual-post` package in another fresh context using Article-section mode and ChatGPT native image generation.
-5. Evaluate the actual rendered asset in another fresh context. Maximum two render attempts.
-6. Publish Generated Visual Manifest.
-7. Build Unified Visual Review from unchanged VIS candidates plus only passing GEN candidates.
-8. Verify Unified Visual Review in a fresh context.
+5. In another fresh context run Render's pinned installed `review-linkedin-visual-post` dependency with its article-section validator/review behavior. A failed review discards that complete attempt; do not patch it.
+6. Only after installed Render Review passes, evaluate the actual rendered asset in another fresh context using the Writing Agent `generated_visual` rubric for factual fidelity, mode fit, DATA_LOCK, explanatory value and render accuracy.
+7. Maximum two complete render attempts per GEN candidate. A candidate enters the human set only after both quality layers pass.
+8. Publish Generated Visual Manifest.
+9. Build Unified Visual Review from unchanged VIS candidates plus only passing GEN candidates.
+10. Verify Unified Visual Review in a fresh context.
 
-Do not expose one candidate's Adapt/Render/evaluation conversation to another candidate. Do not batch images or create a multi-section collage.
+Do not expose one candidate's Adapt/Render/review/evaluation conversation to another candidate. Do not batch images or create a multi-section collage.
 
-The installed Adapt/Render packages must be loaded from the exact pinned registry commit in `skill-sources.json`, including required references/assets. Do not reproduce the skills from memory or rewrite them into simplified prompts. The human does not manually supply style references.
+The installed Adapt/Render/Render-review packages must be loaded from the exact pinned registry commit in `skill-sources.json`, including required references/assets/scripts. Do not reproduce the skills from memory or rewrite them into simplified prompts. The human does not manually supply style references.
 
 Generated visuals are explanatory artifacts derived from approved evidence, not evidence sources.
 
