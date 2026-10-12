@@ -9,13 +9,16 @@ Use this prompt when creating the recurring ChatGPT Work/Codex automation:
 > Read references/execution-policy.md and validate the exported current run snapshot with
 > scripts/state_machine.py before dispatch. Use fresh role contexts with fork_turns="none"
 > and the approved actual model/reasoning controls. Respect Not Before; an unknown limit reset
-> permits reconciliation only. Check current Visual Review and Artifact A/B provenance.
+> permits reconciliation only. Check current Unified Visual Review and Artifact A/B provenance.
+> If Deep Research is inside Visual Generation, reconcile the exact candidate/internal step/attempt
+> from Logs/Events before resuming; do not rerun passing source extraction, already-passing GEN
+> candidates, or completed Adapt/Render/evaluation operations whose receipts exist.
 > Never advance an approval gate, blueprint-selection gate, or visual-review KEEP/EXCLUDE gate.
 > Stay quiet when no transition is eligible. Notify me only when a document needs review, a blueprint
-> choice is needed, a Visual Review needs KEEP/EXCLUDE decisions, the run completes, or the workflow
-> becomes blocked. If the ChatGPT plan allowance is exhausted, preserve or reconcile the Drive
-> checkpoint on the next available run and continue after the displayed reset; never use an API key
-> or purchase credits.
+> choice is needed, a Unified Visual Review needs KEEP/EXCLUDE decisions, the run completes, or the
+> workflow becomes blocked. If the ChatGPT plan allowance is exhausted, preserve or reconcile the Drive
+> checkpoint on the next available run and continue after the displayed reset; never use an API key,
+> external image-generation provider, or purchase credits.
 
 Supported cadence: hourly. Verify the actual schedule and enabled status. Never claim a 30-minute task exists. A scheduled check does not bypass plan limits and can resume only when the host allowance permits execution.
 
