@@ -83,12 +83,13 @@ Choose `DATA_EXPLAINER`, `TOPIC_EXPLAINER`, or `HUMOUR_METAPHOR` with the approv
 For each target subsection independently:
 - fresh Adapt context using the full pinned installed `adapt-linkedin-visual-content` package;
 - fresh Render context using the full pinned installed `render-linkedin-visual-post` package, Article-section mode, and ChatGPT native image generation;
-- fresh generated-image evaluator context;
-- maximum two render attempts.
+- fresh installed `review-linkedin-visual-post` context using the Render skill's article reviewer/validator; failed review discards the complete attempt;
+- fresh Writing Agent generated-image evaluator context for factual fidelity, selected-mode fit and DATA_LOCK after installed review passes;
+- maximum two complete render attempts across both acceptance gates.
 
-Do not paraphrase the installed skills into simplified prompts. Load their exact pinned installed references/assets automatically; user does not manually supply style references.
+Do not paraphrase the installed skills into simplified prompts. Load their exact pinned installed references/assets/scripts automatically; user does not manually supply style references.
 
-Passing `GEN-*` images are explanatory visuals derived from approved evidence, not evidence sources.
+Only `GEN-*` images that pass both the installed article visual review and Writing Agent generated-image evidence gate can enter Unified Visual Review. Generated images are explanatory visuals derived from approved evidence, not evidence sources.
 
 Visual Generation publishes and verifies one `Unified Visual Review` containing unchanged `VIS-*` source candidates plus passing `GEN-*` candidates.
 
