@@ -1,6 +1,6 @@
 ---
 name: visual-generation-v3
-description: "Generate explanatory article visuals only for approved subsections that lack a usable extracted primary-source visual. Runs after passing Visual Research. Select DATA_EXPLAINER, TOPIC_EXPLAINER, or HUMOUR_METAPHOR; then execute the pinned installed Adapt and Render skill packages in isolated per-candidate contexts, evaluate each rendered asset, build one unified VIS+GEN review, and leave final KEEP/EXCLUDE decisions to the human."
+description: "Generate explanatory article visuals only for approved subsections that lack a usable extracted primary-source visual. Runs after passing Visual Research. Select DATA_EXPLAINER, TOPIC_EXPLAINER, or HUMOUR_METAPHOR; then execute the pinned installed Adapt, Render, and Render-review skill packages in isolated per-candidate contexts, apply the Writing Agent generated-image evidence gate, build one unified VIS+GEN review, and leave final KEEP/EXCLUDE decisions to the human."
 ---
 
 # VISUAL GENERATION V3
@@ -13,7 +13,7 @@ You do not do new research. You do not replace primary-source extraction. You do
 
 Your durable output is a single Unified Visual Review containing both:
 - `VIS-*` primary-source candidates from Visual Extraction; and
-- `GEN-*` generated explanatory candidates that passed generated-visual evaluation.
+- `GEN-*` generated explanatory candidates that passed both the installed Render quality review and the Writing Agent generated-visual evidence evaluation.
 
 The human remains the only authority for KEEP/EXCLUDE.
 
@@ -39,10 +39,11 @@ This skill is one durable sub-agent in the Deep Research node. Its internal skil
 2. For every generated candidate separately:
    - Adapt execution — fresh context for that subsection only.
    - Render execution — fresh context for that candidate only.
+   - Installed Render Review execution — fresh context for that candidate only.
    - Generated Visual Evaluate — fresh context for that candidate only.
 3. Unified Review build/verification — fresh context.
 
-Never reuse one candidate's Adapt/Render/evaluation conversation for another candidate. Never expose a renderer to another subsection's brief, image, or prior render conversation.
+Never reuse one candidate's Adapt/Render/review/evaluation conversation for another candidate. Never expose a renderer to another subsection's brief, image, or prior render conversation.
 
 If fresh isolated execution is unavailable in production, stop rather than emulating isolation inside one accumulated conversation.
 
@@ -105,7 +106,7 @@ The resulting Visual Story Brief must preserve the approved meaning and contain 
 
 For DATA_EXPLAINER also apply `references/data-lock-contract.md`.
 
-### Step 4 — Render
+### Step 4 — Render + installed Render Review
 
 For each candidate independently, execute the full pinned installed package identified in `references/skill-sources.json`:
 `render-linkedin-visual-post`.
@@ -122,11 +123,17 @@ Hard requirements:
 - keep article nuance in the article, not dense raster text;
 - no signature/author identity block unless the installed article mode explicitly requires one (book mode defaults to none).
 
-Persist each successful generated asset under `Visual Assets/Generated` with a stable GEN ID (`GEN-001`, `GEN-002`, ...). Never overwrite an earlier attempt; retries use attempt metadata/new asset receipt.
+Before the render is eligible for the Writing Agent evidence gate, run the full pinned installed `review-linkedin-visual-post` dependency required by the Render skill, using its article-section validator/review behavior. This is the Render skill's own visual-quality acceptance step and is not a fourth durable Deep Research sub-agent.
 
-### Step 5 — Generated Visual Evaluate
+A Render candidate that does not pass the installed article review is discarded and counts as a render attempt. Do not patch it with overlays or semantic edits; regenerate a complete candidate as the installed Render skill requires.
 
-Evaluate the actual rendered image, not only its prompt or brief, using `references/rubrics/generated_visual.yaml` in a fresh evaluator context.
+Persist an accepted generated asset under `Visual Assets/Generated` with a stable GEN ID (`GEN-001`, `GEN-002`, ...). Never overwrite an earlier attempt; retries use attempt metadata/new asset receipt.
+
+### Step 5 — Writing Agent Generated Visual Evaluate
+
+Only after the installed Render article review passes, evaluate the actual rendered image — not only its prompt or brief — using `references/rubrics/generated_visual.yaml` in a fresh evaluator context.
+
+This second gate is book/evidence-specific and complements, rather than replaces, the installed visual reviewer.
 
 Required gates:
 1. factual fidelity;
@@ -139,7 +146,7 @@ DATA_EXPLAINER must match DATA_LOCK exactly.
 
 Hard failure includes invented/changed numbers, unsupported claims, wrong relationships, humour that changes meaning, unreadable core copy, decorative-only output, or collage/multi-section output.
 
-Allow at most two render attempts per GEN candidate. If attempt 2 still fails, mark that candidate `GENERATION FAILED`; do not put it in the human candidate set and do not loop indefinitely.
+Allow at most two complete render attempts per GEN candidate across Render + installed review + generated evaluation. If attempt 2 still fails either acceptance layer, mark that candidate `GENERATION FAILED`; do not put it in the human candidate set and do not loop indefinitely.
 
 ### Step 6 — Generated Visual Manifest
 
@@ -154,7 +161,8 @@ For every target record:
 - Adapt brief locator;
 - render asset ID/path;
 - render attempt count;
-- generated evaluator status/report locator;
+- installed Render review verdict/locator;
+- Writing Agent generated evaluator status/report locator;
 - DATA_LOCK when applicable;
 - final status PASS or GENERATION FAILED.
 
@@ -165,7 +173,7 @@ Build one new native Google Doc named like:
 
 Use `references/unified-visual-review-format.md`.
 
-It must cover every approved subsection and preserve all source candidate records from Source Visual Review. Add only passing GEN candidates.
+It must cover every approved subsection and preserve all source candidate records from Source Visual Review. Add only GEN candidates that passed both visual-quality acceptance and the generated evidence gate.
 
 Candidate provenance is explicit:
 - `ORIGIN: PRIMARY_SOURCE` for VIS candidates;
@@ -179,7 +187,7 @@ Generated visuals are explanatory artifacts derived from approved evidence. They
 
 Evaluate the Unified Visual Review using `references/rubrics/unified_visual_review_v3.yaml` in a fresh evaluator context.
 
-The review must fail closed if candidate provenance is missing, a generated candidate did not pass its evaluator, a stale source review is mixed in, IDs collide, an approved subsection is missing, or a candidate lacks a Human Decision field.
+The review must fail closed if candidate provenance is missing, a generated candidate did not pass both required acceptance gates, a stale source review is mixed in, IDs collide, an approved subsection is missing, or a candidate lacks a Human Decision field.
 
 Only a passing Unified Visual Review may be returned to the parent node for human review.
 
@@ -201,6 +209,7 @@ The parent Deep Research node owns Sheets and durable routing. Return enough met
 - Selector
 - Adapt <GEN-ID>
 - Render <GEN-ID> attempt N
+- Review Render <GEN-ID> attempt N
 - Evaluate <GEN-ID> attempt N
 - Unified Review
 - Evaluate Unified Review
@@ -212,7 +221,7 @@ Each logged step must include operation ID, input artifact IDs, output artifact/
 
 - No new research source.
 - No generated visual when a usable EXTRACTED primary-source visual already exists, unless a future explicit policy override is introduced by production configuration.
-- No manually reimplemented/summarized version of the pinned Adapt/Render skills.
+- No manually reimplemented/summarized version of the pinned Adapt/Render/Render-review skills.
 - No external image generator such as Runway.
 - No cross-candidate render context reuse.
 - No generated visual presented as primary-source evidence.
