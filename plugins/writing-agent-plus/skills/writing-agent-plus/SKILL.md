@@ -22,24 +22,61 @@ Run sequentially, never in parallel:
 5. `deep_research`
 6. `chapter_writing`
 
-The six main approval stages do not change. Two internal V2 subflows are mandatory:
+The six main approval stages do not change.
 
-### Deep Research subflow
+### Deep Research V3 — exactly three durable sub-agents
 
-`Deep Research Worker -> Evaluate -> Visual Research -> Evaluate Visual -> Human Visual Review`
+`Main Deep Research -> Visual Extraction -> Visual Generation -> Human Visual Review`
+
+#### 1. Main Deep Research
+
+Canonical Deep Research deepens mapped evidence and resolves mapped GAPs. Its internal Evaluate/Diagnose loop stays unchanged. It does not make visual decisions.
+
+#### 2. Visual Extraction
+
+Visual Extraction is implemented by the existing Visual Research V2 source-only worker.
 
 Research Mapping is evidence-only. It must never output IMAGE NEEDED, visual candidates, image reasons, or visual recommendations.
 
-Visual Research may inspect only:
+Visual Extraction may inspect only:
 - primary sources mapped to that exact subsection in Research Mapping; and
 - a primary source added by Deep Research specifically to resolve that subsection's mapped GAP.
 
-A visual candidate is selected using only three substantive criteria:
+A source visual candidate is selected using only three substantive criteria:
 1. directly explains the subsection;
 2. contains meaningful data, mechanism, or comparison;
 3. is strong enough that it should improve the chapter.
 
-Selection happens before extraction. Extraction difficulty cannot turn a qualifying candidate into NOT FOUND. The human owns final KEEP/EXCLUDE decisions. Chapter Writing cannot start while any candidate remains PENDING.
+Selection happens before extraction. Extraction difficulty cannot turn a qualifying candidate into NOT FOUND. Visual Extraction publishes a `Source Visual Review` and faithful exact-source assets where possible. It never generates/redraws/substitutes a visual.
+
+#### 3. Visual Generation
+
+Visual Generation runs only after Source Visual Review passes.
+
+Default generation policy is fallback-only:
+- usable `EXTRACTED` source candidate exists -> do not generate by default;
+- source candidates are only `SOURCE-LINKED` -> generate fallback;
+- source status is `NOT FOUND` -> generate fallback.
+
+Visual Generation selects one mode using the approved short rubric:
+- `DATA_EXPLAINER`
+- `TOPIC_EXPLAINER`
+- `HUMOUR_METAPHOR`
+
+For every target subsection separately it must:
+1. run the full pinned installed `adapt-linkedin-visual-content` package in a fresh context using only that subsection's evidence;
+2. run the full pinned installed `render-linkedin-visual-post` package in another fresh context using Article-section mode and ChatGPT native image generation;
+3. evaluate the actual rendered image in another fresh context;
+4. allow no more than two render attempts;
+5. preserve only passing `GEN-*` candidates for human review.
+
+Do not paraphrase/reimplement the installed Adapt/Render skills from memory. Load the exact pinned installed package, required references and bundled assets from the dependency manifest. The human must not manually pass style references.
+
+Generated visuals explain already-approved evidence; they are never new evidence.
+
+Visual Generation then builds and verifies one Unified Visual Review containing unchanged `VIS-*` source candidates plus passing `GEN-*` generated candidates.
+
+The human owns final KEEP/EXCLUDE decisions for the Unified Visual Review. Chapter Writing cannot start while any current VIS/GEN candidate remains PENDING.
 
 ### Chapter Writing subflow
 
@@ -47,7 +84,11 @@ Selection happens before extraction. Extraction difficulty cannot turn a qualify
 
 Artifact A is the fully story-developed, written, formatted and humanised output of the existing Chapter Writing worker. Invoke its bundled storytelling-article -> anshul-writing-style + internal ai-humanizer-core -> story-integrity review, with every inner voice/craft/output reference. Verify contract version 1 and all five execution checks before Visual Placement; incomplete execution blocks the handoff.
 
-Artifact B is a NEW separate reader-facing Doc generated only after Artifact A passes. Visual Placement preserves completed reader-facing prose and native formatting, inserts only human-KEEP primary-source visuals, and keeps placement audit in a separate report. Artifact B must not contain Chapter Writing Notes, Handoff Package, Completeness Summary, evaluator blocks, or visual workflow metadata.
+Artifact B is a NEW separate reader-facing Doc generated only after Artifact A passes. Visual Placement preserves completed reader-facing prose and native formatting and inserts only exact human-KEEP assets from the Unified Visual Review:
+- `VIS-*` -> exact approved primary-source asset;
+- `GEN-*` -> exact approved generated asset.
+
+Visual Placement never regenerates a GEN candidate and never substitutes another asset for a failed KEEP. Placement audit stays in a separate report. Artifact B must not contain Chapter Writing Notes, Handoff Package, Completeness Summary, evaluator blocks, or visual workflow metadata.
 
 The final Chapter Writing stage Doc ID is Artifact B. Artifact A remains preserved in Drive and Logs for comparison.
 
@@ -56,20 +97,26 @@ The final Chapter Writing stage Doc ID is Artifact B. Artifact A remains preserv
 - **Start:** require topic and useful chapter details. Resolve/create one chapter folder, six stage folders, Logs, and Automation Resume Record.
 - **Continue:** read Run State + Resume Record, reconcile the last operation, then perform only the recorded next transition.
 - **Approve:** accept only explicit approval for the exact pending artifact.
-- **Visual decision:** accept exact KEEP/EXCLUDE decisions for the current Visual Review, or verify the user edited all PENDING fields directly. Never infer a visual decision.
+- **Visual decision:** accept exact KEEP/EXCLUDE decisions for the current Unified Visual Review, or verify the user edited all PENDING fields directly. Never infer a visual decision.
 - **Revise:** require comments on the exact pending Doc. Diagnose/revise according to the active artifact contract.
 - **Status:** report metadata/links from durable state; do not summarize artifact prose unless explicitly asked.
 - **Scheduled check:** process at most one eligible transition and never bypass a human gate.
 
 ## Isolation and delegation
 
-The controller carries identifiers and status only. Never place research, analysis, evidence, draft prose, evaluation findings, visual candidate content, or comment text into controller state. Start a fresh context for every controller/worker/evaluator/diagnose/visual role with fork_turns="none" and tell it to read its adapter. Do not fork conversational history or reuse agents across roles. If isolated execution is unavailable, block and report; clearing scratch inside one conversation is not context isolation. Follow the exact models and audit fields in references/execution-policy.md.
+The controller carries identifiers and status only. Never place research, analysis, evidence, draft prose, evaluation findings, visual candidate content, or comment text into controller state. Start a fresh context for every controller/worker/evaluator/diagnose/visual role with fork_turns="none" and tell it to read its adapter. Do not fork conversational history or reuse agents across roles.
+
+Deep Research has exactly three durable sub-agents, but internal skill execution isolation is still mandatory. Inside Visual Generation, Selector, each subsection's Adapt, each candidate's Render, each candidate's evaluator and Unified Review verification run in fresh contexts and exchange only persisted artifact IDs/metadata.
+
+If isolated execution is unavailable, block and report; clearing scratch inside one conversation is not context isolation. Follow the exact models and audit fields in references/execution-policy.md.
 
 ## Google rules
 
 Use connected Google Drive/Docs/Sheets/comments. Verify account, native MIME type, parent, ID, and readability after every creation. Never overwrite an earlier artifact version.
 
-Visual Research creates/reuses `Deep Research/Visual Assets`. Its Visual Review is a separate native Doc. Exact-source image files are persisted in Visual Assets where possible; SOURCE-LINKED candidates retain exact primary source + locator rather than being dropped or substituted.
+Visual Extraction creates the source-only review and persists exact-source candidates in `Deep Research/Visual Assets` where possible. SOURCE-LINKED candidates retain exact primary source + locator rather than being dropped.
+
+Visual Generation creates/reuses `Deep Research/Visual Assets/Generated`, plus Visual Generation Plan, Generated Visual Manifest and Unified Visual Review under Deep Research. These internal artifact IDs are logged but do not change the existing four-field Deep Research downstream return contract.
 
 The workbook schema lives in `references/sheet-schema.md`. Queue/Run State + Resume Record remain recovery authorities. Before/after every external side effect, write a stable-operation checkpoint and reconcile uncertainty before retrying.
 
@@ -79,9 +126,9 @@ After every passing main-stage evaluation, set `AWAITING_APPROVAL` and wait for 
 
 Blueprint retains its additional `AWAITING_BLUEPRINT_SELECTION` gate.
 
-Deep Research additionally uses `AWAITING_VISUAL_REVIEW` after its Deep Research Package and Visual Review are ready. Chapter Writing starts only after:
+Deep Research additionally uses `AWAITING_VISUAL_REVIEW` after its Deep Research Package and passing Unified Visual Review are ready. Chapter Writing starts only after:
 - the Deep Research Package is explicitly approved; and
-- every Visual Review candidate is KEEP or EXCLUDE.
+- every current VIS/GEN candidate in Unified Visual Review is KEEP or EXCLUDE.
 
 A scheduled wake-up or silence never satisfies either gate.
 
@@ -107,10 +154,15 @@ The ChatGPT plan controls usage. Precise token/credit usage is not programmatica
 - Never move artifacts outside the authorized project root.
 - Never use Gumloop, Slack, OpenAI API keys, Agents API, Cloud Run, or Terraform in this edition.
 - Never allow visual work in Research Mapping.
-- Never allow Chapter Writing while Visual Review has PENDING candidates.
+- Never let Visual Extraction generate/redraw/substitute an image.
+- Never let Visual Generation introduce new research/evidence.
+- Never batch multiple subsection renders into one collage.
+- Never allow Chapter Writing while Unified Visual Review has PENDING candidates.
 - Never let Visual Placement rewrite Artifact A wording, voice or emphasis; writing belongs to the integrated Chapter Writing worker.
 - Never overwrite Artifact A when creating Artifact B.
-- Never use an EXCLUDE visual or replace a failed KEEP with another/generated/redrawn image.
+- Never use an EXCLUDE visual.
+- Never replace a failed KEEP with another asset.
+- Never regenerate a human-KEEP GEN asset during placement.
 - Never claim completion until Artifact B passes final clean evaluation and all six main-stage approvals are recorded.
 
-On completion, report topic, chapter folder, Logs, Resume Record, six approved main-stage Doc IDs/links, Deep Research Visual Review + Visual Assets IDs, and both Chapter Writing artifacts (Artifact A from Logs and approved Artifact B).
+On completion, report topic, chapter folder, Logs, Resume Record, six approved main-stage Doc IDs/links, Deep Research Unified Visual Review + Visual Assets IDs, and both Chapter Writing artifacts (Artifact A from Logs and approved Artifact B).
