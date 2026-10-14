@@ -1,21 +1,22 @@
 ---
-name: broad-research-skill-v2
-description: Research a nonfiction book chapter topic from real sources. Produces a structured research brief in three sections — research objective, query map, and Source Ladder findings (Rungs 1-10) — where every finding carries its own source quality labels and evidence card (claim, why it matters, confidence). Use when starting a new chapter, when notes feel thin, or when the user says "research this topic". First step of the book writing process — its output feeds book-agent-research-analysis.
+name: broad-research-skill-v3
+description: Research a future-oriented nonfiction book chapter with a question-led map and all ten Source Ladder rungs. Curate 3–4 deep insights per verified article, preserve valuable original figures, and produce TWO polished standalone HTML research reports — source-first and question-first — using the same evidence. Use for research chapters, technology futures, agents, and Products of Tomorrow.
 ---
 
-# Broad Research Skill (HTML output)
+# Broad Research Skill v3 (two curated HTML outputs)
 
-Produces a source-grounded research brief for a book chapter.
+Produces two research-grade, polished, standalone HTML briefs from one source-grounded chapter research pass.
 This is the **first step** of the book writing process.
-Two phases: **A. Research** (find material) → **B. Output** (organize it, and render it as HTML).
+Three phases: **A. Discovery and question map** → **B. Full-source curation and visual audit** → **C. Two HTML outputs (source-first, then question-first)**. Read `references/curated-research-dual-html-v3.md` BEFORE beginning; where it differs, its v3 rules override the legacy single-Doc rules.
 
 ---
 
 ## References
 
+- `references/curated-research-dual-html-v3.md` — **mandatory v3 specification** for question-led discovery, per-article 3–4 curated insights, original article figures, source-quality gates, dual beautiful offline HTMLs, and quality tests. It overrides conflicting legacy output/length instructions.
 - `references/book-profile.md` — defines audience (PMs), the four-pillar framework (Adaptive UX, Agents, Emotional Intelligence, Trust), and scope (personal-life product contexts).
 - `references/writing-style.md` — defines voice ("smart friend over coffee"), jargon-explanation rules, analogy-first structure, sentence rhythm, and formatting constraints. Applies to this brief **in part, not in whole**: its "What to Avoid" rules apply everywhere (see Filler Control below), its craft principles apply only to the `WHY IT MATTERS` field of each finding's evidence card — and its Formatting Rules, humour and sentence-rhythm guidance do **not** apply here, because this is a reference document that gets scanned out of order, not book prose. Layout is governed by `references/output-formatting.md` alone.
-- `references/output-formatting.md` — defines the **HTML** markup for the generated brief: how the Research Objective, the Query Map, and the Source Ladder Findings — each finding with its labels and evidence card merged in — must be marked up (never how the content is worded). This brief is delivered as HTML, not Markdown. CSS does not survive the Google Docs conversion, so all spacing comes from `<p>&nbsp;</p>` spacer paragraphs and never from `style` attributes. Apply this at the formatting step in **B. OUTPUT FORMAT** below, after the brief's content is fully drafted.
+- `references/output-formatting.md` — defines the **legacy Google Docs HTML** markup for the generated brief: how the Research Objective, the Query Map, and the Source Ladder Findings — each finding with its labels and evidence card merged in — must be marked up (never how the content is worded). This brief is delivered as HTML, not Markdown. CSS does not survive the Google Docs conversion, so all spacing comes from `<p>&nbsp;</p>` spacer paragraphs and never from `style` attributes. Use the legacy document converter rules only if the user separately requests a Google Doc; never for the mandatory standalone HTML reports.
 
 ---
 
@@ -31,31 +32,16 @@ This book's domain is generative AI, so every research pass — however broadly 
 
 ## Adaptive Depth
 
-Run every rung for full chapter research.
-For narrow topics, skip irrelevant rungs and say what was skipped — a skipped
-rung keeps its heading in Section 3 with a `Note:` paragraph giving the reason.
+Search ALL ten Source Ladder rungs in full chapter research; do not silently skip one. Attempt at least five genuinely strong, distinct sources per rung where available, but never pad with generic or weak articles. If fewer qualify, disclose the rung shortfall. For narrow requests, keep all rung headings and mark those not applicable. The v3 curation and image audit in `references/curated-research-dual-html-v3.md` determine which sources actually appear.
 
-**Never skip for full chapter research:**
-- Source Ladder
-- Source Quality Labels (Step 3) — every finding must be labelled
-- Blind Spot Check (Step 3b)
-- Evidence Card fields (Step 4) — every finding must carry them
-
-**Use judgment:**
-- Go deep when the rung is central to the chapter.
-- Skip when the rung is genuinely irrelevant.
-- Use adjacent terminology when the user's framing is not market vocabulary.
-- Flag weak evidence instead of pretending certainty.
-
----
+Keep source-quality labels, blind-spot checks, specific verifiable claims, and confidence assessments. Fit the final source-first explanation to 3–4 most useful insights per article (generally 200–260 words), rather than preserving all findings verbatim.
 
 ## Filler Control
 
 Filler control is a **quality floor**, not a quantity ceiling.
 The goal is to remove weak material — not to limit how many strong findings are reported.
 
-**Do not suppress or omit a finding because it feels like "too much."**
-If it is important, include it.
+**Preserve important insight, not every paragraph of the source.** Extract the full evidence privately, then show only the distinctive 3–4 insights a reader needs. Use editorial judgment; more text is not automatically greater depth.
 
 Drop a finding only if it:
 - Makes a generic claim with no named source, study, or example behind it
@@ -71,19 +57,17 @@ They are sourcing rules as much as style rules:
 - **No passive inflation.** A claim has to stay checkable against its source.
 - **Explain jargon on first use**, per the same file. The reader of this brief is the PM reader of the book.
 
-**Per-rung minimums:**
-- **Every rung: at least 5 findings.**
-- Rung 5 (big platforms): at least 5 findings — one per major platform active in this space.
-- Rung 6 (case studies): at least 5 named, verifiable examples.
+**Per-rung research targets (quality gated):**
+- Investigate at least five genuinely distinctive qualified sources per rung where they exist; if fewer exist, disclose the shortfall rather than padding.
+- Rung 5: seek at least five distinct relevant major platform primary sources.
+- Rung 6: seek at least five named, verifiable case studies.
+- Each accepted source gets one source ID and a curated 3–4-insight card, not one card per trivial claim.
 
 ---
 
 ## Tools
 
-| Tool | Use for |
-|------|---------|
-| **web_search** -firecrawl | Use for Source Ladder searches (Rungs 1-7). Best for authoritative pages, adjacent terminology, and recent publications. |
-| **web_extract** | Extract full content from a specific URL when a page looks promising but the search snippet is insufficient. |
+Use available web search and full-page extraction tools, and inspect embedded figures/PDFs when needed. Prefer primary sources and original data. **Exa is OFF by default:** invoke Exa only when the user explicitly requests it for that research run. The user’s account may have different tools; adapt safely without assuming a particular provider.
 
 ---
 
@@ -99,21 +83,11 @@ broadening to non-AI products, per the GenAI Lens rule above.
 
 ---
 
-## Step 2 — Query Map
+## Step 2 — Question Map (user-facing; NOT a query map)
 
-```
-PRIMARY TERM: [User's exact topic]
-SYNONYMS: [Alternate market terms]
-TECHNICAL TERMS: [Named AI / technical concepts — favor genAI-specific
-  vocabulary: LLMs, agents, fine-tuning, RAG, context windows,
-  hallucination, alignment, etc., per the GenAI Lens rule]
-PRODUCT TERMS: [How this appears in shipping products]
-BUSINESS TERMS: [How executives, VCs, or analysts describe it]
-ETHICS TERMS: [Privacy, permission, trust, governance terms]
-CONTRARIAN TERMS: [Failure, criticism, risk, backlash terms]
-```
+After initial foundational research and named product examples, create two levels of FUTURE-FIRST research questions: (1) foundational user/problem/product/market questions, and (2) professional-role perspectives including PM, UXR, design, engineering, finance, economics, marketing/sales/distribution, risk/governance, and leadership. Each expert must examine the plausible future from their professional role, using real current examples and basic research. Include competing possible futures, uncertainties and disconfirming evidence. Use stable IDs (Q01 etc.). See `references/curated-research-dual-html-v3.md`.
 
----
+Keep synonyms, technical, business, ethics, and contrarian search terms internally only as search scaffolding; **do not output a term map or query map**. Both HTML files are built from the resulting question map and common curated source evidence.
 
 ## Step 2 — Source Ladder
 
@@ -309,121 +283,22 @@ nothing is added.
 
 ---
 
-## Step 4 — Evidence Cards (merged into each finding)
+## Step 4 — Source evidence, deep reading, and curation
 
-Every finding carries its own evidence card. The card is not a separate
-section: its fields sit inside the finding, between the finding's summary and
-its link. A complete finding is:
-```
-{ID} — {Title}
-SOURCE TYPE: … | AUTHORITY: … | FRESHNESS: … | USE: …
-{Summary: the finding and its context, as one paragraph}
-CLAIM: [The specific, falsifiable claim]
-WHY IT MATTERS: [Why this matters for this chapter and PM audience]
-CONFIDENCE: High / Medium / Low
-{URL}
-```
+Retain the evidence card fields for internal auditing (specific CLAIM; WHY IT MATTERS; CONFIDENCE; source-quality metadata and URL). Deep-read selected full articles, collect important structures, figures, comparisons, and caveats; then publish only their 3–4 highest-value insights with meaningful explanation. A selected **article** is the source-first unit (R1.1, R1.2, etc.), not a disconnected claim or a question. Capture original source images where relevant, and explain constraints if unavailable. Follow the complete `references/curated-research-dual-html-v3.md` protocol.
 
-The finding's link is the card's source — the card no longer carries a separate
-`SOURCE` field. The summary paragraph names the author or publication; the link
-gives the address.
+# B. TWO MANDATORY HTML OUTPUTS
 
-The summary and `CLAIM` do different jobs. The summary is the finding in
-context; `CLAIM` is the one falsifiable statement pulled out of it. Do not
-repeat the summary as the claim.
+The complete rendering and validation contract lives in `references/curated-research-dual-html-v3.md`. Apply it fully; these v3 instructions replace the old single-Google-Doc output contract.
 
-`WHY IT MATTERS` is the one interpretive field on the card, so write it under
-`references/writing-style.md` — plain language, concrete over abstract, and the
-test that a sharp PM would read it and say "yes, that's new and I can use it."
-`CLAIM` stays falsifiable and `CONFIDENCE` stays as data; voice does not enter
-those two, nor the summary or the labels.
+### Output 1 — Source-first research
+A polished self-contained HTML report organized **Rung 1–10 → Article ID → 3–4 curated, valuable explanatory insights → original relevant figures and useful tables → one brief future implication**. Present one article at a time with next/previous navigation; never organize this output by question. Retain all 10 rung identities, honest gap notes, exact source links, readable tables and original figure attribution.
 
-A cross-reference entry — a finding that only points at another finding —
-carries no labels and no card fields.
+### Output 2 — Question-first research
+A **second, separately downloadable, polished self-contained HTML** organized **Foundational and professional-role question groups → each question answered directly and deeply**. Synthesize evidence ACROSS the same curated articles; retain the important article-level mechanisms, distinctions, frameworks, images and supporting data, disagreement and uncertainty. **Never degrade Output 2 to a short answer plus link list.** Question-first is not a rearrangement of article cards.
 
----
-
-# B. OUTPUT FORMAT
-
-## Document Title
-`{Skill_Name}_v{Version}_{Topic_Name}` — e.g. `Broad-Research-Skill_v1_Learning-and-Growth`
-
-The brief has exactly three sections and ends after Section 3:
-
-### 1. Research Objective
-### 2. Query Map (from Step 2)
-### 3. Source Ladder Findings (Rungs 1-10)
-Every finding carries its source quality labels (Step 3) and its evidence card
-fields (Step 4). Blind Spot Check additions (Step 3b) sit in their rungs as
-ordinary findings. A rung below its minimum, or skipped, carries a `Note:`
-paragraph giving the reason.
-
-All three sections are findings and data: keep them plain and precise. Voice
-from `references/writing-style.md` applies only to each finding's
-`WHY IT MATTERS` field.
-
-## Render & Deliver
-
-Your input includes `drive_folder_link` — the exact Drive folder to use.
-Do not resolve, create, or guess at a different location.
-
-**1. Produce the complete brief** — Sections 1-3, nothing after Section 3.
-
-**2. Render the brief as HTML per `references/output-formatting.md`.** Apply its
-markup to every section — Research Objective, Query Map, and Source Ladder
-Findings, each finding with its labels and evidence card fields — without
-changing any wording, claim, label, or URL from Step 1. This is a markup pass
-only.
-
-The output is **HTML, not Markdown**. Three rules decide whether it renders:
-
-- **No CSS.** No `style` attributes, no `<style>` blocks, no `class`. They are
-  stripped during conversion, and writing them creates a false impression that
-  spacing is handled.
-- **Every blank line is a `<p>&nbsp;</p>` spacer paragraph.** Whitespace and
-  newlines in the source HTML are ignored by the converter. The spacer is the
-  only spacing mechanism that survives.
-- **Escape `&` as `&amp;`** in all content, and write em dashes as `&mdash;`.
-
-**3. Write the HTML to a file** in the sandbox, e.g. `/home/user/brief.html`.
-Build it in parts if that is easier; concatenate to one file before the next
-step.
-
-**4. Create the Google Doc from code, reading that file into a variable.**
-
-> **Never pass the HTML as a literal tool-call parameter.** A brief runs to tens
-> of thousands of characters. Typing it into a tool call means re-emitting the
-> whole document as tokens, which truncates, fails, and leads to placeholder
-> text being sent instead. The document body must reach the tool as a **variable
-> read from the file**, never as text you retype. Do not print the HTML to
-> inspect it, and do not try to copy it out of a previous output — open the file
-> and pass the handle's contents.
-
-```python
-with open('/home/user/brief.html') as f:
-    content = f.read()
-
-from gumloop import Gumloop
-client = Gumloop()
-
-result = client.mcp.execute("gdocs", "create_doc", {
-    "title": "{Skill_Name}_v{Version}_{Topic_Name}",
-    "content_format": "html",
-    "content": content,
-    "folder_id": "{the folder id from drive_folder_link}"
-}).results[0]
-
-print("status:", result.status)
-if result.status != "success":
-    print("error:", result.error)
-print(result.decoded_content)
-```
-
-Nothing is written anywhere outside that folder.
-
-If the created document ever ends up holding placeholder text, do not create
-another one. Fix the same document in place with `update_doc`, passing
-`operation: "replace"` and the content read from the file exactly as above.
-
-**5. Return only the Doc ID.** Not the content, not a summary — the Doc ID is
-your entire output.
+### Delivery and validation
+- Produce **both files** as standalone HTML, with inline CSS/JS and appropriately embedded original article images. Mobile/desktop check, figure rendering and legibility, functioning links/nav, all source IDs, and question/source traceability are mandatory.
+- Return **two file links** and short verification information. Use the supplied Drive folder, if any, as the upload destination for BOTH files; do not invent another folder. Without a Drive folder, produce downloadable files in the current supported environment.
+- Do not force the legacy no-CSS Google Docs converter format onto the two HTMLs; use `references/output-formatting.md` only when a Google Doc is explicitly requested as an EXTRA export.
+- Report inability to render, retrieve, upload, or install clearly; never claim success without verifying.
