@@ -15,7 +15,7 @@ Three phases: **A. Discovery and question map** → **B. Full-source curation an
 
 - `references/curated-research-dual-html-v3.md` — **mandatory v3 specification** for question-led discovery, per-article 3–4 curated insights, original article figures, source-quality gates, dual beautiful offline HTMLs, and quality tests. It overrides conflicting legacy output/length instructions.
 - `references/book-profile.md` — defines audience (PMs), the four-pillar framework (Adaptive UX, Agents, Emotional Intelligence, Trust), and scope (personal-life product contexts).
-- `references/writing-style.md` — defines voice ("smart friend over coffee"), jargon-explanation rules, analogy-first structure, sentence rhythm, and formatting constraints. Applies to this brief **in part, not in whole**: its "What to Avoid" rules apply everywhere (see Filler Control below), its craft principles apply only to the `WHY IT MATTERS` field of each finding's evidence card — and its Formatting Rules, humour and sentence-rhythm guidance do **not** apply here, because this is a reference document that gets scanned out of order, not book prose. Layout is governed by `references/output-formatting.md` alone.
+- `references/writing-style.md` — defines voice ("smart friend over coffee"), jargon-explanation rules, analogy-first structure, sentence rhythm, and formatting constraints. Applies to this brief **in part, not in whole**: its "What to Avoid" rules apply everywhere (see Filler Control below), its craft principles apply only to the `WHY IT MATTERS` field of each finding's evidence card — and its Formatting Rules, humour and sentence-rhythm guidance do **not** apply here, because this is a reference document that gets scanned out of order, not book prose. Layout for the TWO required standalone HTML reports is governed by `references/curated-research-dual-html-v3.md`; `references/output-formatting.md` governs only an optional legacy Google Docs conversion.
 - `references/output-formatting.md` — defines the **legacy Google Docs HTML** markup for the generated brief: how the Research Objective, the Query Map, and the Source Ladder Findings — each finding with its labels and evidence card merged in — must be marked up (never how the content is worded). This brief is delivered as HTML, not Markdown. CSS does not survive the Google Docs conversion, so all spacing comes from `<p>&nbsp;</p>` spacer paragraphs and never from `style` attributes. Use the legacy document converter rules only if the user separately requests a Google Doc; never for the mandatory standalone HTML reports.
 
 ---
@@ -53,7 +53,7 @@ Drop a finding only if it:
 They are sourcing rules as much as style rules:
 - **No hype language** ("revolutionary," "game-changing," "transformative") unless a specific named example immediately backs it.
 - **No generic examples.** Name the company or drop the example — the same test as the first drop rule above.
-- **No academic hedging** ("it could be argued that," "some might suggest"). Uncertainty belongs in the `CONFIDENCE` and `AUTHORITY` fields, never smuggled into the claim itself.
+- **No empty academic hedging.** State evidence limitations and uncertainty explicitly in the source interpretation and question synthesis; retain `CONFIDENCE` and `AUTHORITY` for the audit.
 - **No passive inflation.** A claim has to stay checkable against its source.
 - **Explain jargon on first use**, per the same file. The reader of this brief is the PM reader of the book.
 
